@@ -37,7 +37,7 @@ public class GuiCompressor extends GuiContainer{
         this.drawTexturedModalRect(i, j, 0, 0, this.xSize, this.ySize);
         int energyScale = getEnergyScale(72);
         this.drawTexturedModalRect(i+19, j+8+energyScale, this.xSize, 17, 12, 70-energyScale);
-        if(this.compressorContainer.tileEntity.getActive()) {
+        if(TileEntityCompressor.isActive(this.compressorContainer.tileEntity)) {
             int progressScale = getProgressScale(24);
             this.drawTexturedModalRect(i + 100, j + 33, this.xSize, 0, progressScale, 17);
             progressScale = getProgressScale(22);

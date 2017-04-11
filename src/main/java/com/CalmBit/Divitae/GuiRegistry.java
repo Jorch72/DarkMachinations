@@ -2,9 +2,12 @@ package com.CalmBit.Divitae;
 
 import com.CalmBit.Divitae.machine.*;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
@@ -16,7 +19,7 @@ public class GuiRegistry implements IGuiHandler {
 
     @Nullable
     @Override
-    public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+    public Container getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
         switch(ID)
         {
             case GUI_MACHINE_GRINDER:
@@ -31,15 +34,16 @@ public class GuiRegistry implements IGuiHandler {
 
     @Nullable
     @Override
+    @SideOnly(Side.CLIENT)
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
         switch(ID)
         {
             case GUI_MACHINE_GRINDER:
-                return new GuiGrinder(new ContainerGrinder((TileEntityGrinder)world.getTileEntity(new BlockPos(x,y,z)), player.inventory));
+                return new GuiGrinder(getServerGuiElement(ID, player, world, x, y, z));
             case GUI_MACHINE_COMPRESSOR:
-                return new GuiCompressor(new ContainerCompressor((TileEntityCompressor)world.getTileEntity(new BlockPos(x,y,z)), player.inventory));
+                return new GuiCompressor(getServerGuiElement(ID, player, world, x, y, z));
             case GUI_MACHINE_GENERATOR:
-                return new GuiGenerator(new ContainerGenerator((TileEntityGenerator) world.getTileEntity(new BlockPos(x,y,z)), player.inventory));
+                return new GuiGenerator(getServerGuiElement(ID, player, world, x, y, z));
         }
         return null;
     }

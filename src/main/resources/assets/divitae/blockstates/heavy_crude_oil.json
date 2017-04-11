@@ -1,0 +1,12 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "forge:fluid",
+        "transform": "forge:default-item"
+    },
+    "variants": {
+        "heavy_crude_oil": [{
+            "custom": { "fluid": "heavy_crude_oil" }
+        }]
+    }
+}

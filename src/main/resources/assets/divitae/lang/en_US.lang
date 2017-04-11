@@ -1,0 +1,27 @@
+item.ingot_copper.name=Copper Ingot
+item.ingot_silver.name=Silver Ingot
+item.ingot_tin.name=Tin Ingot
+item.ingot_bronze.name=Bronze Ingot
+
+item.dust_bronze.name=Bronze Dust
+item.dust_copper.name=Copper Dust
+item.dust_gold.name=Gold Dust
+item.dust_iron.name=Iron Dust
+item.dust_silver.name=Silver Dust
+item.dust_tin.name=Tin Dust
+
+item.plate_bronze.name=Bronze Plate
+item.plate_copper.name=Copper Plate
+item.plate_gold.name=Gold Plate
+item.plate_iron.name=Iron Plate
+item.plate_silver.name=Silver Plate
+item.plate_tin.name=Tin Plate
+
+tile.ore_copper.name=Copper Ore
+tile.ore_silver.name=Silver Ore
+tile.ore_tin.name=Tin Ore
+itemGroup.divitae=Nu - Divitae
+
+subtitles.entity.golden_creeper.death=Golden Creepr Death
+subtitles.entity.golden_creeper.hurt=Golden Creeper Hurt
+subtitles.entity.golden_creeper.primed=Golden Creeper Hiss

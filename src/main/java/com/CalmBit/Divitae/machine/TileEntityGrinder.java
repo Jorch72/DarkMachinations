@@ -13,6 +13,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -47,10 +49,7 @@ public class TileEntityGrinder extends TileEntityBase {
         itemStackHandler = new ItemStackHandler(SLOT_COUNT);
         energyStorage = new EnergyUser(ENERGY_CAPACITY, ENERGY_TRANSFER_RATE);
         inGrinder = ItemStack.EMPTY;
-        this.energyStorage.setEnergyStored(ENERGY_CAPACITY);
     }
-
-
 
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
@@ -226,6 +225,7 @@ public class TileEntityGrinder extends TileEntityBase {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
         this.readFromNBT(pkt.getNbtCompound());
     }

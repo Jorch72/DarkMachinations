@@ -1,12 +1,11 @@
 package com.CalmBit.Divitae.machine;
 
 import com.CalmBit.Divitae.CompressorRecipes;
+import com.CalmBit.Divitae.Divitae;
 import com.CalmBit.Divitae.generic.EnergyUser;
-import com.elytradev.probe.api.IProbeDataProvider;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -14,7 +13,6 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -27,7 +25,7 @@ public class TileEntityCompressor extends TileEntityBase {
 
     public ItemStackHandler itemStackHandler;
     public EnergyUser energyStorage;
-    public ProbeDataProviderMachine probeDataProvider;
+    public Object probeDataProvider;
     public String customName;
 
     public ItemStack inCompressor;
@@ -47,24 +45,22 @@ public class TileEntityCompressor extends TileEntityBase {
     public int itemProcessingTimer;
     public int itemProcessingMaximum = 100;
 
-    @CapabilityInject(IProbeDataProvider.class)
-    static Capability<IProbeDataProvider> PROBE_CAPABILITY = null;
-
     public TileEntityCompressor()
     {
         super();
         itemStackHandler = new ItemStackHandler(SLOT_COUNT);
         energyStorage = new EnergyUser(ENERGY_CAPACITY, ENERGY_TRANSFER_RATE);
-        probeDataProvider = new ProbeDataProviderMachine();
 
         inCompressor = ItemStack.EMPTY;
-        this.energyStorage.setEnergyStored(ENERGY_CAPACITY);
     }
 
 
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || capability == CapabilityEnergy.ENERGY|| capability == PROBE_CAPABILITY) {
+        if(capability == null)
+            return false;
+
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || capability == CapabilityEnergy.ENERGY|| capability == Divitae.PROBE_CAPABILITY) {
             return true;
         }
         return super.hasCapability(capability, facing);
@@ -72,6 +68,9 @@ public class TileEntityCompressor extends TileEntityBase {
 
     @Override
     public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+        if(capability == null)
+            return null;
+
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
         {
             return (T) itemStackHandler;
@@ -80,8 +79,10 @@ public class TileEntityCompressor extends TileEntityBase {
         {
             return (T) energyStorage;
         }
-        if(capability == PROBE_CAPABILITY)
+        if(capability == Divitae.PROBE_CAPABILITY)
         {
+            if(probeDataProvider == null)
+                probeDataProvider = new ProbeDataProviderMachine();
             return (T)probeDataProvider;
         }
         return super.getCapability(capability, facing);
@@ -154,11 +155,11 @@ public class TileEntityCompressor extends TileEntityBase {
     public void update() {
         ItemStack supplySlot = itemStackHandler.getStackInSlot(ContainerCompressor.COMPRESSOR_SUPPLY_SLOT);
 
-        if(this.probeDataProvider.getCurrentEnergy() != this.energyStorage.getEnergyStored())
-            this.probeDataProvider.updateProbeEnergyData(this.energyStorage.getEnergyStored(), this.energyStorage.getMaxEnergyStored());
-
-        if(this.probeDataProvider.getCurrentProgress() != this.itemProcessingTimer || this.probeDataProvider.getActive() != this.isActive)
-            this.probeDataProvider.updateProbeProgressData(this.itemProcessingTimer, this.itemProcessingMaximum, this.isActive);
+        if(this.probeDataProvider != null) {
+            ProbeDataProviderMachine probeData = (ProbeDataProviderMachine)probeDataProvider;
+            probeData.updateProbeEnergyData(this.energyStorage.getEnergyStored(), this.energyStorage.getMaxEnergyStored());
+            probeData.updateProbeProgressData(this.itemProcessingTimer, this.itemProcessingMaximum, this.isActive);
+        }
 
         if(!this.world.isRemote) {
             if (this.isActive) {

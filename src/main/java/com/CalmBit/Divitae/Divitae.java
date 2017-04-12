@@ -3,6 +3,9 @@ package com.CalmBit.Divitae;
 import com.CalmBit.Divitae.generic.DivitaeCreativeTab;
 import com.CalmBit.Divitae.proxy.CommonProxy;
 import com.CalmBit.Divitae.world.WorldGen;
+import com.elytradev.probe.api.IProbeDataProvider;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -24,6 +27,9 @@ public class Divitae {
 
     @SidedProxy(clientSide = "com.CalmBit.Divitae.proxy.ClientProxy", serverSide = "com.CalmBit.Divitae.proxy.CommonProxy")
     public static CommonProxy proxy;
+
+    @CapabilityInject(IProbeDataProvider.class)
+    public static Capability<IProbeDataProvider> PROBE_CAPABILITY = null;
 
     static {
         net.minecraftforge.fluids.FluidRegistry.enableUniversalBucket();

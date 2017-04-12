@@ -8,32 +8,37 @@ import net.minecraft.util.math.BlockPos;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class NetworkEdge {
+public class EnergyNetworkEdge implements INetworkEdge {
     // The blocks which are being connected by the edge.
-    private BlockPos first, last;
+    private EnergyNetworkNode first, last;
+
+    // The actual cables that represent the start/end of the route.
+    private BlockPos firstCable, lastCable;
 
     // The blocks that comprise the path, not including the two above.
     private ArrayList<BlockPos> route;
 
-    private Network parent;
+    private EnergyNetwork parent;
 
-    public NetworkEdge(Network parent, BlockPos first, BlockPos last)
+    public EnergyNetworkEdge(EnergyNetwork parent, EnergyNetworkNode first, EnergyNetworkNode last)
     {
         this.parent = parent;
         this.first = first;
+        this.firstCable = first.getPosition().add(first.getFace().getOpposite().getDirectionVec());
         this.last = last;
+        this.lastCable = last.getPosition().add(last.getFace().getOpposite().getDirectionVec());
         this.route = new ArrayList<>();
         findShortestRoute();
     }
 
-    private void findShortestRoute() {
+    public void findShortestRoute() {
         ArrayList<BlockPos> nodeList = (ArrayList<BlockPos>)parent.memberBlocks.clone();
         HashMap<BlockPos, Tuple<BlockPos, Integer>> openList = new HashMap<>();
         HashMap<BlockPos, Tuple<BlockPos, Integer>> closedList = new HashMap<>();
 
         int travelDistance = 0;
-        int hDistance = (int)Math.sqrt(first.distanceSq(last));
-        openList.put(first, new Tuple<>(BlockPos.ORIGIN, travelDistance + hDistance));
+        int hDistance = (int)Math.sqrt(firstCable.distanceSq(last.getPosition()));
+        openList.put(firstCable, new Tuple<>(BlockPos.ORIGIN, travelDistance + hDistance));
 
         while(true) {
 
@@ -54,12 +59,12 @@ public class NetworkEdge {
 
             closedList.put(currentSquare, openList.remove(currentSquare));
 
-            if(currentSquare == last)
+            if(currentSquare == lastCable)
             {
                 BlockPos parent = BlockPos.ORIGIN;
-                while(parent != first) {
+                while(parent != firstCable) {
                     parent = closedList.get(currentSquare).getFirst();
-                    if(parent != first)
+                    if(parent != firstCable)
                         route.add(parent);
                 }
                 break;
@@ -74,7 +79,7 @@ public class NetworkEdge {
 
                     if(!openList.containsKey(workingSquare))
                     {
-                        hDistance = (int)Math.sqrt(first.distanceSq(last));
+                        hDistance = (int)Math.sqrt(workingSquare.distanceSq(lastCable));
                         openList.put(workingSquare, new Tuple<>(currentSquare, travelDistance + hDistance));
                     }
                 }
@@ -82,9 +87,35 @@ public class NetworkEdge {
         }
     }
 
+    @Override
+    public boolean equals(INetworkEdge other) {
+        if(other instanceof EnergyNetworkEdge) {
+            EnergyNetworkEdge otherEdge = (EnergyNetworkEdge)other;
+            return this.first.equals(otherEdge.first) && this.last.equals(otherEdge.last);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean equalsProspective(INetworkNode first, INetworkNode last) {
+        boolean flag = true;
+
+        if(first instanceof EnergyNetworkNode) {
+            EnergyNetworkNode firstNode = (EnergyNetworkNode)first;
+            flag = flag && (firstNode.equals(this.first));
+        }
+        else return false;
+
+        if(last instanceof EnergyNetworkNode) {
+            EnergyNetworkNode lastNode = (EnergyNetworkNode)last;
+            flag = flag && (lastNode.equals(this.first));
+        }
+        else return false;
+
+        return flag;
+    }
+
     public boolean isValidEdge() {
         return !route.isEmpty();
     }
-
-    //public BlockPos getFirst();
 }

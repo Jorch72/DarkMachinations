@@ -1,7 +1,8 @@
 package com.CalmBit.Divitae;
 
 import com.CalmBit.Divitae.cable.BlockCable;
-import com.CalmBit.Divitae.cable.TileEntityCable;
+import com.CalmBit.Divitae.cable.BlockCableNode;
+import com.CalmBit.Divitae.cable.TileEntityCableNode;
 import com.CalmBit.Divitae.generic.*;
 import com.CalmBit.Divitae.machine.BlockCompressor;
 import com.CalmBit.Divitae.machine.BlockGenerator;
@@ -23,6 +24,7 @@ public class BlockRegistry {
     public static BlockBase machine_redstone_core;
     public static BlockGenerator machine_generator;
     public static BlockCable cable_regular;
+    public static BlockCableNode cable_regular_node;
     public static void init()
     {
         ore_copper = registerBlock(new BlockOre("ore_copper", "oreCopper").setCreativeTab(Divitae.divitaeTab));
@@ -33,6 +35,7 @@ public class BlockRegistry {
         machine_redstone_core = registerBlock(new BlockBase(Material.IRON, "machine_redstone_core")).setCreativeTab(Divitae.divitaeTab);
         machine_generator = registerBlock(new BlockGenerator());
         cable_regular = registerBlock(new BlockCable("cable_regular")).setCreativeTab(Divitae.divitaeTab);
+        cable_regular_node = registerBlock(new BlockCableNode("cable_regular_node"));
     }
 
     private static <T extends Block & IDivitaeBlock> T registerBlock(T block, ItemBlock itemBlock)
@@ -52,7 +55,7 @@ public class BlockRegistry {
         }
         if(block instanceof BlockCable)
         {
-            GameRegistry.registerTileEntity(TileEntityCable.class, block.getRegistryName().toString());
+            GameRegistry.registerTileEntity(TileEntityCableNode.class, block.getRegistryName().toString());
         }
         if(itemBlock instanceof IOreDict)
         {

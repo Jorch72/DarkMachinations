@@ -1,7 +1,6 @@
 package com.CalmBit.Divitae.cable;
 
 import com.CalmBit.Divitae.generic.BlockBase;
-import com.sun.glass.ui.View;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
@@ -16,10 +15,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.energy.EnergyStorage;
-import net.minecraftforge.energy.IEnergyStorage;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,11 +28,14 @@ public class BlockCable extends BlockBase {
     public static final PropertyBool UP = PropertyBool.create("up");
     public static final PropertyBool DOWN = PropertyBool.create("down");
 
+    public static final PropertyBool EDGE_MEMBER = PropertyBool.create("edge_member");
+
     public static final List<AxisAlignedBB> boundingBoxes = new ArrayList<AxisAlignedBB>();
 
     public BlockCable(String name) {
         super(Material.CLOTH, name);
         this.setDefaultState(this.blockState.getBaseState()
+                .withProperty(EDGE_MEMBER, false)
                 .withProperty(NORTH, false)
                 .withProperty(EAST, false)
                 .withProperty(SOUTH, false)
@@ -73,7 +72,7 @@ public class BlockCable extends BlockBase {
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         if(!worldIn.isRemote) {
-            TileEntityCable thisCable = (TileEntityCable)worldIn.getTileEntity(pos);
+            TileEntityCableNode thisCable = (TileEntityCableNode)worldIn.getTileEntity(pos);
 
             // We'll iterate over every adjacent block to find other blocks
             for (EnumFacing facing : EnumFacing.VALUES) {
@@ -83,8 +82,8 @@ public class BlockCable extends BlockBase {
 
                     TileEntity tile = worldIn.getTileEntity(neighbour);
 
-                    if (tile instanceof TileEntityCable) {
-                        TileEntityCable otherCable = (TileEntityCable) tile;
+                    if (tile instanceof TileEntityCableNode) {
+                        TileEntityCableNode otherCable = (TileEntityCableNode) tile;
                         if (otherCable.getNetwork() != null) {
                             thisCable.mergeNetworks(otherCable.getNetwork());
                         }
@@ -104,6 +103,11 @@ public class BlockCable extends BlockBase {
         return boundingBoxes.get(getBoundingBoxIndex(getActualState(state, source, pos)));
     }
 
+    @Override
+    public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
+        super.onNeighborChange(world, pos, neighbor);
+    }
+
     private int getBoundingBoxIndex(IBlockState state) {
         int index = 0;
 
@@ -111,7 +115,7 @@ public class BlockCable extends BlockBase {
             index += 1;
         if(state.getValue(EAST))
             index += 2;
-        if(state.getValue(SOUTH))
+        if( state.getValue(SOUTH))
             index += 4;
         if(state.getValue(WEST))
             index += 8;
@@ -126,14 +130,19 @@ public class BlockCable extends BlockBase {
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, NORTH, EAST, SOUTH, WEST, UP, DOWN);
+        return new BlockStateContainer(this, EDGE_MEMBER, NORTH, EAST, SOUTH, WEST, UP, DOWN);
     }
 
     public int getMetaFromState(IBlockState state) {
-        return 0;
+        boolean isEdgeMember = state.getValue(EDGE_MEMBER);
+        return isEdgeMember ? 0 : 1;
     }
 
-
+    @Override
+    @SuppressWarnings("deprecation")
+    public IBlockState getStateFromMeta(int meta) {
+        return this.getDefaultState().withProperty(EDGE_MEMBER, meta == 1);
+    }
 
     @Override
     public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
@@ -147,7 +156,12 @@ public class BlockCable extends BlockBase {
 
     public boolean canConnectTo(IBlockAccess world, BlockPos pos, EnumFacing facing) {
         TileEntity entity = world.getTileEntity(pos.add(facing.getDirectionVec()));
-        return (entity != null && entity.hasCapability(CapabilityEnergy.ENERGY, facing.getOpposite()));
+        if(entity != null)
+            return entity.hasCapability(CapabilityEnergy.ENERGY, facing.getOpposite());
+        else if(world.getBlockState(pos).getBlock() instanceof BlockCable)
+            return true;
+
+        return false;
     }
 
     @Override
@@ -165,16 +179,6 @@ public class BlockCable extends BlockBase {
     @SuppressWarnings("deprecation")
     public boolean isFullCube(IBlockState state) {
         return false;
-    }
-    @Override
-    public boolean hasTileEntity(IBlockState state) {
-        return true;
-    }
-
-    @Nullable
-    @Override
-    public TileEntityCable createTileEntity(World world, IBlockState state) {
-        return new TileEntityCable();
     }
 
 

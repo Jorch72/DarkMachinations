@@ -1,6 +1,8 @@
 package com.CalmBit.Divitae.network;
 
 
+import com.CalmBit.Divitae.BlockRegistry;
+import com.CalmBit.Divitae.cable.BlockCable;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
@@ -61,12 +63,7 @@ public class EnergyNetworkEdge implements INetworkEdge {
 
             if(currentSquare == lastCable)
             {
-                BlockPos parent = BlockPos.ORIGIN;
-                while(parent != firstCable) {
-                    parent = closedList.get(currentSquare).getFirst();
-                    if(parent != firstCable)
-                        route.add(parent);
-                }
+                constructRoute(closedList, currentSquare);
                 break;
             }
 
@@ -77,6 +74,33 @@ public class EnergyNetworkEdge implements INetworkEdge {
                     if(!nodeList.contains(workingSquare) || closedList.containsKey(workingSquare))
                         continue;
 
+                    if(parent.getWorld().getBlockState(workingSquare).getValue(BlockCable.EDGE_MEMBER)) {
+                        // Silent Promotion, Bookkeeping Node
+
+                        // Create a clone of the current last node
+                        EnergyNetworkNode oldLast = (EnergyNetworkNode)this.last.clone();
+
+                        // Establish the new last node (the book keeping node)
+                        this.last = new EnergyNetworkNode(workingSquare, facing.getOpposite());
+
+                        // Try to find the intersecting edge
+                        EnergyNetworkEdge otherEdge = null;
+                        for(EnergyNetworkEdge edge : parent.edges) {
+                            if(edge.containsBlock(workingSquare)) {
+                                otherEdge = edge;
+                                break;
+                            }
+                        }
+
+                        // The other edge now also receives the edge
+                        otherEdge.last = this.last;
+                        otherEdge.findShortestRoute();
+
+                        parent.getWorld().setBlockState(workingSquare, BlockRegistry.cable_regular_node.getDefaultState(), 3);
+                        this.parent.addEdge(this.last, oldLast);
+                        constructRoute(closedList, currentSquare);
+                        break;
+                    }
                     if(!openList.containsKey(workingSquare))
                     {
                         hDistance = (int)Math.sqrt(workingSquare.distanceSq(lastCable));
@@ -84,6 +108,25 @@ public class EnergyNetworkEdge implements INetworkEdge {
                     }
                 }
             }
+        }
+    }
+
+    @Override
+    public boolean containsBlock(BlockPos block) {
+        for(BlockPos routeBlock : route) {
+            if(block == routeBlock)
+                return true;
+        }
+        return false;
+    }
+
+    private void constructRoute(HashMap<BlockPos, Tuple<BlockPos, Integer>> cables, BlockPos start) {
+        BlockPos parent = start;
+        while(parent != firstCable) {
+            parent = cables.get(parent).getFirst();
+            this.parent.getWorld().setBlockState(parent, this.parent.getWorld().getBlockState(parent).withProperty(BlockCable.EDGE_MEMBER, true));
+            if(parent != firstCable)
+                route.add(parent);
         }
     }
 

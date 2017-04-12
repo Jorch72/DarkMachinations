@@ -22,7 +22,10 @@ public class EnergyNetwork implements INetwork {
 
     private UUID identifier;
 
-    public EnergyNetwork() {
+    private World world;
+
+    public EnergyNetwork(World world) {
+        this.world = world;
         identifier = UUID.randomUUID();
     }
 
@@ -96,6 +99,10 @@ public class EnergyNetwork implements INetwork {
 
     public int getMaximumEnergy() {
         return maximumEnergy;
+    }
+
+    public World getWorld() {
+        return world;
     }
 
     public void setMaximumEnergy(int newMaximum) {

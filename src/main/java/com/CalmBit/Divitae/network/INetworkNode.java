@@ -9,4 +9,5 @@ package com.CalmBit.Divitae.network;
  */
 public interface INetworkNode {
     boolean equals(INetworkNode other);
+    INetworkNode clone();
 }

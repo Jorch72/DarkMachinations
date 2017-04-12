@@ -22,6 +22,12 @@ public class EnergyNetworkNode implements INetworkNode {
         return false;
     }
 
+    @Override
+    public INetworkNode clone() {
+        EnergyNetworkNode newNode = new EnergyNetworkNode(this.position, this.face);
+        return newNode;
+    }
+
     public BlockPos getPosition() {
         return position;
     }

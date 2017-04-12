@@ -2,18 +2,22 @@ package com.CalmBit.Divitae.cable;
 
 
 import com.CalmBit.Divitae.network.EnergyNetwork;
+import com.CalmBit.Divitae.network.EnergyNetworkEdge;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 
-public class TileEntityCable extends TileEntity {
+public class TileEntityCableNode extends TileEntity {
     private EnergyNetwork network;
     private NetworkedEnergyUser energyStorage;
-    public TileEntityCable() {
+    private ArrayList<EnergyNetworkEdge> energyNetworkEdges;
+    public TileEntityCableNode() {
         this.energyStorage = new NetworkedEnergyUser(network);
+        this.energyNetworkEdges = new ArrayList<>();
     }
 
     public EnergyNetwork getNetwork() {
@@ -22,6 +26,16 @@ public class TileEntityCable extends TileEntity {
 
     public void setNetwork(EnergyNetwork network) {
         this.network = network;
+    }
+
+    public void addDependentEdge(EnergyNetworkEdge edge) {
+        if(!this.energyNetworkEdges.contains(edge))
+            energyNetworkEdges.add(edge);
+    }
+
+    public void removeDependentEdge(EnergyNetworkEdge edge) {
+        if(this.energyNetworkEdges.contains(edge))
+            energyNetworkEdges.remove(edge);
     }
 
     public void mergeNetworks(EnergyNetwork network) {

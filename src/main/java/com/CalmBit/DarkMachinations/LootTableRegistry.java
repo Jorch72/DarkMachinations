@@ -14,6 +14,6 @@ public class LootTableRegistry {
 
     public static ResourceLocation registerLootTable(String resourceLocation)
     {
-        return LootTableList.register(new ResourceLocation(DarkMachinations.DIVITAE_MOD_ID, resourceLocation));
+        return LootTableList.register(new ResourceLocation(DarkMachinations.DARKMACHINATIONS_MOD_ID, resourceLocation));
     }
 }

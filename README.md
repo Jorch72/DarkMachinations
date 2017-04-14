@@ -1,4 +1,4 @@
-<img src="src/main/resources/assets/divitae/textures/logo.png" height=128 width=128>
+<img src="src/main/resources/logo.png" height=128 width=128>
 
 # Dark Machinations
 ## A technology mod for 1.11.2

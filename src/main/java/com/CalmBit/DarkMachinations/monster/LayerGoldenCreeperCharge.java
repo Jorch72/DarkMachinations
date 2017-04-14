@@ -12,7 +12,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class LayerGoldenCreeperCharge implements LayerRenderer<EntityGoldenCreeper> {
 
-    private static final ResourceLocation LIGHTNING_TEXTURE = new ResourceLocation(DarkMachinations.DIVITAE_MOD_ID, "textures/entity/golden_creeper/golden_creeper_armor.png");
+    private static final ResourceLocation LIGHTNING_TEXTURE = new ResourceLocation(DarkMachinations.DARKMACHINATIONS_MOD_ID, "textures/entity/golden_creeper/golden_creeper_armor.png");
     private final RenderGoldenCreeper creeperRenderer;
     private final ModelCreeper creeperModel = new ModelCreeper(2.0F);
 

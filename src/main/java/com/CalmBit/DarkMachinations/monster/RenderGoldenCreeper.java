@@ -12,7 +12,7 @@ import net.minecraft.util.math.MathHelper;
 import javax.annotation.Nullable;
 
 public class RenderGoldenCreeper extends RenderLiving<EntityGoldenCreeper> {
-    private static final ResourceLocation GOLDEN_CREEPER_TEXTURE = new ResourceLocation(DarkMachinations.DIVITAE_MOD_ID, "textures/entity/golden_creeper/golden_creeper.png");
+    private static final ResourceLocation GOLDEN_CREEPER_TEXTURE = new ResourceLocation(DarkMachinations.DARKMACHINATIONS_MOD_ID, "textures/entity/golden_creeper/golden_creeper.png");
     public RenderGoldenCreeper(RenderManager renderManagerIn) {
         super(renderManagerIn, new ModelCreeper(), 0.5f);
         boolean b = this.addLayer(new LayerGoldenCreeperCharge(this));

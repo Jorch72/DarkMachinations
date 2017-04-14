@@ -19,7 +19,7 @@ public class SoundRegistry {
 
     public static SoundEvent registerSound(String resourceLocation)
     {
-        ResourceLocation sound = new ResourceLocation(DarkMachinations.DIVITAE_MOD_ID, resourceLocation);
+        ResourceLocation sound = new ResourceLocation(DarkMachinations.DARKMACHINATIONS_MOD_ID, resourceLocation);
         return GameRegistry.register(new SoundEvent(sound).setRegistryName(sound));
     }
 }

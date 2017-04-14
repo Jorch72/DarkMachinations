@@ -14,8 +14,8 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 
 
 version = "1.0"
-group = "com.CalmBit.Divitae" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "Divitae"
+group = "com.CalmBit.DarkMachinations" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "DarkMachinations"
 
 sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8 // Need this here so eclipse task generates correctly.
 compileJava {

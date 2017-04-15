@@ -1,0 +1,92 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "darkmachinations:cable_gold_center"
+	},
+	"variants": {
+		"normal": {
+			"model": "darkmachinations:cable_gold_center"
+		},
+		"edge_member": {
+			"true": {},
+			"false": {}
+		},
+		"west": {
+			"true": {
+				"submodel": {
+					"west": {
+						"model": "darkmachinations:cable_gold",
+						"y": 270
+					}
+				}
+			},
+			"false": {}
+		},
+		"north": {
+			"true": {
+				"submodel": {
+					"north": {
+						"model": "darkmachinations:cable_gold"
+					}
+				}
+			},
+			"false": {}
+		},
+		"east": {
+			"true": {
+				"submodel": {
+					"east": {
+						"model": "darkmachinations:cable_gold",
+						"y": 90
+					}
+				}
+			},
+			"false": {}
+		},
+		"south": {
+			"true": {
+				"submodel": {
+					"south": {
+						"model": "darkmachinations:cable_gold",
+						"y": 180
+					}
+				}
+			},
+			"false": {}
+		},
+		"up": {
+			"true": {
+				"submodel": {
+					"up": {
+						"model": "darkmachinations:cable_gold",
+						"transform": {
+							"rotation": {
+								"x": 90
+							}
+						}
+					}
+				}
+			},
+			"false": {}
+		},
+		"down": {
+			"true": {
+				"submodel": {
+					"down": {
+						"model": "darkmachinations:cable_gold",
+						"transform": {
+							"rotation": {
+								"x": -90
+							}
+						}
+					}
+				}
+			},
+			"false": {}
+		},
+		"inventory": {
+			"model": "darkmachinations:cable_gold_center",
+			"transform": "forge:default-block"
+		}
+	}
+}

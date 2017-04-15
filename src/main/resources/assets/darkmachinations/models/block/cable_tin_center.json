@@ -1,0 +1,518 @@
+{
+    "__createdwith": "opl's Model Creator",
+    "ambientocclusion": false,
+    "textures": {
+        "cable_cover": "darkmachinations:blocks/cable_cover",
+        "cable_core": "darkmachinations:blocks/cable_core_tin"
+    },
+    "elements": [
+        {
+            "from": [7,7,7],
+            "to": [9,9,9],
+            "faces": {
+                "up": {
+                    "texture": "#cable_core"
+                },
+                "down": {
+                    "texture": "#cable_core"
+                },
+                "west": {
+                    "texture": "#cable_core"
+                },
+                "east": {
+                    "texture": "#cable_core"
+                },
+                "north": {
+                    "texture": "#cable_core"
+                },
+                "south": {
+                    "texture": "#cable_core"
+                }
+            }
+        },
+        {
+            "from": [9,9,7],
+            "to": [10,10,9],
+            "faces": {
+                "up": {
+                    "texture": "#cable_cover"
+                },
+                "down": {
+                    "texture": "#cable_cover"
+                },
+                "west": {
+                    "texture": "#cable_cover"
+                },
+                "east": {
+                    "texture": "#cable_cover"
+                },
+                "north": {
+                    "texture": "#cable_cover"
+                },
+                "south": {
+                    "texture": "#cable_cover"
+                }
+            }
+        },
+        {
+            "from": [6,9,7],
+            "to": [7,10,9],
+            "faces": {
+                "up": {
+                    "texture": "#cable_cover"
+                },
+                "down": {
+                    "uv": [6,5,7,11],
+                    "texture": "#cable_cover"
+                },
+                "west": {
+                    "texture": "#cable_cover"
+                },
+                "east": {
+                    "texture": "#cable_cover"
+                },
+                "north": {
+                    "texture": "#cable_cover"
+                },
+                "south": {
+                    "texture": "#cable_cover"
+                }
+            }
+        },
+        {
+            "from": [9,6,7],
+            "to": [10,7,9],
+            "faces": {
+                "up": {
+                    "texture": "#cable_cover"
+                },
+                "down": {
+                    "texture": "#cable_cover"
+                },
+                "west": {
+                    "texture": "#cable_cover"
+                },
+                "east": {
+                    "texture": "#cable_cover"
+                },
+                "north": {
+                    "texture": "#cable_cover"
+                },
+                "south": {
+                    "texture": "#cable_cover"
+                }
+            }
+        },
+        {
+            "from": [6,6,7],
+            "to": [7,7,9],
+            "faces": {
+                "up": {
+                    "texture": "#cable_cover"
+                },
+                "down": {
+                    "texture": "#cable_cover"
+                },
+                "west": {
+                    "texture": "#cable_cover"
+                },
+                "east": {
+                    "texture": "#cable_cover"
+                },
+                "north": {
+                    "texture": "#cable_cover"
+                },
+                "south": {
+                    "texture": "#cable_cover"
+                }
+            }
+        },
+        {
+            "from": [7,9,6],
+            "to": [9,10,7],
+            "faces": {
+                "up": {
+                    "texture": "#cable_cover"
+                },
+                "down": {
+                    "texture": "#cable_cover"
+                },
+                "west": {
+                    "texture": "#cable_cover"
+                },
+                "east": {
+                    "texture": "#cable_cover"
+                },
+                "north": {
+                    "texture": "#cable_cover"
+                },
+                "south": {
+                    "texture": "#cable_cover"
+                }
+            }
+        },
+        {
+            "from": [7,9,9],
+            "to": [9,10,10],
+            "faces": {
+                "up": {
+                    "texture": "#cable_cover"
+                },
+                "down": {
+                    "texture": "#cable_cover"
+                },
+                "west": {
+                    "texture": "#cable_cover"
+                },
+                "east": {
+                    "texture": "#cable_cover"
+                },
+                "north": {
+                    "texture": "#cable_cover"
+                },
+                "south": {
+                    "texture": "#cable_cover"
+                }
+            }
+        },
+        {
+            "from": [6,7,9],
+            "to": [7,9,10],
+            "faces": {
+                "up": {
+                    "texture": "#cable_cover"
+                },
+                "down": {
+                    "texture": "#cable_cover"
+                },
+                "west": {
+                    "uv": [0,9,1,11],
+                    "texture": "#cable_cover"
+                },
+                "east": {
+                    "texture": "#cable_cover"
+                },
+                "north": {
+                    "texture": "#cable_cover"
+                },
+                "south": {
+                    "uv": [6,5,7,7],
+                    "texture": "#cable_cover"
+                }
+            }
+        },
+        {
+            "from": [6,7,6],
+            "to": [7,9,7],
+            "faces": {
+                "up": {
+                    "texture": "#cable_cover"
+                },
+                "down": {
+                    "texture": "#cable_cover"
+                },
+                "west": {
+                    "uv": [15,9,16,11],
+                    "texture": "#cable_cover"
+                },
+                "east": {
+                    "texture": "#cable_cover"
+                },
+                "north": {
+                    "texture": "#cable_cover"
+                },
+                "south": {
+                    "texture": "#cable_cover"
+                }
+            }
+        },
+        {
+            "from": [9,7,6],
+            "to": [10,9,7],
+            "faces": {
+                "up": {
+                    "texture": "#cable_cover"
+                },
+                "down": {
+                    "texture": "#cable_cover"
+                },
+                "west": {
+                    "texture": "#cable_cover"
+                },
+                "east": {
+                    "texture": "#cable_cover"
+                },
+                "north": {
+                    "texture": "#cable_cover"
+                },
+                "south": {
+                    "texture": "#cable_cover"
+                }
+            }
+        },
+        {
+            "from": [9,7,9],
+            "to": [10,9,10],
+            "faces": {
+                "up": {
+                    "texture": "#cable_cover"
+                },
+                "down": {
+                    "texture": "#cable_cover"
+                },
+                "west": {
+                    "texture": "#cable_cover"
+                },
+                "east": {
+                    "texture": "#cable_cover"
+                },
+                "north": {
+                    "texture": "#cable_cover"
+                },
+                "south": {
+                    "texture": "#cable_cover"
+                }
+            }
+        },
+        {
+            "from": [7,6,6],
+            "to": [9,7,7],
+            "faces": {
+                "up": {
+                    "texture": "#cable_cover"
+                },
+                "down": {
+                    "texture": "#cable_cover"
+                },
+                "west": {
+                    "texture": "#cable_cover"
+                },
+                "east": {
+                    "texture": "#cable_cover"
+                },
+                "north": {
+                    "texture": "#cable_cover"
+                },
+                "south": {
+                    "texture": "#cable_cover"
+                }
+            }
+        },
+        {
+            "from": [7,6,9],
+            "to": [9,7,10],
+            "faces": {
+                "up": {
+                    "texture": "#cable_cover"
+                },
+                "down": {
+                    "texture": "#cable_cover"
+                },
+                "west": {
+                    "texture": "#cable_cover"
+                },
+                "east": {
+                    "texture": "#cable_cover"
+                },
+                "north": {
+                    "texture": "#cable_cover"
+                },
+                "south": {
+                    "texture": "#cable_cover"
+                }
+            }
+        },
+        {
+            "from": [9,9,6],
+            "to": [10,10,7],
+            "faces": {
+                "up": {
+                    "texture": "#cable_cover"
+                },
+                "down": {
+                    "texture": "#cable_cover"
+                },
+                "west": {
+                    "texture": "#cable_cover"
+                },
+                "east": {
+                    "texture": "#cable_cover"
+                },
+                "north": {
+                    "texture": "#cable_cover"
+                },
+                "south": {
+                    "texture": "#cable_cover"
+                }
+            }
+        },
+        {
+            "from": [9,9,9],
+            "to": [10,10,10],
+            "faces": {
+                "up": {
+                    "texture": "#cable_cover"
+                },
+                "down": {
+                    "texture": "#cable_cover"
+                },
+                "west": {
+                    "texture": "#cable_cover"
+                },
+                "east": {
+                    "texture": "#cable_cover"
+                },
+                "north": {
+                    "texture": "#cable_cover"
+                },
+                "south": {
+                    "texture": "#cable_cover"
+                }
+            }
+        },
+        {
+            "from": [6,9,9],
+            "to": [7,10,10],
+            "faces": {
+                "up": {
+                    "texture": "#cable_cover"
+                },
+                "down": {
+                    "texture": "#cable_cover"
+                },
+                "west": {
+                    "texture": "#cable_cover"
+                },
+                "east": {
+                    "texture": "#cable_cover"
+                },
+                "north": {
+                    "texture": "#cable_cover"
+                },
+                "south": {
+                    "texture": "#cable_cover"
+                }
+            }
+        },
+        {
+            "from": [6,9,6],
+            "to": [7,10,7],
+            "faces": {
+                "up": {
+                    "texture": "#cable_cover"
+                },
+                "down": {
+                    "texture": "#cable_cover"
+                },
+                "west": {
+                    "texture": "#cable_cover"
+                },
+                "east": {
+                    "texture": "#cable_cover"
+                },
+                "north": {
+                    "texture": "#cable_cover"
+                },
+                "south": {
+                    "texture": "#cable_cover"
+                }
+            }
+        },
+        {
+            "from": [9,6,6],
+            "to": [10,7,7],
+            "faces": {
+                "up": {
+                    "texture": "#cable_cover"
+                },
+                "down": {
+                    "texture": "#cable_cover"
+                },
+                "west": {
+                    "texture": "#cable_cover"
+                },
+                "east": {
+                    "texture": "#cable_cover"
+                },
+                "north": {
+                    "texture": "#cable_cover"
+                },
+                "south": {
+                    "texture": "#cable_cover"
+                }
+            }
+        },
+        {
+            "from": [6,6,6],
+            "to": [7,7,7],
+            "faces": {
+                "up": {
+                    "texture": "#cable_cover"
+                },
+                "down": {
+                    "texture": "#cable_cover"
+                },
+                "west": {
+                    "texture": "#cable_cover"
+                },
+                "east": {
+                    "texture": "#cable_cover"
+                },
+                "north": {
+                    "texture": "#cable_cover"
+                },
+                "south": {
+                    "texture": "#cable_cover"
+                }
+            }
+        },
+        {
+            "from": [6,6,9],
+            "to": [7,7,10],
+            "faces": {
+                "up": {
+                    "texture": "#cable_cover"
+                },
+                "down": {
+                    "texture": "#cable_cover"
+                },
+                "west": {
+                    "texture": "#cable_cover"
+                },
+                "east": {
+                    "texture": "#cable_cover"
+                },
+                "north": {
+                    "texture": "#cable_cover"
+                },
+                "south": {
+                    "texture": "#cable_cover"
+                }
+            }
+        },
+        {
+            "from": [9,6,9],
+            "to": [10,7,10],
+            "faces": {
+                "up": {
+                    "texture": "#cable_cover"
+                },
+                "down": {
+                    "texture": "#cable_cover"
+                },
+                "west": {
+                    "texture": "#cable_cover"
+                },
+                "east": {
+                    "texture": "#cable_cover"
+                },
+                "north": {
+                    "texture": "#cable_cover"
+                },
+                "south": {
+                    "texture": "#cable_cover"
+                }
+            }
+        }
+    ]
+}

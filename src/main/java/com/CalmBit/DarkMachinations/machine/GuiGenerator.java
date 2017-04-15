@@ -10,7 +10,7 @@ import java.util.List;
 
 public class GuiGenerator extends GuiContainer{
     private final ContainerGenerator generatorContainer;
-    public static final ResourceLocation guiLocation = new ResourceLocation("divitae:textures/gui/machine/generator.png");
+    public static final ResourceLocation guiLocation = new ResourceLocation("darkmachinations:textures/gui/machine/generator.png");
     public GuiGenerator(Container inventorySlotsIn) {
         super(inventorySlotsIn);
         this.generatorContainer = (ContainerGenerator) inventorySlotsIn;

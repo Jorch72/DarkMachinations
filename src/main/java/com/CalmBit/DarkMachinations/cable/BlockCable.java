@@ -4,24 +4,34 @@ import com.CalmBit.DarkMachinations.BlockRegistry;
 import com.CalmBit.DarkMachinations.NetworkRegistry;
 import com.CalmBit.DarkMachinations.generic.BlockBase;
 import com.CalmBit.DarkMachinations.network.EnergyNetwork;
+import com.CalmBit.DarkMachinations.network.EnergyNetworkNode;
 import com.elytradev.probe.api.IProbeDataProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
+import sun.nio.ch.Net;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class BlockCable extends BlockBase {
 
@@ -48,6 +58,7 @@ public class BlockCable extends BlockBase {
                 .withProperty(WEST, false)
                 .withProperty(UP, false)
                 .withProperty(DOWN, false));
+
         if(boundingBoxes.isEmpty()) {
             for(int i =0;i < 64;i++) {
                 double  minX = 0.3125,
@@ -77,26 +88,46 @@ public class BlockCable extends BlockBase {
 
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        for(EnumFacing facing : EnumFacing.VALUES) {
-            BlockPos neighbour = pos.add(facing.getDirectionVec());
-            if(worldIn.getTileEntity(neighbour) instanceof TileEntityCableNode) {
-                NetworkRegistry.networkRediscovery(worldIn, ((TileEntityCableNode) worldIn.getTileEntity(neighbour)).getNetwork(), pos);
-            }
-            else if(worldIn.getBlockState(neighbour).getBlock() instanceof BlockCable)
-            {
-                NetworkRegistry.networkRediscovery(worldIn, new EnergyNetwork(worldIn), pos);
-            }
-            else if(worldIn.getTileEntity(neighbour) != null && worldIn.getTileEntity(neighbour).hasCapability(CapabilityEnergy.ENERGY, facing.getOpposite())) {
-                worldIn.setBlockState(pos, BlockRegistry.cable_regular_node.getDefaultState(), 3);
-                worldIn.setTileEntity(pos, new TileEntityCableNode(new EnergyNetwork(worldIn)));
-                NetworkRegistry.networkRediscovery(worldIn, ((TileEntityCableNode) worldIn.getTileEntity(pos)).getNetwork(), pos);
+        if(!worldIn.isRemote) {
+            for (EnumFacing facing : EnumFacing.VALUES) {
+                BlockPos neighbour = pos.add(facing.getDirectionVec());
+                if (worldIn.getTileEntity(neighbour) instanceof TileEntityCableNode) {
+                    NetworkRegistry.networkRediscovery(worldIn, ((TileEntityCableNode) worldIn.getTileEntity(neighbour)).getNetwork(), pos);
+                } else if (worldIn.getBlockState(neighbour).getBlock() instanceof BlockCable) {
+                    NetworkRegistry.networkRediscovery(worldIn, null, pos);
+                } else if (worldIn.getTileEntity(neighbour) != null && worldIn.getTileEntity(neighbour).hasCapability(CapabilityEnergy.ENERGY, facing.getOpposite())) {
+                    IEnergyStorage storage = worldIn.getTileEntity(neighbour).getCapability(CapabilityEnergy.ENERGY, facing.getOpposite());
+
+                    EnergyNetworkNode.NodeType nodeType;
+                    if (storage.canReceive()) {
+                        if (storage.canExtract()) {
+                            nodeType = EnergyNetworkNode.NodeType.SENDRECV;
+                        } else {
+                            nodeType = EnergyNetworkNode.NodeType.RECIEVER;
+                        }
+                    } else {
+                        nodeType = EnergyNetworkNode.NodeType.SENDER;
+                    }
+                    worldIn.setBlockState(pos, BlockRegistry.cable_regular_node.getDefaultState(), 3);
+                    TileEntityCableNode node = ((TileEntityCableNode) worldIn.getTileEntity(pos));
+                    node.addNodeToNetwork(nodeType);
+                    NetworkRegistry.networkRediscovery(worldIn, ((TileEntityCableNode) worldIn.getTileEntity(pos)).getNetwork(), pos);
+                }
             }
         }
     }
 
-    public void networkDiscovery() {
-
+    @Override
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+        if(!worldIn.isRemote)
+        {
+            UUID network = NetworkRegistry.getNetworkIdentityForBlock(pos);
+            if(network != null)
+                NetworkRegistry.getNetwork(network).removeMember(pos);
+        }
+        super.breakBlock(worldIn, pos, state);
     }
+
 
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
@@ -135,13 +166,13 @@ public class BlockCable extends BlockBase {
 
     public int getMetaFromState(IBlockState state) {
         boolean isEdgeMember = state.getValue(EDGE_MEMBER);
-        return isEdgeMember ? 0 : 1;
+        return (isEdgeMember ? 0 : 1);
     }
 
     @Override
     @SuppressWarnings("deprecation")
     public IBlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(EDGE_MEMBER, meta == 1);
+        return this.getDefaultState().withProperty(EDGE_MEMBER, (meta & 1) == 1);
     }
 
     @Override
@@ -153,6 +184,8 @@ public class BlockCable extends BlockBase {
                     .withProperty(UP, canConnectTo(world, pos, EnumFacing.UP))
                     .withProperty(DOWN, canConnectTo(world, pos, EnumFacing.DOWN));
     }
+
+
 
     public boolean canConnectTo(IBlockAccess world, BlockPos pos, EnumFacing facing) {
         TileEntity entity = world.getTileEntity(pos.add(facing.getDirectionVec()));

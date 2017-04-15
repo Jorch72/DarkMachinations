@@ -1,8 +1,0 @@
-{
-    "parent": "block/orientable",
-    "textures": {
-        "top": "divitae:blocks/machine_side",
-        "front": "divitae:blocks/generator_front_off",
-        "side": "divitae:blocks/machine_side"
-    }
-}

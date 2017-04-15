@@ -1,6 +1,6 @@
 package com.CalmBit.DarkMachinations;
 
-import com.CalmBit.DarkMachinations.generic.DivitaeCreativeTab;
+import com.CalmBit.DarkMachinations.generic.DarkMachinationsCreativeTab;
 import com.CalmBit.DarkMachinations.proxy.CommonProxy;
 import com.CalmBit.DarkMachinations.world.WorldGen;
 import com.elytradev.probe.api.IProbeDataProvider;
@@ -19,7 +19,7 @@ public class DarkMachinations {
     public static final String DARKMACHINATIONS_NAME = "DarkMachinations";
     public static final String DARKMACHINATIONS_VERSION = "1.11.2-0.1.0.0";
 
-    public static final DivitaeCreativeTab divitaeTab = new DivitaeCreativeTab(DARKMACHINATIONS_MOD_ID);
+    public static final DarkMachinationsCreativeTab divitaeTab = new DarkMachinationsCreativeTab(DARKMACHINATIONS_MOD_ID);
 
     @Mod.Instance(DARKMACHINATIONS_MOD_ID)
     public static DarkMachinations instance;

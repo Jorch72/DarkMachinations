@@ -1,0 +1,31 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "darkmachinations:compressor"
+    },
+    "variants": {
+        "inventory": {
+            "model": "darkmachinations:compressor"
+        },
+        "state": {
+            "off": {},
+            "on": {
+                "textures": {
+                    "front": "darkmachinations:blocks/compressor_front_on"
+                }
+            }
+        },
+        "facing": {
+            "north": {},
+            "south": {
+                "y": 180
+            },
+            "west": {
+                "y": 270
+            },
+            "east": {
+                "y": 90
+            }
+        }
+    }
+}

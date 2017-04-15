@@ -3,6 +3,7 @@ package com.CalmBit.DarkMachinations.machine;
 import com.CalmBit.DarkMachinations.CompressorRecipes;
 import com.CalmBit.DarkMachinations.DarkMachinations;
 import com.CalmBit.DarkMachinations.generic.EnergyUser;
+import net.minecraft.block.BlockHorizontal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -60,8 +61,12 @@ public class TileEntityCompressor extends TileEntityBase {
         if(capability == null)
             return false;
 
-        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || capability == CapabilityEnergy.ENERGY|| capability == DarkMachinations.PROBE_CAPABILITY) {
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || capability == DarkMachinations.PROBE_CAPABILITY) {
             return true;
+        }
+        if(capability == CapabilityEnergy.ENERGY)
+        {
+            return (world.getBlockState(pos).getValue(BlockHorizontal.FACING) != facing);
         }
         return super.hasCapability(capability, facing);
     }
@@ -75,7 +80,7 @@ public class TileEntityCompressor extends TileEntityBase {
         {
             return (T) itemStackHandler;
         }
-        if(capability == CapabilityEnergy.ENERGY)
+        if(capability == CapabilityEnergy.ENERGY && (world.getBlockState(pos).getValue(BlockHorizontal.FACING) != facing))
         {
             return (T) energyStorage;
         }
@@ -236,7 +241,7 @@ public class TileEntityCompressor extends TileEntityBase {
 
     @Override
     public String getGuiID() {
-        return "divitae:compressor";
+        return "darkmachinations:compressor";
     }
 
     @Override

@@ -1,0 +1,23 @@
+{
+    "entity.golden_creeper.death": {
+        "sounds": [
+            "darkmachinations:mob/golden_creeper/death"
+        ],
+        "subtitle": "subtitles.entity.golden_creeper.death"
+    },
+    "entity.golden_creeper.hurt": {
+        "sounds": [
+            "darkmachinations:mob/golden_creeper/say1",
+            "darkmachinations:mob/golden_creeper/say2",
+            "darkmachinations:mob/golden_creeper/say3",
+            "darkmachinations:mob/golden_creeper/say4"
+        ],
+        "subtitle": "subtitles.entity.golden_creeper.hurt"
+    },
+    "entity.golden_creeper.primed": {
+        "sounds": [
+            "darkmachinations:mob/golden_creeper/fuse"
+        ],
+        "subtitle": "subtitles.entity.golden_creeper.primed"
+    }
+}

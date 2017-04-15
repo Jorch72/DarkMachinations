@@ -1,6 +1,7 @@
 package com.CalmBit.DarkMachinations.machine;
 
 import com.CalmBit.DarkMachinations.generic.EnergyUser;
+import net.minecraft.block.BlockHorizontal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -53,8 +54,11 @@ public class TileEntityGenerator extends TileEntityBase {
 
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || capability == CapabilityEnergy.ENERGY) {
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             return true;
+        }
+        if(capability == CapabilityEnergy.ENERGY) {
+            return world.getBlockState(pos).getValue(BlockHorizontal.FACING) != facing;
         }
         return super.hasCapability(capability, facing);
     }
@@ -65,7 +69,7 @@ public class TileEntityGenerator extends TileEntityBase {
         {
             return (T) itemStackHandler;
         }
-        if(capability == CapabilityEnergy.ENERGY)
+        if(capability == CapabilityEnergy.ENERGY && world.getBlockState(pos).getValue(BlockHorizontal.FACING) != facing)
         {
             return (T) energyStorage;
         }
@@ -210,7 +214,7 @@ public class TileEntityGenerator extends TileEntityBase {
 
     @Override
     public String getGuiID() {
-        return "divitae:generator";
+        return "darkmachinations:generator";
     }
 
     @Override

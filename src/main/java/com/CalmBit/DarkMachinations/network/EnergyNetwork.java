@@ -22,14 +22,16 @@ public class EnergyNetwork {
         NetworkRegistry.registerNetwork(worldIn, this);
     }
 
-    public void addNode(BlockPos node, EnergyNetworkNode.NodeType nodeType) {
-        EnergyNetworkNode createdNode = new EnergyNetworkNode(this, node, nodeType);
-        if(!nodes.contains(createdNode))
-            this.nodes.add(createdNode);
-        for(EnergyNetworkNode searchedNode : nodes) {
-            if(searchedNode.equals(createdNode))
-                continue;
-            // TODO: Search and link
+    public void addNode(World worldIn, BlockPos node, EnergyNetworkNode.NodeType nodeType) {
+        if(!worldIn.isRemote) {
+            EnergyNetworkNode createdNode = new EnergyNetworkNode(this, node, nodeType);
+            if (!nodes.contains(createdNode))
+                this.nodes.add(createdNode);
+            for (EnergyNetworkNode searchedNode : nodes) {
+                if (searchedNode.equals(createdNode))
+                    continue;
+                // TODO: Search and link
+            }
         }
     }
 
@@ -38,7 +40,20 @@ public class EnergyNetwork {
     public ArrayList<EnergyNetworkNode> getNodesList() { return nodes; }
 
     public void addMember(BlockPos member) {
-        this.members.add(member);
+        if(!this.members.contains(member))
+            this.members.add(member);
+    }
+
+    public void removeMember(BlockPos member) {
+        if(this.members.contains(member))
+            this.members.remove(member);
+    }
+
+    public void removeNode(EnergyNetworkNode node) {
+        if(this.nodes.contains(node))
+            this.nodes.remove(node);
+
+        // TODO: Edges would be de-initialized here, too.
     }
 
     public boolean hasMember(BlockPos member) {
@@ -50,6 +65,10 @@ public class EnergyNetwork {
     }
 
     public void mergeNetworks(EnergyNetwork other) {
+    }
+
+    public int getSize() {
+        return this.members.size() + this.nodes.size();
     }
 
     public UUID getIdentifier() {

@@ -1,8 +1,6 @@
 package com.CalmBit.DarkMachinations;
 
-import com.CalmBit.DarkMachinations.cable.BlockCable;
-import com.CalmBit.DarkMachinations.cable.BlockCableEndpoint;
-import com.CalmBit.DarkMachinations.cable.TileEntityCableNode;
+import com.CalmBit.DarkMachinations.cable.*;
 import com.CalmBit.DarkMachinations.generic.*;
 import com.CalmBit.DarkMachinations.machine.BlockCompressor;
 import com.CalmBit.DarkMachinations.machine.BlockGenerator;
@@ -23,7 +21,9 @@ public class BlockRegistry {
     public static BlockCompressor machine_compressor;
     public static BlockBase machine_redstone_core;
     public static BlockGenerator machine_generator;
-    public static BlockCable cable_regular;
+    public static BlockCable cable_copper;
+    public static BlockCable cable_gold;
+    public static BlockCable cable_tin;
     public static BlockCableEndpoint cable_regular_node;
     public static void init()
     {
@@ -34,10 +34,10 @@ public class BlockRegistry {
         machine_compressor = registerBlock(new BlockCompressor());
         machine_redstone_core = registerBlock(new BlockBase(Material.IRON, "machine_redstone_core")).setCreativeTab(DarkMachinations.divitaeTab);
         machine_generator = registerBlock(new BlockGenerator());
-        cable_regular = registerBlock(new BlockCable("cable_regular")).setCreativeTab(DarkMachinations.divitaeTab);
+        cable_copper = registerBlock(new BlockCableCopper("cable_copper")).setCreativeTab(DarkMachinations.divitaeTab);
+        cable_gold = registerBlock(new BlockCableGold("cable_gold")).setCreativeTab(DarkMachinations.divitaeTab);
+        cable_tin = registerBlock(new BlockCableTin("cable_tin")).setCreativeTab(DarkMachinations.divitaeTab);
         cable_regular_node = registerBlock(new BlockCableEndpoint("cable_regular_node"));
-        GameRegistry.registerTileEntity(TileEntityCableNode.class, cable_regular_node.getRegistryName().toString());
-
     }
 
     private static <T extends Block & IDivitaeBlock> T registerBlock(T block, ItemBlock itemBlock)
@@ -54,6 +54,10 @@ public class BlockRegistry {
         if(block instanceof BlockMachineBase)
         {
             GameRegistry.registerTileEntity(((BlockMachineBase<?>)block).getTileEntityClass(), block.getRegistryName().toString());
+        }
+        if(block instanceof BlockCableEndpoint)
+        {
+            GameRegistry.registerTileEntity(TileEntityCableNode.class, block.getRegistryName().toString());
         }
         if(itemBlock instanceof IOreDict)
         {

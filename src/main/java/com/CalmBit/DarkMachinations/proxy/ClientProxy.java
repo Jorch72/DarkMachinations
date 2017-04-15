@@ -11,9 +11,10 @@ import net.minecraft.item.Item;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
+@SuppressWarnings("MethodCallSideOnly")
 public class ClientProxy extends CommonProxy {
 
-    private static ModelResourceLocation heavyCrudeOilLocation = new ModelResourceLocation("divitae:heavy_crude_oil", "heavy_crude_oil");
+    private static ModelResourceLocation heavyCrudeOilLocation = new ModelResourceLocation("darkmachinations:heavy_crude_oil", "heavy_crude_oil");
 
     public void init()
     {

@@ -1,0 +1,31 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "darkmachinations:generator"
+    },
+    "variants": {
+        "inventory": {
+            "model": "darkmachinations:generator"
+        },
+        "state": {
+            "off": {},
+            "on": {
+                "textures": {
+                    "front": "darkmachinations:blocks/generator_front_on"
+                }
+            }
+        },
+        "facing": {
+            "north": {},
+            "south": {
+                "y": 180
+            },
+            "west": {
+                "y": 270
+            },
+            "east": {
+                "y": 90
+            }
+        }
+    }
+}

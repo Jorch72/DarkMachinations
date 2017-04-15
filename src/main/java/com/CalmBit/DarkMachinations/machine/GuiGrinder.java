@@ -11,7 +11,7 @@ import java.util.List;
 public class GuiGrinder extends GuiContainer {
 
     private final ContainerGrinder grinderContainer;
-    public static final ResourceLocation guiLocation = new ResourceLocation("divitae:textures/gui/machine/grinder.png");
+    public static final ResourceLocation guiLocation = new ResourceLocation("darkmachinations:textures/gui/machine/grinder.png");
     public GuiGrinder(Container inventorySlotsIn) {
         super(inventorySlotsIn);
         this.grinderContainer = (ContainerGrinder)inventorySlotsIn;

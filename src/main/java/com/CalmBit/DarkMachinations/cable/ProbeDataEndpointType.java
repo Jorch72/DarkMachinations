@@ -1,22 +1,23 @@
 package com.CalmBit.DarkMachinations.cable;
 
-
+import com.CalmBit.DarkMachinations.network.EnergyNetworkNode;
 import com.elytradev.probe.api.IProbeData;
 import com.elytradev.probe.api.IUnit;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentString;;
 
 import javax.annotation.Nonnull;
-import java.util.UUID;
 
-public class ProbeDataUUID implements IProbeData{
+public class ProbeDataEndpointType implements IProbeData {
 
-    UUID identifier;
-    public ProbeDataUUID(UUID identifier) {
-        this.identifier = identifier;
+    private EnergyNetworkNode.NodeType nodeType;
+
+    public ProbeDataEndpointType(EnergyNetworkNode.NodeType nodeType) {
+        this.nodeType = nodeType;
     }
+
     @Override
     public boolean hasLabel() {
         return true;
@@ -35,10 +36,10 @@ public class ProbeDataUUID implements IProbeData{
     @Nonnull
     @Override
     public ITextComponent getLabel() {
-        if(identifier == null) {
-            return new TextComponentString("No network found.");
-        }
-        return new TextComponentString(identifier.toString());
+        if(nodeType != null)
+            return new TextComponentString(nodeType.toString());
+        else
+            return new TextComponentString("No Endpoint Type");
     }
 
     @Override

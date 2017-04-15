@@ -10,7 +10,7 @@ import java.util.List;
 
 public class GuiCompressor extends GuiContainer{
     private final ContainerCompressor compressorContainer;
-    public static final ResourceLocation guiLocation = new ResourceLocation("divitae:textures/gui/machine/compressor.png");
+    public static final ResourceLocation guiLocation = new ResourceLocation("darkmachinations:textures/gui/machine/compressor.png");
     public GuiCompressor(Container inventorySlotsIn) {
         super(inventorySlotsIn);
         this.compressorContainer = (ContainerCompressor) inventorySlotsIn;

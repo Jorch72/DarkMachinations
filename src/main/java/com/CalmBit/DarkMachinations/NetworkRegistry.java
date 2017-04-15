@@ -8,36 +8,55 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLLog;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import sun.nio.ch.Net;
 
-import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
-import java.util.LinkedList;
-import java.util.UUID;
+import java.util.*;
 
 public class NetworkRegistry {
 
-    public static ArrayList<EnergyNetwork> networkList = new ArrayList<>();
+    public static HashMap<UUID, EnergyNetwork> networkList = new HashMap<>();
+    private static ArrayList<UUID> toRemove = new ArrayList<>();
+
 
     public static void registerNetwork(World worldIn, EnergyNetwork network) {
         if(!worldIn.isRemote)
-            networkList.add(network);
+            networkList.put(network.getIdentifier(), network);
     }
 
-    public static void removeNetwork(World worldIn, EnergyNetwork network) {
-        if(!worldIn.isRemote)
-            networkList.remove(network);
+    public static void removeNetwork(World worldIn, UUID identifier) {
+        networkList.remove(identifier);
     }
 
     public static EnergyNetwork getNetwork(UUID identifier) {
-        for(EnergyNetwork network : networkList) {
-            if(network.getIdentifier() == identifier)
-                return network;
-        }
+        if(networkList.containsKey(identifier))
+            return networkList.get(identifier);
         return null;
     }
 
+    public static void networkTick(World worldIn) {
+        if(!worldIn.isRemote) {
+            for (EnergyNetwork network : networkList.values()) {
+                if (network.getNodesList().size() == 0) {
+                    if(network.getMembersList().size() != 0)
+                    {
+                        for(BlockPos member : network.getMembersList())
+                            NetworkRegistry.networkRediscovery(worldIn, network, member);
+                    }
+                    toRemove.add(network.getIdentifier());
+                }
+            }
+
+            for (UUID ident : toRemove) {
+                NetworkRegistry.removeNetwork(worldIn, ident);
+            }
+
+            toRemove.clear();
+        }
+    }
+
     public static UUID getNetworkIdentityForBlock(BlockPos pos) {
-        for(EnergyNetwork network : networkList) {
+        for(EnergyNetwork network : networkList.values()) {
             if(network.hasMember(pos)) {
                 return network.getIdentifier();
             }
@@ -45,65 +64,91 @@ public class NetworkRegistry {
         return null;
     }
 
-    public static void mergeNetworks(World worldIn, EnergyNetwork one, EnergyNetwork two)
+    public static EnergyNetwork mergeNetworks(World worldIn, EnergyNetwork one, EnergyNetwork two)
     {
         if(!worldIn.isRemote) {
-            if (one.getIdentifier() == two.getIdentifier()) {
-                FMLLog.getLogger().error("For some reason, this network (" + one.getIdentifier() + ") just tried to merge to itself...");
-                return;
+            boolean biggerNetwork = one.getSize() > two.getSize();
+            EnergyNetwork biggest = biggerNetwork ? one : two;
+            EnergyNetwork smallest = biggerNetwork ? two : one;
+            if (biggest.getIdentifier() == smallest.getIdentifier()) {
+                FMLLog.getLogger().error("For some reason, this network (" + biggest.getIdentifier() + ") just tried to merge to itself...");
+                return biggest;
             }
             try {
-                FMLLog.getLogger().info("Network merge incoming! (" + one.getIdentifier() + "," + two.getIdentifier() + ")");
-                for (BlockPos member : two.getMembersList()) {
-                    one.addMember(member);
+                FMLLog.getLogger().info("Network merge incoming! (" + biggest.getIdentifier() + "," + smallest.getIdentifier() + ")");
+                for (BlockPos member : smallest.getMembersList()) {
+                    biggest.addMember(member);
                 }
 
-                for (EnergyNetworkNode node : two.getNodesList()) {
-                    one.addNode(node.position, node.nodeType);
+                for (EnergyNetworkNode node : smallest.getNodesList()) {
+                    biggest.addNode(worldIn, node.position, node.nodeType);
                     switch (node.nodeType) {
-                        case ENDPOINT:
+                        case ROUTER:
+                            break;
+                        default:
                             TileEntityCableNode cable = (TileEntityCableNode) worldIn.getTileEntity(node.position);
                             if (cable == null)
                                 FMLLog.getLogger().error("What the fuck? Why is an ENDPOINT node not carrying a TE? Position: " + node.position);
                             else
-                                cable.setNetwork(one);
+                                cable.setNetwork(biggest);
                             break;
                     }
                 }
-                NetworkRegistry.removeNetwork(worldIn, two);
+
+                smallest.getNodesList().clear();
+                smallest.getMembersList().clear();
+
                 FMLLog.getLogger().info("Network merge complete.");
             } catch (ConcurrentModificationException e) {
-                FMLLog.getLogger().fatal("ConcurrentModificationException thrown merging networks " + one.getIdentifier() + ", " + two.getIdentifier());
+                FMLLog.getLogger().fatal("ConcurrentModificatibiggestxception thrown merging networks " + biggest.getIdentifier() + ", " + smallest.getIdentifier());
             }
+            return biggest;
         }
+        return null;
     }
 
     public static void networkRediscovery(World worldIn, EnergyNetwork network, BlockPos pos) {
-        if(network.hasMember(pos))
-            return;
-        if(!(worldIn.getBlockState(pos).getBlock() instanceof BlockCable))
-            return;
 
-        LinkedList<BlockPos> toBeChecked = new LinkedList<>();
-        toBeChecked.add(pos);
+        EnergyNetwork mergingNetwork = network;
 
-        network.addMember(pos);
+        if (!worldIn.isRemote) {
+            if (mergingNetwork != null && mergingNetwork.hasMember(pos))
+                return;
+            if (!(worldIn.getBlockState(pos).getBlock() instanceof BlockCable))
+                return;
 
-        while(!toBeChecked.isEmpty()) {
-            BlockPos checking = toBeChecked.removeFirst();
-            for (EnumFacing facing : EnumFacing.VALUES) {
-                BlockPos extra = checking.add(facing.getDirectionVec());
-                if(network.hasMember(extra))
-                    continue;
-                if(worldIn.getBlockState(extra).getBlock() instanceof BlockCable)
-                {
-                    if(worldIn.getTileEntity(extra) != null)
-                        mergeNetworks(worldIn, network, ((TileEntityCableNode) worldIn.getTileEntity(extra)).getNetwork());
-                    else {
-                        network.addMember(extra);
-                        toBeChecked.add(extra);
+            LinkedList<BlockPos> toBeChecked = new LinkedList<>();
+            ArrayList<BlockPos> alreadyChecked = new ArrayList<>();
+            if(mergingNetwork != null)
+                mergingNetwork.addMember(pos);
+
+            toBeChecked.add(pos);
+
+            while (!toBeChecked.isEmpty()) {
+                BlockPos checking = toBeChecked.removeFirst();
+                alreadyChecked.add(checking);
+                for (EnumFacing facing : EnumFacing.VALUES) {
+                    BlockPos extra = checking.add(facing.getDirectionVec());
+                    if (mergingNetwork != null && mergingNetwork.hasMember(extra))
+                        continue;
+                    if (worldIn.getBlockState(extra).getBlock() instanceof BlockCable) {
+                        if (worldIn.getTileEntity(extra) != null) {
+                            if(mergingNetwork == null)
+                                mergingNetwork = ((TileEntityCableNode)worldIn.getTileEntity(extra)).getNetwork();
+                            else
+                                mergingNetwork = mergeNetworks(worldIn, mergingNetwork, ((TileEntityCableNode) worldIn.getTileEntity(extra)).getNetwork());
+                        }
+                        else {
+                            if(mergingNetwork != null)
+                                mergingNetwork.addMember(extra);
+                            if(!alreadyChecked.contains(extra))
+                                toBeChecked.add(extra);
+                        }
                     }
                 }
+            }
+            if(mergingNetwork == null) {
+                NetworkRegistry.networkRediscovery(worldIn, new EnergyNetwork(worldIn), pos);
             }
         }
     }

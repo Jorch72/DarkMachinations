@@ -1,6 +1,6 @@
 package com.CalmBit.DarkMachinations.machine;
 
-import com.CalmBit.DarkMachinations.GrinderRecipes;
+import com.CalmBit.DarkMachinations.CrusherRecipes;
 import com.CalmBit.DarkMachinations.generic.EnergyUser;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,13 +21,13 @@ import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
 
-public class TileEntityGrinder extends TileEntityBase {
+public class TileEntityCrusher extends TileEntityBase {
 
     public ItemStackHandler itemStackHandler;
     public EnergyUser energyStorage;
     public String customName;
 
-    public ItemStack inGrinder;
+    public ItemStack inCrusher;
     public boolean isActive;
     public boolean wasActive;
 
@@ -44,12 +44,12 @@ public class TileEntityGrinder extends TileEntityBase {
     public int itemProcessingTimer;
     public int itemProcessingMaximum = 100;
 
-    public TileEntityGrinder()
+    public TileEntityCrusher()
     {
         super();
         itemStackHandler = new ItemStackHandler(SLOT_COUNT);
         energyStorage = new EnergyUser(ENERGY_CAPACITY, ENERGY_TRANSFER_RATE);
-        inGrinder = ItemStack.EMPTY;
+        inCrusher = ItemStack.EMPTY;
     }
 
     @Override
@@ -99,17 +99,17 @@ public class TileEntityGrinder extends TileEntityBase {
 
     @Override
     public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn) {
-        return new ContainerGrinder(this, playerInventory);
+        return new ContainerCrusher(this, playerInventory);
     }
 
     @Override
     public String getGuiID() {
-        return "darkmachinations:grinder";
+        return "darkmachinations:crusher";
     }
 
     @Override
     public String getName() {
-        return this.hasCustomName() ? this.customName : "machine.grinder";
+        return this.hasCustomName() ? this.customName : "machine.crusher";
     }
 
     public void setCustomName(String name)
@@ -125,7 +125,7 @@ public class TileEntityGrinder extends TileEntityBase {
     @Override
     public void update() {
 
-        ItemStack supplySlot = itemStackHandler.getStackInSlot(ContainerGrinder.GRINDER_SUPPLY_SLOT);
+        ItemStack supplySlot = itemStackHandler.getStackInSlot(ContainerCrusher.CRUSHER_SUPPLY_SLOT);
 
         if(!this.world.isRemote) {
             if (this.isActive) {
@@ -139,10 +139,10 @@ public class TileEntityGrinder extends TileEntityBase {
 
             if (!isActive && this.energyStorage.getEnergyStored() >= ENERGY_USAGE_RATE) {
                 if (!supplySlot.isEmpty()) {
-                    ItemStack product = GrinderRecipes.INSTANCE.getRecipeResult(supplySlot);
+                    ItemStack product = CrusherRecipes.INSTANCE.getRecipeResult(supplySlot);
                     if (!product.isEmpty()) {
-                        inGrinder = new ItemStack(supplySlot.getItem(), 1);
-                        this.itemStackHandler.setStackInSlot(ContainerGrinder.GRINDER_SUPPLY_SLOT, new ItemStack(supplySlot.getItem(), supplySlot.getCount() - 1));
+                        inCrusher = new ItemStack(supplySlot.getItem(), 1);
+                        this.itemStackHandler.setStackInSlot(ContainerCrusher.CRUSHER_SUPPLY_SLOT, new ItemStack(supplySlot.getItem(), supplySlot.getCount() - 1));
                         this.itemProcessingTimer = this.itemProcessingMaximum;
                         this.isActive = true;
                     }
@@ -164,17 +164,17 @@ public class TileEntityGrinder extends TileEntityBase {
 
     public void grindItem()
     {
-        ItemStack product = GrinderRecipes.INSTANCE.getRecipeResult(inGrinder);
-        ItemStack productSlot = this.itemStackHandler.getStackInSlot(ContainerGrinder.GRINDER_PRODUCT_SLOT);
+        ItemStack product = CrusherRecipes.INSTANCE.getRecipeResult(inCrusher);
+        ItemStack productSlot = this.itemStackHandler.getStackInSlot(ContainerCrusher.CRUSHER_PRODUCT_SLOT);
 
         if (productSlot.isEmpty())
-            this.itemStackHandler.setStackInSlot(ContainerGrinder.GRINDER_PRODUCT_SLOT, new ItemStack(product.getItem(), product.getCount()));
+            this.itemStackHandler.setStackInSlot(ContainerCrusher.CRUSHER_PRODUCT_SLOT, new ItemStack(product.getItem(), product.getCount()));
         else if (productSlot.getItem() == product.getItem() && product.getCount() + productSlot.getCount() <= 64)
-            this.itemStackHandler.setStackInSlot(ContainerGrinder.GRINDER_PRODUCT_SLOT, new ItemStack(product.getItem(), product.getCount()+productSlot.getCount()));
+            this.itemStackHandler.setStackInSlot(ContainerCrusher.CRUSHER_PRODUCT_SLOT, new ItemStack(product.getItem(), product.getCount()+productSlot.getCount()));
         else
             return;
 
-        this.inGrinder = ItemStack.EMPTY;
+        this.inCrusher = ItemStack.EMPTY;
         this.isActive = false;
     }
 

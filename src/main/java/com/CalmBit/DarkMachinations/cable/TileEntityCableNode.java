@@ -50,7 +50,7 @@ public class TileEntityCableNode extends TileEntity {
 
     @Override
     public void onLoad() {
-        this.nodeType = this.nodeType == null ? EnergyNetworkNode.NodeType.BLANK : this.nodeType;
+            this.nodeType = this.nodeType == null ? EnergyNetworkNode.NodeType.BLANK : this.nodeType;
         this.network = new EnergyNetwork(world);
         this.energyStorage = new NetworkedEnergyUser(network);
         this.cableProvider = new ProbeDataProviderCable(this.getNetwork().getIdentifier(), nodeType);

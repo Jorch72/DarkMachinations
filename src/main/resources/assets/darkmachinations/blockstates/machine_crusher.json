@@ -1,17 +1,17 @@
 {
     "forge_marker": 1,
     "defaults": {
-        "model": "darkmachinations:grinder"
+        "model": "darkmachinations:crusher"
     },
     "variants": {
         "inventory": {
-            "model": "darkmachinations:grinder"
+            "model": "darkmachinations:crusher"
         },
         "state": {
             "off": {},
             "on": {
                 "textures": {
-                    "front": "darkmachinations:blocks/grinder_front_on"
+                    "front": "darkmachinations:blocks/crusher_front_on"
                 }
             }
         },

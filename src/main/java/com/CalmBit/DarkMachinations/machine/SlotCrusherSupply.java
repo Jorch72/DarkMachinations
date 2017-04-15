@@ -1,20 +1,20 @@
 package com.CalmBit.DarkMachinations.machine;
 
-import com.CalmBit.DarkMachinations.GrinderRecipes;
+import com.CalmBit.DarkMachinations.CrusherRecipes;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
 
-public class SlotGrinderSupply extends SlotItemHandler {
-    public SlotGrinderSupply(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
+public class SlotCrusherSupply extends SlotItemHandler {
+    public SlotCrusherSupply(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
         super(itemHandler, index, xPosition, yPosition);
     }
 
     @Override
     public boolean isItemValid(@Nonnull ItemStack stack) {
-        return !GrinderRecipes.INSTANCE.getRecipeResult(stack).isEmpty();
+        return !CrusherRecipes.INSTANCE.getRecipeResult(stack).isEmpty();
     }
 
     public ItemStack decrementCount()

@@ -51,7 +51,7 @@ public abstract class BlockMachineBase<TE extends TileEntityBase> extends Block 
         }
     }
 
-    public static final PropertyEnum<BlockGrinder.EnumMachineState> STATE = PropertyEnum.create("state", BlockMachineBase.EnumMachineState.class);
+    public static final PropertyEnum<BlockCrusher.EnumMachineState> STATE = PropertyEnum.create("state", BlockMachineBase.EnumMachineState.class);
 
     protected BlockMachineBase(Material materialIn, String name, int guiID) {
         super(materialIn);
@@ -116,8 +116,8 @@ public abstract class BlockMachineBase<TE extends TileEntityBase> extends Block 
 
         if(tileentity != null)
         {
-            TE grinder = (TE)tileentity;
-            if(grinder.getActive())
+            TE crusher = (TE)tileentity;
+            if(crusher.getActive())
                 machineState = EnumMachineState.ON;
         }
         return state.withProperty(STATE, machineState);

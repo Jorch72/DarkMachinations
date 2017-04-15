@@ -6,3 +6,9 @@
 Dark Machinations aims to be a technology mod that strikes a better balance than more traditional tech mods, while retaining the feel of playing some of these mods, and the unbridled fun of creating sprawling and impressive tech chains.
 
 Goes well with [Correlated](https://github.com/elytra/Correlated), [Teckle](https://github.com/elytra/Teckle), and [Thermionics](https://github.com/elytra/Thermionics)!
+
+## Credits and Thanks
+
+### [Falkreon](https://github.com/Falkreon)
+* Plate Textures
+* Machine Textures (Generator, Crusher, Base Textures)

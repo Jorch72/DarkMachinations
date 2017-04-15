@@ -9,12 +9,12 @@ import net.minecraft.item.ItemStack;
 
 import java.util.Map;
 
-public class GrinderRecipes {
-    public static final GrinderRecipes INSTANCE = new GrinderRecipes();
+public class CrusherRecipes {
+    public static final CrusherRecipes INSTANCE = new CrusherRecipes();
 
     private final Map<ItemStack, ItemStack> recipeList = Maps.newHashMap();
 
-    public GrinderRecipes()
+    public CrusherRecipes()
     {
         this.addRecipe(ItemRegistry.ingot_bronze, ItemRegistry.dust_bronze);
         this.addRecipe(ItemRegistry.ingot_copper, ItemRegistry.dust_copper);

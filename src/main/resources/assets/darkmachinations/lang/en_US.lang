@@ -2,6 +2,7 @@ item.ingot_copper.name=Copper Ingot
 item.ingot_silver.name=Silver Ingot
 item.ingot_tin.name=Tin Ingot
 item.ingot_bronze.name=Bronze Ingot
+item.ingot_steel.name=Steel Ingot
 
 item.dust_bronze.name=Bronze Dust
 item.dust_copper.name=Copper Dust
@@ -9,6 +10,7 @@ item.dust_gold.name=Gold Dust
 item.dust_iron.name=Iron Dust
 item.dust_silver.name=Silver Dust
 item.dust_tin.name=Tin Dust
+item.dust_steel.name=Steel Dust
 
 item.plate_bronze.name=Bronze Plate
 item.plate_copper.name=Copper Plate
@@ -16,11 +18,22 @@ item.plate_gold.name=Gold Plate
 item.plate_iron.name=Iron Plate
 item.plate_silver.name=Silver Plate
 item.plate_tin.name=Tin Plate
+item.plate_steel.name=Steel Plate
 
 tile.ore_copper.name=Copper Ore
 tile.ore_silver.name=Silver Ore
 tile.ore_tin.name=Tin Ore
+item.machine_corner.name=Machine Corner
 itemGroup.darkmachinations=Dark Machinations
+
+tile.machine_crusher.name=Crusher
+tile.machine_compressor.name=Compressor
+tile.machine_redstone_core.name=Redstone Machine Core
+tile.machine_generator.name=Solid-Fuel Generator
+tile.cable_copper.name=Copper Cable
+tile.cable_tin.name=Tin Cable
+tile.cable_gold.name=Gold Cable
+tile.cable_regular_endpoint.name=Cable Node
 
 subtitles.entity.golden_creeper.death=Golden Creepr Death
 subtitles.entity.golden_creeper.hurt=Golden Creeper Hurt

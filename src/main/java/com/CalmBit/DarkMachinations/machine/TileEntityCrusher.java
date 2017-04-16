@@ -1,6 +1,7 @@
 package com.CalmBit.DarkMachinations.machine;
 
 import com.CalmBit.DarkMachinations.CrusherRecipes;
+import com.CalmBit.DarkMachinations.generic.EnergyReciever;
 import com.CalmBit.DarkMachinations.generic.EnergyUser;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.entity.player.EntityPlayer;
@@ -48,7 +49,7 @@ public class TileEntityCrusher extends TileEntityBase {
     {
         super();
         itemStackHandler = new ItemStackHandler(SLOT_COUNT);
-        energyStorage = new EnergyUser(ENERGY_CAPACITY, ENERGY_TRANSFER_RATE);
+        energyStorage = new EnergyReciever(ENERGY_CAPACITY, ENERGY_TRANSFER_RATE);
         inCrusher = ItemStack.EMPTY;
     }
 
@@ -133,7 +134,7 @@ public class TileEntityCrusher extends TileEntityBase {
                     this.grindItem();
                 } else if (this.energyStorage.getEnergyStored() >= ENERGY_USAGE_RATE) {
                     this.itemProcessingTimer--;
-                    this.energyStorage.extractEnergy(ENERGY_USAGE_RATE, false);
+                    this.energyStorage.setEnergyStored(this.energyStorage.getEnergyStored()-ENERGY_USAGE_RATE);
                 }
             }
 

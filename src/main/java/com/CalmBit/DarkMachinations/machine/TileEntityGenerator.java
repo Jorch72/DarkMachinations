@@ -1,5 +1,6 @@
 package com.CalmBit.DarkMachinations.machine;
 
+import com.CalmBit.DarkMachinations.generic.EnergyProvider;
 import com.CalmBit.DarkMachinations.generic.EnergyUser;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.entity.player.EntityPlayer;
@@ -10,6 +11,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -20,6 +22,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 
 public class TileEntityGenerator extends TileEntityBase {
 
@@ -47,7 +50,7 @@ public class TileEntityGenerator extends TileEntityBase {
     {
         super();
         itemStackHandler = new ItemStackHandler(SLOT_COUNT);
-        energyStorage = new EnergyUser(ENERGY_CAPACITY, ENERGY_TRANSFER_RATE);
+        energyStorage = new EnergyProvider(ENERGY_CAPACITY, ENERGY_TRANSFER_RATE);
         this.energyStorage.setEnergyStored(ENERGY_CAPACITY);
     }
 
@@ -144,7 +147,7 @@ public class TileEntityGenerator extends TileEntityBase {
         if (!this.world.isRemote) {
             if (this.itemProcessingTimer != 0) {
                 this.itemProcessingTimer--;
-                this.energyStorage.receiveEnergy(ENERGY_GENERATION_RATE, false);
+                this.energyStorage.setEnergyStored(Math.min(this.energyStorage.getEnergyStored()+ENERGY_GENERATION_RATE, this.energyStorage.getMaxEnergyStored()));
             } else {
                 if (supplySlot.isEmpty()) {
                     this.isActive = false;
@@ -155,14 +158,25 @@ public class TileEntityGenerator extends TileEntityBase {
                 }
             }
 
-            if(this.energyStorage.getEnergyStored() > ENERGY_TRANSFER_RATE)
+            if(this.energyStorage.getEnergyStored() > 0)
             {
-                checkPowerSide(0, 1, 0, EnumFacing.DOWN);
-                checkPowerSide(0, -1, 0, EnumFacing.UP);
-                checkPowerSide(1, 0, 0, EnumFacing.WEST);
-                checkPowerSide(-1, 0, 0, EnumFacing.EAST);
-                checkPowerSide(0, 0, 1, EnumFacing.NORTH);
-                checkPowerSide(0, 0, -1, EnumFacing.SOUTH);
+                ArrayList<IEnergyStorage> receivers = new ArrayList<>();
+                for(EnumFacing facing : EnumFacing.VALUES)
+                {
+                    IEnergyStorage storage = this.getPowerReceiver(facing);
+                    if(storage != null && storage.canReceive())
+                        receivers.add(storage);
+                }
+
+                if(receivers.size() != 0) {
+                    int energyRate = Math.min(ENERGY_TRANSFER_RATE / receivers.size(), this.energyStorage.getEnergyStored());
+                    int energyLeft = Math.min(ENERGY_TRANSFER_RATE, this.energyStorage.getEnergyStored());
+                    for (IEnergyStorage storage : receivers) {
+                        if(energyLeft <= 0)
+                            break;
+                        energyLeft -= energyStorage.extractEnergy(storage.receiveEnergy(energyRate, false), false);
+                    }
+                }
             }
         }
 
@@ -176,15 +190,22 @@ public class TileEntityGenerator extends TileEntityBase {
         }
     }
 
-    private void checkPowerSide(int xAdd, int yAdd, int zAdd, EnumFacing face)
+    private int checkPowerSide(int energyTransferRate, EnumFacing face)
     {
-        if (world.getTileEntity(this.getPos().add(xAdd, yAdd, zAdd)) != null && world.getTileEntity(this.getPos().add(xAdd, yAdd, zAdd)).hasCapability(CapabilityEnergy.ENERGY, face)) {
-            IEnergyStorage energy = world.getTileEntity(this.getPos().add(xAdd, yAdd, zAdd)).getCapability(CapabilityEnergy.ENERGY, face);
-            if(energy.getEnergyStored() < energy.getMaxEnergyStored()) {
-                int maximumTransfer = Math.min(ENERGY_TRANSFER_RATE, energy.getMaxEnergyStored()-energy.getEnergyStored());
-                world.getTileEntity(this.getPos().add(xAdd, yAdd, zAdd)).getCapability(CapabilityEnergy.ENERGY, face).receiveEnergy(this.energyStorage.extractEnergy(maximumTransfer, false), false);
-            }
+        IEnergyStorage energy = getPowerReceiver(face);
+        if(energy.getEnergyStored() < energy.getMaxEnergyStored()) {
+            int maximumTransfer = Math.min(energyTransferRate, energy.getMaxEnergyStored()-energy.getEnergyStored());
+            return energy.receiveEnergy(this.energyStorage.extractEnergy(maximumTransfer, false), false);
         }
+        return 0;
+    }
+
+    private IEnergyStorage getPowerReceiver(EnumFacing face) {
+        BlockPos poweredBlock = this.getPos().add(face.getDirectionVec());
+        if (world.getTileEntity(poweredBlock) != null && world.getTileEntity(poweredBlock).hasCapability(CapabilityEnergy.ENERGY, face))
+            return world.getTileEntity(poweredBlock).getCapability(CapabilityEnergy.ENERGY, face);
+        else
+            return null;
     }
 
     private void consumeFuel() {

@@ -2,6 +2,7 @@ package com.CalmBit.DarkMachinations.machine;
 
 import com.CalmBit.DarkMachinations.CompressorRecipes;
 import com.CalmBit.DarkMachinations.DarkMachinations;
+import com.CalmBit.DarkMachinations.generic.EnergyReciever;
 import com.CalmBit.DarkMachinations.generic.EnergyUser;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.entity.player.EntityPlayer;
@@ -36,7 +37,7 @@ public class TileEntityCompressor extends TileEntityBase {
     public static final int SLOT_COUNT = 2;
     public static final int ENERGY_CAPACITY = 10000;
     public static final int ENERGY_TRANSFER_RATE = 100;
-    public static final int ENERGY_USAGE_RATE = 25;
+    public static final int ENERGY_USAGE_RATE = 50;
 
     public static final int FIELD_ENERGY_COUNT = 0;
     public static final int FIELD_ENERGY_CAPACITY = 1;
@@ -50,10 +51,11 @@ public class TileEntityCompressor extends TileEntityBase {
     {
         super();
         itemStackHandler = new ItemStackHandler(SLOT_COUNT);
-        energyStorage = new EnergyUser(ENERGY_CAPACITY, ENERGY_TRANSFER_RATE);
+        energyStorage = new EnergyReciever(ENERGY_CAPACITY, ENERGY_TRANSFER_RATE);
 
         inCompressor = ItemStack.EMPTY;
     }
+
 
 
     @Override
@@ -172,7 +174,7 @@ public class TileEntityCompressor extends TileEntityBase {
                     this.compressItem();
                 } else if (this.energyStorage.getEnergyStored() >= ENERGY_USAGE_RATE) {
                     this.itemProcessingTimer--;
-                    this.energyStorage.extractEnergy(ENERGY_USAGE_RATE, false);
+                    this.energyStorage.setEnergyStored(this.energyStorage.getEnergyStored()-ENERGY_USAGE_RATE);
                 }
             }
 

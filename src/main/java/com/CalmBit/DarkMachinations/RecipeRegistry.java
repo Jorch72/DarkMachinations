@@ -1,5 +1,6 @@
 package com.CalmBit.DarkMachinations;
 
+import net.minecraft.block.Block;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -15,6 +16,10 @@ public class RecipeRegistry {
         GameRegistry.addRecipe(new ShapedOreRecipe(ItemRegistry.machine_corner, new Object[] {"PP", "P*", 'P', "plateSteel"}));
         GameRegistry.addRecipe(new ShapedOreRecipe(ItemRegistry.machine_corner, new Object[] {"P*", "PP", 'P', "plateSteel"}));
         GameRegistry.addRecipe(new ShapedOreRecipe(BlockRegistry.machine_redstone_core, new Object[] {"CPC", "PRP", "CPC", 'C', ItemRegistry.machine_corner, 'P', "plateSteel", 'R', "blockRedstone"}));
+
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockRegistry.cable_copper_uninsulated, 6), new Object[] {"CCC", 'C', "ingotCopper"}));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockRegistry.cable_tin_uninsulated, 9), new Object[] {"TTT", 'T', "ingotTin"}));
+
 
         // Smelting
         GameRegistry.addSmelting(BlockRegistry.ore_copper, new ItemStack(ItemRegistry.ingot_copper, 1), 0.7f);

@@ -16,6 +16,7 @@ public class GuiRegistry implements IGuiHandler {
     public static final int GUI_MACHINE_CRUSHER = 0;
     public static final int GUI_MACHINE_COMPRESSOR = 1;
     public static final int GUI_MACHINE_GENERATOR = 2;
+    public static final int GUI_MACHINE_BLOOMERY = 3;
 
     @Nullable
     @Override

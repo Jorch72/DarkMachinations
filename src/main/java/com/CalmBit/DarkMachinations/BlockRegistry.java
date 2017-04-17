@@ -2,10 +2,7 @@ package com.CalmBit.DarkMachinations;
 
 import com.CalmBit.DarkMachinations.cable.*;
 import com.CalmBit.DarkMachinations.generic.*;
-import com.CalmBit.DarkMachinations.machine.BlockCompressor;
-import com.CalmBit.DarkMachinations.machine.BlockGenerator;
-import com.CalmBit.DarkMachinations.machine.BlockCrusher;
-import com.CalmBit.DarkMachinations.machine.BlockMachineBase;
+import com.CalmBit.DarkMachinations.machine.*;
 import com.CalmBit.DarkMachinations.world.BlockOre;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -17,10 +14,14 @@ public class BlockRegistry {
     public static BlockOre ore_copper;
     public static BlockOre ore_silver;
     public static BlockOre ore_tin;
+
     public static BlockCrusher machine_crusher;
     public static BlockCompressor machine_compressor;
     public static BlockBase machine_redstone_core;
     public static BlockGenerator machine_generator;
+
+    public static BlockBloomery machine_bloomery;
+
     public static BlockCable cable_copper_insulated;
     public static BlockCable cable_gold_insulated;
     public static BlockCable cable_tin_insulated;
@@ -28,15 +29,20 @@ public class BlockRegistry {
     public static BlockCable cable_gold_uninsulated;
     public static BlockCable cable_tin_uninsulated;
     public static BlockCableEndpoint cable_regular_node;
+
     public static void init()
     {
         ore_copper = registerBlock(new BlockOre("ore_copper", "oreCopper").setCreativeTab(DarkMachinations.divitaeTab));
         ore_silver = registerBlock(new BlockOre("ore_silver", "oreSilver", 3, 5, 2).setCreativeTab(DarkMachinations.divitaeTab));
         ore_tin = registerBlock(new BlockOre("ore_tin", "oreTin").setCreativeTab(DarkMachinations.divitaeTab));
+
         machine_crusher = registerBlock(new BlockCrusher());
         machine_compressor = registerBlock(new BlockCompressor());
         machine_redstone_core = registerBlock(new BlockBase(Material.IRON, "machine_redstone_core")).setCreativeTab(DarkMachinations.divitaeTab);
         machine_generator = registerBlock(new BlockGenerator());
+
+        machine_bloomery = registerBlock(new BlockBloomery());
+
         cable_copper_insulated = registerBlock(new BlockCableCopperInsulated("cable_copper_insulated")).setCreativeTab(DarkMachinations.divitaeTab);
         cable_gold_insulated = registerBlock(new BlockCableGoldInsulated("cable_gold_insulated")).setCreativeTab(DarkMachinations.divitaeTab);
         cable_tin_insulated = registerBlock(new BlockCableTinInsulated("cable_tin_insulated")).setCreativeTab(DarkMachinations.divitaeTab);

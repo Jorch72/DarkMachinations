@@ -1,0 +1,11 @@
+{
+    "parent": "block/orientable",
+    "textures": {
+        "up": "darkmachinations:blocks/bloomery_top_off_v1",
+        "north": "darkmachinations:blocks/bloomery_front_off_v1",
+        "east": "darkmachinations:blocks/bloomery_side_off_v1",
+        "west": "darkmachinations:blocks/bloomery_side_off_v1",
+        "down": "darkmachinations:blocks/bloomery_brick",
+        "south": "darkmachinations:blocks/bloomery_brick"
+    }
+}

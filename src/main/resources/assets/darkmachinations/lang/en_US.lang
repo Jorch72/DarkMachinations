@@ -30,9 +30,18 @@ tile.machine_crusher.name=Crusher
 tile.machine_compressor.name=Compressor
 tile.machine_redstone_core.name=Redstone Machine Core
 tile.machine_generator.name=Solid-Fuel Generator
-tile.cable_copper.name=Copper Cable
-tile.cable_tin.name=Tin Cable
-tile.cable_gold.name=Gold Cable
+
+tile.cable_copper_insulated.name=Insulated Copper Cable
+tile.cable_tin_insulated.name=Insulated Tin Cable
+tile.cable_gold.name=Insulated Gold Cable
+
+tile.cable_copper_uninsulated.name=Uninsulated Copper Cable
+tile.cable_tin_uninsulated.name=Uninsulated Tin Cable
+tile.cable_gold_uninsulated.name=Uninsulated Gold Cable
+
+tile.machine_bloomery.name=Bloomery Controller
+tile.bloomery_brick.name=Bloomery Brick
+
 tile.cable_regular_endpoint.name=Cable Node
 
 subtitles.entity.golden_creeper.death=Golden Creepr Death

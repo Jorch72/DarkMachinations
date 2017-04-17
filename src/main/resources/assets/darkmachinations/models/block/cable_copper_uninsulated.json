@@ -1,0 +1,34 @@
+{
+    "__createdwith": "opl's Model Creator",
+    "ambientocclusion": false,
+    "textures": {
+        "particle": "darkmachinations:blocks/cable_core_copper",
+        "cable_core": "darkmachinations:blocks/cable_core_copper"
+    },
+    "elements": [
+        {
+            "from": [0,6,6],
+            "to": [6,10,10],
+            "faces": {
+                "up": {
+                    "texture": "#cable_core"
+                },
+                "down": {
+                    "texture": "#cable_core"
+                },
+                "west": {
+                    "texture": "#cable_core"
+                },
+                "east": {
+                    "texture": "#cable_core"
+                },
+                "north": {
+                    "texture": "#cable_core"
+                },
+                "south": {
+                    "texture": "#cable_core"
+                }
+            }
+        }
+    ]
+}

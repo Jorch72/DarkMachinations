@@ -3,6 +3,7 @@
     "textures": {
         "top": "darkmachinations:blocks/machine_side",
         "front": "darkmachinations:blocks/generator_front_off",
-        "side": "darkmachinations:blocks/machine_side"
+        "side": "darkmachinations:blocks/machine_side",
+        "down": "darkmachinations:blocks/machine_bottom"
     }
 }

@@ -25,6 +25,8 @@ tile.ore_silver.name=Silver Ore
 tile.ore_tin.name=Tin Ore
 item.machine_corner.name=Machine Corner
 itemGroup.darkmachinations=Dark Machinations
+itemGroup.darkmachinations_af=Dank Machinations
+
 
 tile.machine_crusher.name=Crusher
 tile.machine_compressor.name=Compressor

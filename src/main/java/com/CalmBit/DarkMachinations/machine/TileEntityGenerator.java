@@ -34,7 +34,7 @@ public class TileEntityGenerator extends TileEntityBase {
     public boolean wasActive;
 
     public static final int SLOT_COUNT = 1;
-    public static final int ENERGY_CAPACITY = 100000;
+    public static final int ENERGY_CAPACITY = 10000;
     public static final int ENERGY_TRANSFER_RATE = 100;
     public static final int ENERGY_GENERATION_RATE = 125;
 

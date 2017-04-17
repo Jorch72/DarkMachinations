@@ -23,7 +23,7 @@ public class TileEntityCableNode extends TileEntity {
     private NetworkedEnergyUser energyStorage;
     private ProbeDataProviderCable cableProvider;
     private EnergyNetworkNode.NodeType nodeType;
-    private BlockCableEndpoint.BlockCableType cableType = BlockCableEndpoint.BlockCableType.COPPER;
+    private BlockCableEndpoint.BlockCableType cableType = BlockCableEndpoint.BlockCableType.COPPER_INSULATED;
 
     public void addNodeToNetwork(EnergyNetworkNode.NodeType nodeType) {
         this.nodeType = nodeType;
@@ -50,7 +50,7 @@ public class TileEntityCableNode extends TileEntity {
 
     @Override
     public void onLoad() {
-            this.nodeType = this.nodeType == null ? EnergyNetworkNode.NodeType.BLANK : this.nodeType;
+        this.nodeType = this.nodeType == null ? EnergyNetworkNode.NodeType.BLANK : this.nodeType;
         this.network = new EnergyNetwork(world);
         this.energyStorage = new NetworkedEnergyUser(network);
         this.cableProvider = new ProbeDataProviderCable(this.getNetwork().getIdentifier(), nodeType);

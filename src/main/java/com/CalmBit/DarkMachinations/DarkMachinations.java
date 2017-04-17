@@ -41,8 +41,8 @@ public class DarkMachinations {
         SoundRegistry.init();
         LootTableRegistry.init();
         EntityRegistry.init();
-        ItemRegistry.init();
         BlockRegistry.init();
+        ItemRegistry.init();
         FluidRegistry.init();
         proxy.init();
         RecipeRegistry.init();

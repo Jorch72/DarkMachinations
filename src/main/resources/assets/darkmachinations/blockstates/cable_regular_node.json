@@ -1,29 +1,49 @@
 {
 	"forge_marker": 1,
 	"defaults": {
-		"model": "darkmachinations:cable_regular_center"
+		"model": "darkmachinations:cable_copper_uninsulated_center"
 	},
 	"variants": {
 		"normal": {
-			"model": "darkmachinations:cable_regular_center"
+			"model": "darkmachinations:cable_copper_uninsulated_center"
 		},
 		"cable_type": {
-			"copper": {
+			"copper_insulated": {
 				"textures": {
 					"cable_core": "darkmachinations:blocks/cable_core_copper"
 				}
 			},
-			"gold": {
+			"gold_insulated": {
 				"textures": {
 					"cable_core": "darkmachinations:blocks/cable_core_gold"
 				}
 			},
-			"tin": {
+			"tin_insulated": {
 				"textures": {
 					"cable_core": "darkmachinations:blocks/cable_core_tin"
 				}
 			},
-			"silver": {
+			"silver_insulated": {
+				"textures": {
+					"cable_core": "darkmachinations:blocks/cable_core_silver"
+				}
+			},
+			"copper_uninsulated": {
+				"textures": {
+					"cable_core": "darkmachinations:blocks/cable_core_copper"
+				}
+			},
+			"gold_uninsulated": {
+				"textures": {
+					"cable_core": "darkmachinations:blocks/cable_core_gold"
+				}
+			},
+			"tin_uninsulated": {
+				"textures": {
+					"cable_core": "darkmachinations:blocks/cable_core_tin"
+				}
+			},
+			"silver_uninsulated": {
 				"textures": {
 					"cable_core": "darkmachinations:blocks/cable_core_silver"
 				}
@@ -37,7 +57,7 @@
 			"true": {
 				"submodel": {
 					"west": {
-						"model": "darkmachinations:cable_regular"
+						"model": "darkmachinations:cable_copper_insulated"
 					}
 				}
 			},
@@ -47,7 +67,7 @@
 			"true": {
 				"submodel": {
 					"north": {
-						"model": "darkmachinations:cable_regular",
+						"model": "darkmachinations:cable_copper_insulated",
 						"y": 90
 					}
 				}
@@ -58,7 +78,7 @@
 			"true": {
 				"submodel": {
 					"east": {
-						"model": "darkmachinations:cable_regular",
+						"model": "darkmachinations:cable_copper_insulated",
 						"y": 180
 					}
 				}
@@ -69,7 +89,7 @@
 			"true": {
 				"submodel": {
 					"south": {
-						"model": "darkmachinations:cable_regular",
+						"model": "darkmachinations:cable_copper_insulated",
 						"y": 270
 					}
 				}
@@ -80,7 +100,7 @@
 			"true": {
 				"submodel": {
 					"up": {
-						"model": "darkmachinations:cable_regular",
+						"model": "darkmachinations:cable_copper_insulated",
 						"transform": {
 							"rotation": {
 								"z": -90
@@ -95,7 +115,7 @@
 			"true": {
 				"submodel": {
 					"down": {
-						"model": "darkmachinations:cable_regular",
+						"model": "darkmachinations:cable_copper_insulated",
 						"transform": {
 							"rotation": {
 								"z": 90
@@ -107,7 +127,7 @@
 			"false": {}
 		},
 		"inventory": {
-			"model": "darkmachinations:cable_regular_center",
+			"model": "darkmachinations:cable_copper_uninsulated_center",
 			"transform": "forge:default-block"
 		}
 	}

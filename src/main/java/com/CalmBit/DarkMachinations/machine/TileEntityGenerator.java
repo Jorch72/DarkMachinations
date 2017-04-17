@@ -1,5 +1,6 @@
 package com.CalmBit.DarkMachinations.machine;
 
+import com.CalmBit.DarkMachinations.DarkMachinations;
 import com.CalmBit.DarkMachinations.generic.EnergyProvider;
 import com.CalmBit.DarkMachinations.generic.EnergyUser;
 import net.minecraft.block.BlockHorizontal;
@@ -7,15 +8,18 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -28,6 +32,7 @@ public class TileEntityGenerator extends TileEntityBase {
 
     public ItemStackHandler itemStackHandler;
     public EnergyUser energyStorage;
+    public Object probeDataProvider;
     public String customName;
 
     public boolean isActive;
@@ -44,7 +49,7 @@ public class TileEntityGenerator extends TileEntityBase {
     public static final int FIELD_ITEM_PROCESSING_MAX = 3;
 
     public int itemProcessingTimer;
-    public int itemProcessingMaximum = 100;
+    public int itemProcessingMaximum;
 
     public TileEntityGenerator()
     {
@@ -58,6 +63,9 @@ public class TileEntityGenerator extends TileEntityBase {
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            return true;
+        }
+        if(capability == DarkMachinations.PROBE_CAPABILITY) {
             return true;
         }
         if(capability == CapabilityEnergy.ENERGY) {
@@ -75,6 +83,12 @@ public class TileEntityGenerator extends TileEntityBase {
         if(capability == CapabilityEnergy.ENERGY && world.getBlockState(pos).getValue(BlockHorizontal.FACING) != facing)
         {
             return (T) energyStorage;
+        }
+        if(capability == DarkMachinations.PROBE_CAPABILITY)
+        {
+            if(probeDataProvider == null)
+                probeDataProvider = new ProbeDataProviderGenerator();
+            return (T)probeDataProvider;
         }
         return super.getCapability(capability, facing);
     }
@@ -152,8 +166,7 @@ public class TileEntityGenerator extends TileEntityBase {
                 if (supplySlot.isEmpty()) {
                     this.isActive = false;
                 } else if(this.energyStorage.getEnergyStored() < this.energyStorage.getMaxEnergyStored())  {
-                    consumeFuel();
-                    this.itemProcessingTimer = this.itemProcessingMaximum;
+                    this.itemProcessingTimer = this.itemProcessingMaximum = consumeFuel();
                     this.isActive  = true;
                 }
             }
@@ -178,6 +191,12 @@ public class TileEntityGenerator extends TileEntityBase {
                     }
                 }
             }
+        }
+
+        if(this.probeDataProvider != null) {
+            ProbeDataProviderGenerator probeData = (ProbeDataProviderGenerator)probeDataProvider;
+            probeData.updateProbeEnergyData(this.energyStorage.getEnergyStored(), this.energyStorage.getMaxEnergyStored());
+            probeData.updateProbeFuelData(this.itemProcessingTimer, this.itemProcessingMaximum, this.isActive);
         }
 
         if(wasActive != isActive) {
@@ -208,10 +227,12 @@ public class TileEntityGenerator extends TileEntityBase {
             return null;
     }
 
-    private void consumeFuel() {
+    private int consumeFuel() {
         ItemStack supplySlot = itemStackHandler.getStackInSlot(ContainerGenerator.GENERATOR_SUPPLY_SLOT);
-        this.itemStackHandler.setStackInSlot(ContainerGenerator.GENERATOR_SUPPLY_SLOT, new ItemStack(supplySlot.getItem(), supplySlot.getCount() - 1));
+        int fuelValue = TileEntityFurnace.getItemBurnTime(supplySlot);
+        supplySlot.setCount(supplySlot.getCount()-1);
         this.isActive = true;
+        return fuelValue;
     }
 
     @Nullable

@@ -71,11 +71,11 @@ public class NetworkRegistry {
             EnergyNetwork biggest = biggerNetwork ? one : two;
             EnergyNetwork smallest = biggerNetwork ? two : one;
             if (biggest.getIdentifier() == smallest.getIdentifier()) {
-                FMLLog.getLogger().error("For some reason, this network (" + biggest.getIdentifier() + ") just tried to merge to itself...");
+                DarkMachinations.LOG.error("For some reason, this network (" + biggest.getIdentifier() + ") just tried to merge to itself...");
                 return biggest;
             }
             try {
-                FMLLog.getLogger().info("Network merge incoming! (" + biggest.getIdentifier() + "," + smallest.getIdentifier() + ")");
+                DarkMachinations.LOG.info("Network merge incoming! (" + biggest.getIdentifier() + "," + smallest.getIdentifier() + ")");
                 for (BlockPos member : smallest.getMembersList()) {
                     biggest.addMember(member);
                 }
@@ -88,7 +88,7 @@ public class NetworkRegistry {
                         default:
                             TileEntityCableNode cable = (TileEntityCableNode) worldIn.getTileEntity(node.position);
                             if (cable == null)
-                                FMLLog.getLogger().error("What the fuck? Why is an ENDPOINT node not carrying a TE? Position: " + node.position);
+                                DarkMachinations.LOG.error("What the fuck? Why is an ENDPOINT node not carrying a TE? Position: " + node.position);
                             else
                                 cable.setNetwork(biggest);
                             break;
@@ -98,9 +98,9 @@ public class NetworkRegistry {
                 smallest.getNodesList().clear();
                 smallest.getMembersList().clear();
 
-                FMLLog.getLogger().info("Network merge complete.");
+                DarkMachinations.LOG.info("Network merge complete.");
             } catch (ConcurrentModificationException e) {
-                FMLLog.getLogger().fatal("ConcurrentModificatibiggestxception thrown merging networks " + biggest.getIdentifier() + ", " + smallest.getIdentifier());
+                DarkMachinations.LOG.fatal("ConcurrentModificationException thrown merging networks " + biggest.getIdentifier() + ", " + smallest.getIdentifier());
             }
             return biggest;
         }

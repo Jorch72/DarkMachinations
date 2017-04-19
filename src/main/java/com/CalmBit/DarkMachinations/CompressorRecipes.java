@@ -5,6 +5,9 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraftforge.fml.common.FMLLog;
+import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.Map;
 
@@ -15,32 +18,34 @@ public class CompressorRecipes {
 
     public CompressorRecipes()
     {
-        this.addRecipe(ItemRegistry.ingot_bronze, ItemRegistry.plate_bronze);
-        this.addRecipe(ItemRegistry.ingot_copper, ItemRegistry.plate_copper);
-        this.addRecipe(Items.GOLD_INGOT, ItemRegistry.plate_gold);
-        this.addRecipe(Items.IRON_INGOT, ItemRegistry.plate_iron);
-        this.addRecipe(ItemRegistry.ingot_silver, ItemRegistry.plate_silver);
-        this.addRecipe(ItemRegistry.ingot_tin, ItemRegistry.plate_tin);
+        this.addRecipe("ingotBronze", "plateBronze");
+        this.addRecipe("ingotCopper", "plateCopper");
+        this.addRecipe("ingotGold", "plateGold");
+        this.addRecipe("ingotIron", "plateIron");
+        this.addRecipe("ingotSilver", "plateSilver");
+        this.addRecipe("ingotTin", "plateTin");
     }
 
-    public void addRecipe(Block supply, ItemStack product)
+    public void addRecipe(String supplyDict, String productDict, int qty)
     {
-        this.recipeList.put(new ItemStack(supply, 1), product);
+        NonNullList<ItemStack> supplyList = OreDictionary.getOres(supplyDict);
+        NonNullList<ItemStack> productList = OreDictionary.getOres(productDict);
+
+        if(supplyList.isEmpty() || productList.isEmpty()) {
+            DarkMachinations.LOG.error("Couldn't add a Compressor recipe for conversion of " + supplyDict + " to " + qty + " " + productDict + "(s)! You might be missing one of those...");
+            return;
+        }
+
+        ItemStack product = productList.get(0);
+
+        for(ItemStack supplyStack : supplyList) {
+            if(!this.recipeList.containsKey(supplyStack))
+                this.recipeList.put(supplyStack, new ItemStack(product.getItem(), product.getCount(), product.getItemDamage()));
+        }
     }
 
-    public void addRecipe(Item supply, ItemStack product)
-    {
-        this.recipeList.put(new ItemStack(supply, 1), product);
-    }
-
-    public void addRecipe(Item supply, Item product)
-    {
-        this.recipeList.put(new ItemStack(supply, 1), new ItemStack(product, 1));
-    }
-
-    public void addRecipe(Block supply, Item product)
-    {
-        this.recipeList.put(new ItemStack(supply, 1), new ItemStack(product, 1));
+    public void addRecipe(String supplyDict, String productDict) {
+        addRecipe(supplyDict, productDict, 1);
     }
 
     public ItemStack getRecipeResult(ItemStack supply)

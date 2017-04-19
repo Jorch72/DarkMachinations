@@ -1,6 +1,7 @@
 package com.CalmBit.DarkMachinations.machine;
 
 import com.CalmBit.DarkMachinations.CrusherRecipes;
+import com.CalmBit.DarkMachinations.DarkMachinations;
 import com.CalmBit.DarkMachinations.generic.EnergyReciever;
 import com.CalmBit.DarkMachinations.generic.EnergyUser;
 import net.minecraft.block.BlockHorizontal;
@@ -45,14 +46,15 @@ public class TileEntityCrusher extends TileEntityBase {
     public int itemProcessingTimer;
     public int itemProcessingMaximum = 100;
 
-    public TileEntityCrusher()
-    {
-        super();
+    public Object probeDataProvider;
+
+
+    public TileEntityCrusher() {
         itemStackHandler = new ItemStackHandler(SLOT_COUNT);
         energyStorage = new EnergyReciever(ENERGY_CAPACITY, ENERGY_TRANSFER_RATE);
+        energyStorage.listen(this::markDirty);
         inCrusher = ItemStack.EMPTY;
     }
-
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
@@ -61,6 +63,9 @@ public class TileEntityCrusher extends TileEntityBase {
         if(capability == CapabilityEnergy.ENERGY)
         {
             return (world.getBlockState(pos).getValue(BlockHorizontal.FACING) != facing) && facing != EnumFacing.UP;
+        }
+        if(capability == DarkMachinations.PROBE_CAPABILITY) {
+            return true;
         }
         return super.hasCapability(capability, facing);
     }
@@ -74,6 +79,16 @@ public class TileEntityCrusher extends TileEntityBase {
         if(capability == CapabilityEnergy.ENERGY && (world.getBlockState(pos).getValue(BlockHorizontal.FACING) != facing) && facing != EnumFacing.UP)
         {
             return (T) energyStorage;
+        }
+        if(capability == DarkMachinations.PROBE_CAPABILITY) {
+            if(capability == DarkMachinations.PROBE_CAPABILITY)
+            {
+                if(probeDataProvider == null) {
+                    probeDataProvider = new ProbeDataProviderMachine();
+                    ((ProbeDataProviderMachine)probeDataProvider).setStackHandler(this.itemStackHandler);
+                }
+                return (T)probeDataProvider;
+            }
         }
         return super.getCapability(capability, facing);
     }
@@ -151,6 +166,12 @@ public class TileEntityCrusher extends TileEntityBase {
             }
         }
 
+        if(this.probeDataProvider != null) {
+            ProbeDataProviderMachine probeData = (ProbeDataProviderMachine)probeDataProvider;
+            probeData.updateProbeEnergyData(this.energyStorage.getEnergyStored(), this.energyStorage.getMaxEnergyStored());
+            probeData.updateProbeProgressData(this.itemProcessingTimer, this.itemProcessingMaximum, this.isActive);
+        }
+
         if(wasActive != isActive) {
             wasActive = isActive;
             this.world.notifyBlockUpdate(this.pos, this.world.getBlockState(this.pos), this.world.getBlockState(this.pos), 3);
@@ -169,9 +190,9 @@ public class TileEntityCrusher extends TileEntityBase {
         ItemStack productSlot = this.itemStackHandler.getStackInSlot(ContainerCrusher.CRUSHER_PRODUCT_SLOT);
 
         if (productSlot.isEmpty())
-            this.itemStackHandler.setStackInSlot(ContainerCrusher.CRUSHER_PRODUCT_SLOT, new ItemStack(product.getItem(), product.getCount()));
+            this.itemStackHandler.setStackInSlot(ContainerCrusher.CRUSHER_PRODUCT_SLOT, new ItemStack(product.getItem(), product.getCount(), product.getItemDamage()));
         else if (productSlot.getItem() == product.getItem() && product.getCount() + productSlot.getCount() <= 64)
-            this.itemStackHandler.setStackInSlot(ContainerCrusher.CRUSHER_PRODUCT_SLOT, new ItemStack(product.getItem(), product.getCount()+productSlot.getCount()));
+            this.itemStackHandler.setStackInSlot(ContainerCrusher.CRUSHER_PRODUCT_SLOT, new ItemStack(product.getItem(), product.getCount()+productSlot.getCount(), product.getItemDamage()));
         else
             return;
 

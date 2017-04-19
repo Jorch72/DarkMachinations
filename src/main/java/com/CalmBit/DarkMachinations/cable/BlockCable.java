@@ -3,32 +3,24 @@ package com.CalmBit.DarkMachinations.cable;
 import com.CalmBit.DarkMachinations.BlockRegistry;
 import com.CalmBit.DarkMachinations.NetworkRegistry;
 import com.CalmBit.DarkMachinations.generic.BlockBase;
-import com.CalmBit.DarkMachinations.network.EnergyNetwork;
 import com.CalmBit.DarkMachinations.network.EnergyNetworkNode;
 import com.elytradev.probe.api.IProbeDataProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
-import sun.nio.ch.Net;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -103,7 +95,7 @@ public class BlockCable extends BlockBase {
                         if (storage.canExtract()) {
                             nodeType = EnergyNetworkNode.NodeType.SENDRECV;
                         } else {
-                            nodeType = EnergyNetworkNode.NodeType.RECIEVER;
+                            nodeType = EnergyNetworkNode.NodeType.RECEIVER;
                         }
                     } else {
                         nodeType = EnergyNetworkNode.NodeType.SENDER;

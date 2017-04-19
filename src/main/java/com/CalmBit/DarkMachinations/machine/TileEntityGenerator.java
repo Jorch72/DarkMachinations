@@ -51,15 +51,11 @@ public class TileEntityGenerator extends TileEntityBase {
     public int itemProcessingTimer;
     public int itemProcessingMaximum;
 
-    public TileEntityGenerator()
-    {
-        super();
+    public TileEntityGenerator() {
         itemStackHandler = new ItemStackHandler(SLOT_COUNT);
         energyStorage = new EnergyProvider(ENERGY_CAPACITY, ENERGY_TRANSFER_RATE);
-        this.energyStorage.setEnergyStored(ENERGY_CAPACITY);
+        energyStorage.listen(this::markDirty);
     }
-
-
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
@@ -86,8 +82,10 @@ public class TileEntityGenerator extends TileEntityBase {
         }
         if(capability == DarkMachinations.PROBE_CAPABILITY)
         {
-            if(probeDataProvider == null)
+            if(probeDataProvider == null) {
                 probeDataProvider = new ProbeDataProviderGenerator();
+                ((ProbeDataProviderGenerator)probeDataProvider).setItemStackHandler(itemStackHandler);
+            }
             return (T)probeDataProvider;
         }
         return super.getCapability(capability, facing);

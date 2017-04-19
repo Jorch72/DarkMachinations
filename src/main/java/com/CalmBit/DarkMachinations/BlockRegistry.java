@@ -11,10 +11,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class BlockRegistry {
 
-    public static BlockOre ore_copper;
-    public static BlockOre ore_silver;
-    public static BlockOre ore_tin;
-
     public static BlockCrusher machine_crusher;
     public static BlockCompressor machine_compressor;
     public static BlockBase machine_redstone_core;
@@ -32,10 +28,6 @@ public class BlockRegistry {
 
     public static void init()
     {
-        ore_copper = registerBlock(new BlockOre("ore_copper", "oreCopper").setCreativeTab(DarkMachinations.divitaeTab));
-        ore_silver = registerBlock(new BlockOre("ore_silver", "oreSilver", 3, 5, 2).setCreativeTab(DarkMachinations.divitaeTab));
-        ore_tin = registerBlock(new BlockOre("ore_tin", "oreTin").setCreativeTab(DarkMachinations.divitaeTab));
-
         machine_crusher = registerBlock(new BlockCrusher());
         machine_compressor = registerBlock(new BlockCompressor());
         machine_redstone_core = registerBlock(new BlockBase(Material.IRON, "machine_redstone_core")).setCreativeTab(DarkMachinations.divitaeTab);

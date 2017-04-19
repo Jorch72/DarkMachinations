@@ -2,6 +2,7 @@ package com.CalmBit.DarkMachinations.machine;
 
 import com.elytradev.probe.api.IProbeData;
 import com.elytradev.probe.api.IProbeDataProvider;
+import net.minecraftforge.items.ItemStackHandler;
 
 import java.util.List;
 
@@ -13,10 +14,13 @@ public class ProbeDataProviderGenerator implements IProbeDataProvider {
     private double currTicks, maxTicks;
     private boolean active;
 
+    private ItemStackHandler stackHandler;
+
     @Override
     public void provideProbeData(List<IProbeData> data) {
         data.add(new ProbeDataEnergy(currEnergy, maxEnergy));
         data.add(new ProbeDataFuel(currTicks, maxTicks, active));
+        data.add(new ProbeDataItemStackHandler(stackHandler));
     }
 
     public void updateProbeEnergyData(double currEnergy, double maxEnergy) {
@@ -29,6 +33,10 @@ public class ProbeDataProviderGenerator implements IProbeDataProvider {
         this.currTicks = currTicks;
         this.maxTicks = maxTicks;
         this.active = active;
+    }
+
+    public void setItemStackHandler(ItemStackHandler stackHandler) {
+        this.stackHandler = stackHandler;
     }
 
     public double getCurrentEnergy() {

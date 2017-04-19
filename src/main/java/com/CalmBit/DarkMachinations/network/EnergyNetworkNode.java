@@ -9,7 +9,7 @@ public class EnergyNetworkNode {
         BLANK((byte)0),
         ROUTER((byte)1),
         SENDER((byte)2),
-        RECIEVER((byte)3),
+        RECEIVER((byte)3),
         SENDRECV((byte)4);
 
         public byte value;

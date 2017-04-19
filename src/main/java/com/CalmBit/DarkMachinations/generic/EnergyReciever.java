@@ -22,6 +22,7 @@ public class EnergyReciever extends EnergyUser {
         int energyToTransfer = Math.min(actualTransfer, this.getMaxEnergyStored()-this.getEnergyStored());
         if(!simulate)
             this.setEnergyStored(this.getEnergyStored()+energyToTransfer);
+        if(energyToTransfer != 0 && !simulate) this.markDirty();
         return energyToTransfer;
     }
 }

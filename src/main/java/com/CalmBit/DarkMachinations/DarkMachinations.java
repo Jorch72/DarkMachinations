@@ -12,6 +12,8 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @Mod(modid = DarkMachinations.DARKMACHINATIONS_MOD_ID, name = DarkMachinations.DARKMACHINATIONS_NAME, version = DarkMachinations.DARKMACHINATIONS_VERSION)
 public class DarkMachinations {
@@ -26,6 +28,8 @@ public class DarkMachinations {
 
     @SidedProxy(clientSide = "com.CalmBit.DarkMachinations.proxy.ClientProxy", serverSide = "com.CalmBit.DarkMachinations.proxy.CommonProxy")
     public static CommonProxy proxy;
+
+    public static final Logger LOG = LogManager.getLogger(DARKMACHINATIONS_NAME);
 
     @CapabilityInject(IProbeDataProvider.class)
     public static Capability<IProbeDataProvider> PROBE_CAPABILITY = null;

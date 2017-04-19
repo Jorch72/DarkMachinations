@@ -49,13 +49,11 @@ public class TileEntityCompressor extends TileEntityBase {
 
     public TileEntityCompressor()
     {
-        super();
         itemStackHandler = new ItemStackHandler(SLOT_COUNT);
         energyStorage = new EnergyReciever(ENERGY_CAPACITY, ENERGY_TRANSFER_RATE);
-
+        energyStorage.listen(this::markDirty);
         inCompressor = ItemStack.EMPTY;
     }
-
 
 
     @Override
@@ -88,8 +86,10 @@ public class TileEntityCompressor extends TileEntityBase {
         }
         if(capability == DarkMachinations.PROBE_CAPABILITY)
         {
-            if(probeDataProvider == null)
+            if(probeDataProvider == null) {
                 probeDataProvider = new ProbeDataProviderMachine();
+                ((ProbeDataProviderMachine)probeDataProvider).setStackHandler(this.itemStackHandler);
+            }
             return (T)probeDataProvider;
         }
         return super.getCapability(capability, facing);
@@ -162,12 +162,6 @@ public class TileEntityCompressor extends TileEntityBase {
     public void update() {
         ItemStack supplySlot = itemStackHandler.getStackInSlot(ContainerCompressor.COMPRESSOR_SUPPLY_SLOT);
 
-        if(this.probeDataProvider != null) {
-            ProbeDataProviderMachine probeData = (ProbeDataProviderMachine)probeDataProvider;
-            probeData.updateProbeEnergyData(this.energyStorage.getEnergyStored(), this.energyStorage.getMaxEnergyStored());
-            probeData.updateProbeProgressData(this.itemProcessingTimer, this.itemProcessingMaximum, this.isActive);
-        }
-
         if(!this.world.isRemote) {
             if (this.isActive) {
                 if (this.itemProcessingTimer == 0) {
@@ -191,6 +185,12 @@ public class TileEntityCompressor extends TileEntityBase {
             }
         }
 
+        if(this.probeDataProvider != null) {
+            ProbeDataProviderMachine probeData = (ProbeDataProviderMachine)probeDataProvider;
+            probeData.updateProbeEnergyData(this.energyStorage.getEnergyStored(), this.energyStorage.getMaxEnergyStored());
+            probeData.updateProbeProgressData(this.itemProcessingTimer, this.itemProcessingMaximum, this.isActive);
+        }
+
         if(wasActive != isActive) {
             wasActive = isActive;
             this.world.notifyBlockUpdate(this.pos, this.world.getBlockState(this.pos), this.world.getBlockState(this.pos), 3);
@@ -207,9 +207,9 @@ public class TileEntityCompressor extends TileEntityBase {
         ItemStack productSlot = this.itemStackHandler.getStackInSlot(ContainerCompressor.COMPRESSOR_PRODUCT_SLOT);
 
         if (productSlot.isEmpty())
-            this.itemStackHandler.setStackInSlot(ContainerCompressor.COMPRESSOR_PRODUCT_SLOT, new ItemStack(product.getItem(), product.getCount()));
-        else if (productSlot.getItem() == product.getItem() && product.getCount() + productSlot.getCount() <= 64)
-            this.itemStackHandler.setStackInSlot(ContainerCompressor.COMPRESSOR_PRODUCT_SLOT, new ItemStack(product.getItem(), product.getCount()+productSlot.getCount()));
+            this.itemStackHandler.setStackInSlot(ContainerCompressor.COMPRESSOR_PRODUCT_SLOT, new ItemStack(product.getItem(), product.getCount(), product.getItemDamage()));
+        else if (productSlot.getItem() == product.getItem() && productSlot.getItemDamage() == product.getItemDamage() &&  product.getCount() + productSlot.getCount() <= 64)
+            this.itemStackHandler.setStackInSlot(ContainerCompressor.COMPRESSOR_PRODUCT_SLOT, new ItemStack(product.getItem(), product.getCount()+productSlot.getCount(), product.getItemDamage()));
         else
             return;
 

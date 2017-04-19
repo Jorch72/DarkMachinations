@@ -176,8 +176,8 @@ public class TileEntityCompressor extends TileEntityBase {
                 if (!supplySlot.isEmpty()) {
                     ItemStack product = CompressorRecipes.INSTANCE.getRecipeResult(supplySlot);
                     if (!product.isEmpty()) {
-                        inCompressor = new ItemStack(supplySlot.getItem(), 1);
-                        this.itemStackHandler.setStackInSlot(ContainerCompressor.COMPRESSOR_SUPPLY_SLOT, new ItemStack(supplySlot.getItem(), supplySlot.getCount() - 1));
+                        inCompressor = new ItemStack(supplySlot.getItem(), 1, supplySlot.getItemDamage());
+                        this.itemStackHandler.setStackInSlot(ContainerCompressor.COMPRESSOR_SUPPLY_SLOT, new ItemStack(supplySlot.getItem(), supplySlot.getCount() - 1, supplySlot.getItemDamage()));
                         this.itemProcessingTimer = this.itemProcessingMaximum;
                         this.isActive = true;
                     }

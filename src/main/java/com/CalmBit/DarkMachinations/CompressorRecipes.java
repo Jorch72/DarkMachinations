@@ -52,7 +52,7 @@ public class CompressorRecipes {
     {
         for(Map.Entry<ItemStack, ItemStack> entry : recipeList.entrySet())
         {
-            if(entry.getKey().getItem() ==  supply.getItem())
+            if(entry.getKey().getItem() ==  supply.getItem() && entry.getKey().getItemDamage() == supply.getItemDamage())
             {
                 return entry.getValue();
             }

@@ -157,8 +157,8 @@ public class TileEntityCrusher extends TileEntityBase {
                 if (!supplySlot.isEmpty()) {
                     ItemStack product = CrusherRecipes.INSTANCE.getRecipeResult(supplySlot);
                     if (!product.isEmpty()) {
-                        inCrusher = new ItemStack(supplySlot.getItem(), 1);
-                        this.itemStackHandler.setStackInSlot(ContainerCrusher.CRUSHER_SUPPLY_SLOT, new ItemStack(supplySlot.getItem(), supplySlot.getCount() - 1));
+                        inCrusher = new ItemStack(supplySlot.getItem(), 1, supplySlot.getItemDamage());
+                        this.itemStackHandler.setStackInSlot(ContainerCrusher.CRUSHER_SUPPLY_SLOT, new ItemStack(supplySlot.getItem(), supplySlot.getCount() - 1, supplySlot.getItemDamage()));
                         this.itemProcessingTimer = this.itemProcessingMaximum;
                         this.isActive = true;
                     }
@@ -191,7 +191,7 @@ public class TileEntityCrusher extends TileEntityBase {
 
         if (productSlot.isEmpty())
             this.itemStackHandler.setStackInSlot(ContainerCrusher.CRUSHER_PRODUCT_SLOT, new ItemStack(product.getItem(), product.getCount(), product.getItemDamage()));
-        else if (productSlot.getItem() == product.getItem() && product.getCount() + productSlot.getCount() <= 64)
+        else if (productSlot.getItem() == product.getItem() && productSlot.getItemDamage() == product.getItemDamage() && product.getCount() + productSlot.getCount() <= 64)
             this.itemStackHandler.setStackInSlot(ContainerCrusher.CRUSHER_PRODUCT_SLOT, new ItemStack(product.getItem(), product.getCount()+productSlot.getCount(), product.getItemDamage()));
         else
             return;

@@ -176,8 +176,11 @@ public class TileEntityCompressor extends TileEntityBase {
                 if (!supplySlot.isEmpty()) {
                     ItemStack product = CompressorRecipes.INSTANCE.getRecipeResult(supplySlot);
                     if (!product.isEmpty()) {
-                        inCompressor = new ItemStack(supplySlot.getItem(), 1, supplySlot.getItemDamage());
-                        this.itemStackHandler.setStackInSlot(ContainerCompressor.COMPRESSOR_SUPPLY_SLOT, new ItemStack(supplySlot.getItem(), supplySlot.getCount() - 1, supplySlot.getItemDamage()));
+                        inCompressor = supplySlot.copy();
+                        inCompressor.setCount(1);
+                        ItemStack supplyDecrement = supplySlot.copy();
+                        supplyDecrement.setCount(supplySlot.getCount()-1);
+                        this.itemStackHandler.setStackInSlot(ContainerCompressor.COMPRESSOR_SUPPLY_SLOT, supplyDecrement);
                         this.itemProcessingTimer = this.itemProcessingMaximum;
                         this.isActive = true;
                     }
@@ -207,9 +210,12 @@ public class TileEntityCompressor extends TileEntityBase {
         ItemStack productSlot = this.itemStackHandler.getStackInSlot(ContainerCompressor.COMPRESSOR_PRODUCT_SLOT);
 
         if (productSlot.isEmpty())
-            this.itemStackHandler.setStackInSlot(ContainerCompressor.COMPRESSOR_PRODUCT_SLOT, new ItemStack(product.getItem(), product.getCount(), product.getItemDamage()));
-        else if (productSlot.getItem() == product.getItem() && productSlot.getItemDamage() == product.getItemDamage() &&  product.getCount() + productSlot.getCount() <= 64)
-            this.itemStackHandler.setStackInSlot(ContainerCompressor.COMPRESSOR_PRODUCT_SLOT, new ItemStack(product.getItem(), product.getCount()+productSlot.getCount(), product.getItemDamage()));
+            this.itemStackHandler.setStackInSlot(ContainerCompressor.COMPRESSOR_PRODUCT_SLOT, product.copy());
+        else if (productSlot.getItem() == product.getItem() && productSlot.getItemDamage() == product.getItemDamage() &&  product.getCount() + productSlot.getCount() <= 64) {
+            ItemStack adjustedQtyProduct = product.copy();
+            adjustedQtyProduct.setCount(product.getCount() + productSlot.getCount());
+            this.itemStackHandler.setStackInSlot(ContainerCompressor.COMPRESSOR_PRODUCT_SLOT, adjustedQtyProduct);
+        }
         else
             return;
 

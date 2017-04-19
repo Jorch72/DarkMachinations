@@ -26,7 +26,7 @@ public class DarkMachinations {
     @Mod.Instance(DARKMACHINATIONS_MOD_ID)
     public static DarkMachinations instance;
 
-    @SidedProxy(clientSide = "ClientProxy", serverSide = "CommonProxy")
+    @SidedProxy(clientSide = "com.calmbit.darkmachinations.proxy.ClientProxy", serverSide = "com.calmbit.darkmachinations.proxy.CommonProxy")
     public static CommonProxy proxy;
 
     public static final Logger LOG = LogManager.getLogger(DARKMACHINATIONS_NAME);

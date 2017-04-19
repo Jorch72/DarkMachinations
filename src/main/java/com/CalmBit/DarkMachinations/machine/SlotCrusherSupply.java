@@ -22,7 +22,8 @@ public class SlotCrusherSupply extends SlotItemHandler {
         if(this.getStack().getCount() < 0)
             return ItemStack.EMPTY;
 
-        ItemStack returnStack = new ItemStack(this.getStack().getItem(), 1, this.getStack().getItemDamage());
+        ItemStack returnStack = this.getStack().copy();
+        returnStack.setCount(1);
 
         if(this.getStack().getCount() == 1)
             this.putStack(ItemStack.EMPTY);

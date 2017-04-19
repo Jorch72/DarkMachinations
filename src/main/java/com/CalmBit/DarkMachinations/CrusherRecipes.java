@@ -42,7 +42,7 @@ public class CrusherRecipes {
 
         for(ItemStack supplyStack : supplyList) {
             if(!this.recipeList.containsKey(supplyStack))
-                this.recipeList.put(supplyStack, new ItemStack(product.getItem(), product.getCount(), product.getItemDamage()));
+                this.recipeList.put(supplyStack, product.copy());
         }
     }
 

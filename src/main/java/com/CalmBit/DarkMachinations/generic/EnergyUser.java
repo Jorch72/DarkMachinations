@@ -1,4 +1,4 @@
-package com.CalmBit.DarkMachinations.generic;
+package com.calmbit.darkmachinations.generic;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.energy.EnergyStorage;

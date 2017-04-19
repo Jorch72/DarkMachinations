@@ -1,4 +1,4 @@
-package com.CalmBit.DarkMachinations.network;
+package com.calmbit.darkmachinations.network;
 
 
 import net.minecraft.util.math.BlockPos;

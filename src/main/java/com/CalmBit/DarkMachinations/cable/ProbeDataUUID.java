@@ -1,4 +1,4 @@
-package com.CalmBit.DarkMachinations.cable;
+package com.calmbit.darkmachinations.cable;
 
 
 import com.elytradev.probe.api.IProbeData;

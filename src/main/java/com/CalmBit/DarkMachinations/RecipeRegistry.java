@@ -1,11 +1,8 @@
-package com.CalmBit.DarkMachinations;
+package com.calmbit.darkmachinations;
 
-import net.minecraft.block.Block;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.ShapedOreRecipe;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 public class RecipeRegistry {
 

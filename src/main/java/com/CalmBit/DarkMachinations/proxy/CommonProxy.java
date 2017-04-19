@@ -1,7 +1,7 @@
-package com.CalmBit.DarkMachinations.proxy;
+package com.calmbit.darkmachinations.proxy;
 
-import com.CalmBit.DarkMachinations.DarkMachinations;
-import com.CalmBit.DarkMachinations.GuiRegistry;
+import com.calmbit.darkmachinations.DarkMachinations;
+import com.calmbit.darkmachinations.GuiRegistry;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 

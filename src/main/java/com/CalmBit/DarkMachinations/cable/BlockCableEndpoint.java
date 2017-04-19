@@ -1,9 +1,9 @@
-package com.CalmBit.DarkMachinations.cable;
+package com.calmbit.darkmachinations.cable;
 
 
-import com.CalmBit.DarkMachinations.BlockRegistry;
-import com.CalmBit.DarkMachinations.NetworkRegistry;
-import com.CalmBit.DarkMachinations.network.EnergyNetworkNode;
+import com.calmbit.darkmachinations.BlockRegistry;
+import com.calmbit.darkmachinations.NetworkRegistry;
+import com.calmbit.darkmachinations.network.EnergyNetworkNode;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;

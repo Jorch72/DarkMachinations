@@ -1,14 +1,13 @@
-package com.CalmBit.DarkMachinations.machine;
+package com.calmbit.darkmachinations.machine;
 
-import com.CalmBit.DarkMachinations.DarkMachinations;
-import com.CalmBit.DarkMachinations.generic.EnergyProvider;
-import com.CalmBit.DarkMachinations.generic.EnergyUser;
+import com.calmbit.darkmachinations.DarkMachinations;
+import com.calmbit.darkmachinations.generic.EnergyProvider;
+import com.calmbit.darkmachinations.generic.EnergyUser;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -19,7 +18,6 @@ import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;

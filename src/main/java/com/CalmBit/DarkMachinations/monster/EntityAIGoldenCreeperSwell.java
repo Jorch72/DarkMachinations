@@ -1,4 +1,4 @@
-package com.CalmBit.DarkMachinations.monster;
+package com.calmbit.darkmachinations.monster;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;

@@ -1,8 +1,7 @@
-package com.CalmBit.DarkMachinations;
+package com.calmbit.darkmachinations;
 
-import com.CalmBit.DarkMachinations.generic.IOreDict;
-import com.CalmBit.DarkMachinations.generic.ItemBase;
-import com.CalmBit.DarkMachinations.world.ItemOre;
+import com.calmbit.darkmachinations.generic.IOreDict;
+import com.calmbit.darkmachinations.generic.ItemBase;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 

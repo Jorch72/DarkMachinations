@@ -1,4 +1,4 @@
-package com.CalmBit.DarkMachinations.cable;
+package com.calmbit.darkmachinations.cable;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;

@@ -1,9 +1,9 @@
-package com.CalmBit.DarkMachinations.cable;
+package com.calmbit.darkmachinations.cable;
 
 
-import com.CalmBit.DarkMachinations.DarkMachinations;
-import com.CalmBit.DarkMachinations.network.EnergyNetwork;
-import com.CalmBit.DarkMachinations.network.EnergyNetworkNode;
+import com.calmbit.darkmachinations.DarkMachinations;
+import com.calmbit.darkmachinations.network.EnergyNetwork;
+import com.calmbit.darkmachinations.network.EnergyNetworkNode;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;

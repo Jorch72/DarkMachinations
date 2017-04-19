@@ -1,6 +1,6 @@
-package com.CalmBit.DarkMachinations.machine;
+package com.calmbit.darkmachinations.machine;
 
-import com.CalmBit.DarkMachinations.generic.IUsableStrictness;
+import com.calmbit.darkmachinations.generic.IUsableStrictness;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;

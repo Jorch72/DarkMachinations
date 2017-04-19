@@ -1,9 +1,9 @@
-package com.CalmBit.DarkMachinations.proxy;
+package com.calmbit.darkmachinations.proxy;
 
-import com.CalmBit.DarkMachinations.DarkMachinations;
-import com.CalmBit.DarkMachinations.FluidRegistry;
-import com.CalmBit.DarkMachinations.monster.EntityGoldenCreeper;
-import com.CalmBit.DarkMachinations.monster.RenderGoldenCreeper;
+import com.calmbit.darkmachinations.DarkMachinations;
+import com.calmbit.darkmachinations.FluidRegistry;
+import com.calmbit.darkmachinations.monster.EntityGoldenCreeper;
+import com.calmbit.darkmachinations.monster.RenderGoldenCreeper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;

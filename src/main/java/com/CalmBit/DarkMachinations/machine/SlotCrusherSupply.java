@@ -1,6 +1,6 @@
-package com.CalmBit.DarkMachinations.machine;
+package com.calmbit.darkmachinations.machine;
 
-import com.CalmBit.DarkMachinations.CrusherRecipes;
+import com.calmbit.darkmachinations.CrusherRecipes;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;

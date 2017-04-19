@@ -1,4 +1,4 @@
-package com.CalmBit.DarkMachinations.machine;
+package com.calmbit.darkmachinations.machine;
 
 public interface ITEActivatable {
     boolean getActive();

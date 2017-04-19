@@ -1,4 +1,4 @@
-package com.CalmBit.DarkMachinations.machine;
+package com.calmbit.darkmachinations.machine;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;

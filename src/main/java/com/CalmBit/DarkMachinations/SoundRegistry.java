@@ -1,4 +1,4 @@
-package com.CalmBit.DarkMachinations;
+package com.calmbit.darkmachinations;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;

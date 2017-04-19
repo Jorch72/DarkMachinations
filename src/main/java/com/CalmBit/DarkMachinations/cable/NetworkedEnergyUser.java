@@ -1,7 +1,7 @@
-package com.CalmBit.DarkMachinations.cable;
+package com.calmbit.darkmachinations.cable;
 
 
-import com.CalmBit.DarkMachinations.network.EnergyNetwork;
+import com.calmbit.darkmachinations.network.EnergyNetwork;
 import net.minecraftforge.energy.IEnergyStorage;
 
 public class NetworkedEnergyUser implements IEnergyStorage {

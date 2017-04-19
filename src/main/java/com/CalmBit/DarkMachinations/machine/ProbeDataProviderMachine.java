@@ -1,8 +1,7 @@
-package com.CalmBit.DarkMachinations.machine;
+package com.calmbit.darkmachinations.machine;
 
 import com.elytradev.probe.api.IProbeData;
 import com.elytradev.probe.api.IProbeDataProvider;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.CalmBit.DarkMachinations.machine;
+package com.calmbit.darkmachinations.machine;
 
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;

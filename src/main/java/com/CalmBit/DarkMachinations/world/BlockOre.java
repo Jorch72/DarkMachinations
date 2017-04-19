@@ -1,7 +1,7 @@
-package com.CalmBit.DarkMachinations.world;
+package com.calmbit.darkmachinations.world;
 
-import com.CalmBit.DarkMachinations.generic.BlockBase;
-import com.CalmBit.DarkMachinations.generic.IOreDict;
+import com.calmbit.darkmachinations.generic.BlockBase;
+import com.calmbit.darkmachinations.generic.IOreDict;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.oredict.OreDictionary;

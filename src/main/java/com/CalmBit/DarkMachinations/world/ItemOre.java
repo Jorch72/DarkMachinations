@@ -1,7 +1,7 @@
-package com.CalmBit.DarkMachinations.world;
+package com.calmbit.darkmachinations.world;
 
-import com.CalmBit.DarkMachinations.generic.IOreDict;
-import com.CalmBit.DarkMachinations.generic.ItemBase;
+import com.calmbit.darkmachinations.generic.IOreDict;
+import com.calmbit.darkmachinations.generic.ItemBase;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class ItemOre extends ItemBase implements IOreDict {

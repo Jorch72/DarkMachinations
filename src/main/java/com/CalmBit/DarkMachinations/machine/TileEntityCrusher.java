@@ -1,9 +1,9 @@
-package com.CalmBit.DarkMachinations.machine;
+package com.calmbit.darkmachinations.machine;
 
-import com.CalmBit.DarkMachinations.CrusherRecipes;
-import com.CalmBit.DarkMachinations.DarkMachinations;
-import com.CalmBit.DarkMachinations.generic.EnergyReciever;
-import com.CalmBit.DarkMachinations.generic.EnergyUser;
+import com.calmbit.darkmachinations.CrusherRecipes;
+import com.calmbit.darkmachinations.DarkMachinations;
+import com.calmbit.darkmachinations.generic.EnergyReciever;
+import com.calmbit.darkmachinations.generic.EnergyUser;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -57,6 +57,9 @@ public class TileEntityCrusher extends TileEntityBase {
     }
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+        if(capability == null)
+            return false;
+
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             return true;
         }
@@ -72,6 +75,9 @@ public class TileEntityCrusher extends TileEntityBase {
 
     @Override
     public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+        if(capability == null)
+            return null;
+
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
         {
             return (T) itemStackHandler;
@@ -81,14 +87,11 @@ public class TileEntityCrusher extends TileEntityBase {
             return (T) energyStorage;
         }
         if(capability == DarkMachinations.PROBE_CAPABILITY) {
-            if(capability == DarkMachinations.PROBE_CAPABILITY)
-            {
-                if(probeDataProvider == null) {
-                    probeDataProvider = new ProbeDataProviderMachine();
-                    ((ProbeDataProviderMachine)probeDataProvider).setStackHandler(this.itemStackHandler);
-                }
-                return (T)probeDataProvider;
+            if(probeDataProvider == null) {
+                probeDataProvider = new ProbeDataProviderMachine();
+                ((ProbeDataProviderMachine)probeDataProvider).setStackHandler(this.itemStackHandler);
             }
+            return (T)probeDataProvider;
         }
         return super.getCapability(capability, facing);
     }

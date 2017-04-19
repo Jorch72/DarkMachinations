@@ -1,15 +1,12 @@
-package com.CalmBit.DarkMachinations;
+package com.calmbit.darkmachinations;
 
-import com.CalmBit.DarkMachinations.cable.BlockCable;
-import com.CalmBit.DarkMachinations.cable.TileEntityCableNode;
-import com.CalmBit.DarkMachinations.network.EnergyNetwork;
-import com.CalmBit.DarkMachinations.network.EnergyNetworkNode;
+import com.calmbit.darkmachinations.cable.BlockCable;
+import com.calmbit.darkmachinations.cable.TileEntityCableNode;
+import com.calmbit.darkmachinations.network.EnergyNetwork;
+import com.calmbit.darkmachinations.network.EnergyNetworkNode;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLLog;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import sun.nio.ch.Net;
 
 import java.util.*;
 

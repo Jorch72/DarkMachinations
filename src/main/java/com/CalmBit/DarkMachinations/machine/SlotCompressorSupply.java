@@ -1,6 +1,6 @@
-package com.CalmBit.DarkMachinations.machine;
+package com.calmbit.darkmachinations.machine;
 
-import com.CalmBit.DarkMachinations.CompressorRecipes;
+import com.calmbit.darkmachinations.CompressorRecipes;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;

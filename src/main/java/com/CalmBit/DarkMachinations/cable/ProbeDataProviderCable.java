@@ -1,7 +1,7 @@
-package com.CalmBit.DarkMachinations.cable;
+package com.calmbit.darkmachinations.cable;
 
 
-import com.CalmBit.DarkMachinations.network.EnergyNetworkNode;
+import com.calmbit.darkmachinations.network.EnergyNetworkNode;
 import com.elytradev.probe.api.IProbeData;
 import com.elytradev.probe.api.IProbeDataProvider;
 

@@ -1,6 +1,6 @@
-package com.CalmBit.DarkMachinations;
+package com.calmbit.darkmachinations;
 
-import com.CalmBit.DarkMachinations.world.BlockFluidHeavyCrudeOil;
+import com.calmbit.darkmachinations.world.BlockFluidHeavyCrudeOil;
 import net.minecraft.block.material.MaterialLiquid;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;

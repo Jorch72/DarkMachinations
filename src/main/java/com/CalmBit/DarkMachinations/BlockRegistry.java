@@ -1,9 +1,8 @@
-package com.CalmBit.DarkMachinations;
+package com.calmbit.darkmachinations;
 
-import com.CalmBit.DarkMachinations.cable.*;
-import com.CalmBit.DarkMachinations.generic.*;
-import com.CalmBit.DarkMachinations.machine.*;
-import com.CalmBit.DarkMachinations.world.BlockOre;
+import com.calmbit.darkmachinations.cable.*;
+import com.calmbit.darkmachinations.generic.*;
+import com.calmbit.darkmachinations.machine.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemBlock;

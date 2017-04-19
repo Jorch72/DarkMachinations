@@ -1,6 +1,6 @@
-package com.CalmBit.DarkMachinations;
+package com.calmbit.darkmachinations;
 
-import com.CalmBit.DarkMachinations.monster.EntityGoldenCreeper;
+import com.calmbit.darkmachinations.monster.EntityGoldenCreeper;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 

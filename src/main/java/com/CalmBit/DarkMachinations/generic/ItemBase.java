@@ -1,6 +1,6 @@
-package com.CalmBit.DarkMachinations.generic;
+package com.calmbit.darkmachinations.generic;
 
-import com.CalmBit.DarkMachinations.DarkMachinations;
+import com.calmbit.darkmachinations.DarkMachinations;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 

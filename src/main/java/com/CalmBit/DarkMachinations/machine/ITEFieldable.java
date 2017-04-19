@@ -1,4 +1,4 @@
-package com.CalmBit.DarkMachinations.machine;
+package com.calmbit.darkmachinations.machine;
 
 public interface ITEFieldable {
     void setField(int id, int value);

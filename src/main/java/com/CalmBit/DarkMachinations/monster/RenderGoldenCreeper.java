@@ -1,6 +1,6 @@
-package com.CalmBit.DarkMachinations.monster;
+package com.calmbit.darkmachinations.monster;
 
-import com.CalmBit.DarkMachinations.DarkMachinations;
+import com.calmbit.darkmachinations.DarkMachinations;
 import net.minecraft.client.model.ModelCreeper;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLiving;

@@ -1,8 +1,8 @@
-package com.CalmBit.DarkMachinations;
+package com.calmbit.darkmachinations;
 
-import com.CalmBit.DarkMachinations.generic.DarkMachinationsCreativeTab;
-import com.CalmBit.DarkMachinations.proxy.CommonProxy;
-import com.CalmBit.DarkMachinations.world.WorldGen;
+import com.calmbit.darkmachinations.generic.DarkMachinationsCreativeTab;
+import com.calmbit.darkmachinations.proxy.CommonProxy;
+import com.calmbit.darkmachinations.world.WorldGen;
 import com.elytradev.probe.api.IProbeDataProvider;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
@@ -26,7 +26,7 @@ public class DarkMachinations {
     @Mod.Instance(DARKMACHINATIONS_MOD_ID)
     public static DarkMachinations instance;
 
-    @SidedProxy(clientSide = "com.CalmBit.DarkMachinations.proxy.ClientProxy", serverSide = "com.CalmBit.DarkMachinations.proxy.CommonProxy")
+    @SidedProxy(clientSide = "ClientProxy", serverSide = "CommonProxy")
     public static CommonProxy proxy;
 
     public static final Logger LOG = LogManager.getLogger(DARKMACHINATIONS_NAME);

@@ -1,9 +1,9 @@
-package com.CalmBit.DarkMachinations.machine;
+package com.calmbit.darkmachinations.machine;
 
-import com.CalmBit.DarkMachinations.CompressorRecipes;
-import com.CalmBit.DarkMachinations.DarkMachinations;
-import com.CalmBit.DarkMachinations.generic.EnergyReciever;
-import com.CalmBit.DarkMachinations.generic.EnergyUser;
+import com.calmbit.darkmachinations.CompressorRecipes;
+import com.calmbit.darkmachinations.DarkMachinations;
+import com.calmbit.darkmachinations.generic.EnergyReciever;
+import com.calmbit.darkmachinations.generic.EnergyUser;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;

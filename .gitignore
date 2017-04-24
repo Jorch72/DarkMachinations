@@ -1,6 +1,27 @@
-/*
-!/src
-!build.gradle
-!.gitignore
-!LICENSE.md
-!README.md
+# Gradle (but not gradlew!)
+.gradle/
+
+# Eclipse-generated files
+.project
+.classpath
+.settings/
+
+# Built artifacts
+build/
+out/
+run/
+bin/
+
+# Run cruft
+minecraft/
+
+!src/main/resources/assets/minecraft/
+
+# Non-java files
+*.txt
+*.iml
+*.ipr
+*.iws
+
+# System-created cruft
+**/Thumbs.db

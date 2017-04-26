@@ -9,8 +9,13 @@ buildscript {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
     }
 }
+plugins {
+    id 'com.github.johnrengelman.shadow' version '1.2.3'
+}
+
 apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
+
 
 
 version = "1.0"
@@ -41,6 +46,26 @@ repositories {
     }
 }
 
+jar {
+    classifier = 'slim'
+}
+
+shadowJar {
+    classifier = ''
+    relocate 'com.elytradev.concrete', 'com.CalmBit.darkmachinations.repackage.com.elytradev.concrete'
+    configurations = [project.configurations.shadow]
+}
+
+reobf {
+    shadowJar { mappingType = 'SEARGE' }
+}
+
+tasks.build.dependsOn reobfShadowJar
+
+artifacts {
+    archives shadowJar
+}
+
 dependencies {
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..
@@ -63,6 +88,12 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
     deobfCompile 'com.elytradev:probedataproviderapi:MC1.11.2_ver1.1.1'
+
+    compile 'com.elytradev:concrete:0.2.2:common'
+    shadow 'com.elytradev:concrete:0.2.2:common'
+
+    compile 'com.elytradev:concrete:0.2.2:inventory'
+    shadow 'com.elytradev:concrete:0.2.2:inventory'
 
 }
 

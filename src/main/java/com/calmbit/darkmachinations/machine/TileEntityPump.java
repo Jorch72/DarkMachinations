@@ -1,8 +1,10 @@
 package com.calmbit.darkmachinations.machine;
 
 import com.calmbit.darkmachinations.DarkMachinations;
+import com.calmbit.darkmachinations.FluidRegistry;
 import com.calmbit.darkmachinations.generic.EnergyProvider;
 import com.calmbit.darkmachinations.generic.EnergyUser;
+import com.calmbit.darkmachinations.generic.FluidBuffer;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -11,24 +13,23 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
-import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 
-public class TileEntityGenerator extends TileEntityBase {
+public class TileEntityPump extends TileEntityBase {
 
     public ItemStackHandler itemStackHandler;
+    public FluidBuffer fluidTank;
     public EnergyUser energyStorage;
     public Object probeDataProvider;
     public String customName;
@@ -36,22 +37,28 @@ public class TileEntityGenerator extends TileEntityBase {
     public boolean isActive;
     public boolean wasActive;
 
+
     public static final int SLOT_COUNT = 1;
     public static final int ENERGY_CAPACITY = 10000;
     public static final int ENERGY_TRANSFER_RATE = 100;
-    public static final int ENERGY_GENERATION_RATE = 125;
 
+    public static final int FLUID_CAPACITY = 10000;
     public static final int FIELD_ENERGY_COUNT = 0;
     public static final int FIELD_ENERGY_CAPACITY = 1;
-    public static final int FIELD_ITEM_PROCESSING_TIME = 2;
-    public static final int FIELD_ITEM_PROCESSING_MAX = 3;
+    public static final int FIELD_PUMP_TIMER = 2;
+    public static final int FIELD_PUMP_TIMER_MAX = 3;
+    public static final int FIELD_FLUID_LEVEL = 4;
+    public static final int FIELD_FLUID_CAPACITY = 5;
 
-    public int itemProcessingTimer;
-    public int itemProcessingMaximum;
+    public int pumpTimer;
+    public int pumpTimerMaximum;
 
-    public TileEntityGenerator() {
+    public TileEntityPump() {
         itemStackHandler = new ItemStackHandler(SLOT_COUNT);
-        energyStorage = new EnergyProvider(ENERGY_CAPACITY, ENERGY_TRANSFER_RATE);
+        fluidTank = new FluidBuffer(FLUID_CAPACITY);
+        fluidTank.setFluid(new FluidStack(FluidRegistry.fluid_heavy_crude_oil, 1000));
+        fluidTank.listen(this::markDirty);
+        energyStorage = new EnergyUser(ENERGY_CAPACITY, ENERGY_TRANSFER_RATE);
         energyStorage.listen(this::markDirty);
     }
 
@@ -64,10 +71,8 @@ public class TileEntityGenerator extends TileEntityBase {
 
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return true;
-        }
-        if(capability == DarkMachinations.PROBE_CAPABILITY) {
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || capability == DarkMachinations.PROBE_CAPABILITY
+                || capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
             return true;
         }
         if(capability == CapabilityEnergy.ENERGY) {
@@ -94,16 +99,20 @@ public class TileEntityGenerator extends TileEntityBase {
             }
             return (T)probeDataProvider;
         }
+        if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+            return (T)fluidTank;
+        }
         return super.getCapability(capability, facing);
     }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         compound.setTag("inventory", itemStackHandler.serializeNBT());
+        fluidTank.writeToNBT(compound);
         energyStorage.writeToNBT(compound);
         compound.setBoolean("isActive", this.isActive);
-        compound.setInteger("itemProcessingTimer", this.itemProcessingTimer);
-        compound.setInteger("itemProcessingMaximum", this.itemProcessingMaximum);
+        compound.setInteger("pumpTimer", this.pumpTimer);
+        compound.setInteger("pumpTimerMax", this.pumpTimerMaximum);
         return super.writeToNBT(compound);
     }
 
@@ -111,10 +120,11 @@ public class TileEntityGenerator extends TileEntityBase {
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
         itemStackHandler.deserializeNBT(compound.getCompoundTag("inventory"));
+        fluidTank.readFromNBT(compound);
         energyStorage.readFromNBT(compound);
         this.isActive = compound.getBoolean("isActive");
-        this.itemProcessingTimer = compound.getInteger("itemProcessingTimer");
-        this.itemProcessingMaximum = compound.getInteger("itemProcessingMaximum");
+        this.pumpTimer = compound.getInteger("pumpTimer");
+        this.pumpTimerMaximum = compound.getInteger("pumpTimerMax");
     }
 
     public int getField(int id)
@@ -125,10 +135,14 @@ public class TileEntityGenerator extends TileEntityBase {
                 return this.energyStorage.getEnergyStored();
             case FIELD_ENERGY_CAPACITY:
                 return this.energyStorage.getMaxEnergyStored();
-            case FIELD_ITEM_PROCESSING_TIME:
-                return this.itemProcessingTimer;
-            case FIELD_ITEM_PROCESSING_MAX:
-                return this.itemProcessingMaximum;
+            case FIELD_PUMP_TIMER:
+                return this.pumpTimer;
+            case FIELD_PUMP_TIMER_MAX:
+                return this.pumpTimerMaximum;
+            case FIELD_FLUID_LEVEL:
+                return this.fluidTank.getFluidAmount();
+            case FIELD_FLUID_CAPACITY:
+                return this.fluidTank.getCapacity();
             default:
                 return 0;
         }
@@ -148,12 +162,18 @@ public class TileEntityGenerator extends TileEntityBase {
                 break;
             case FIELD_ENERGY_CAPACITY:
                 this.energyStorage.setEnergyCapacity(value);
-            case FIELD_ITEM_PROCESSING_TIME:
-                this.itemProcessingTimer = value;
+            case FIELD_PUMP_TIMER:
+                this.pumpTimer = value;
                 break;
-            case FIELD_ITEM_PROCESSING_MAX:
-                this.itemProcessingMaximum = value;
+            case FIELD_PUMP_TIMER_MAX:
+                this.pumpTimerMaximum = value;
                 break;
+            case FIELD_FLUID_LEVEL:
+                if(this.fluidTank.getFluid() != null)
+                    this.fluidTank.getFluid().amount = value;
+                break;
+            case FIELD_FLUID_CAPACITY:
+                this.fluidTank.setCapacity(value);
             default:
                 break;
         }
@@ -163,44 +183,12 @@ public class TileEntityGenerator extends TileEntityBase {
         ItemStack supplySlot = itemStackHandler.getStackInSlot(ContainerGenerator.GENERATOR_SUPPLY_SLOT);
 
         if (!this.world.isRemote) {
-            if (this.itemProcessingTimer != 0) {
-                this.itemProcessingTimer--;
-                this.energyStorage.setEnergyStored(Math.min(this.energyStorage.getEnergyStored()+ENERGY_GENERATION_RATE, this.energyStorage.getMaxEnergyStored()));
-            } else {
-                if (supplySlot.isEmpty()) {
-                    this.isActive = false;
-                } else if(this.energyStorage.getEnergyStored() < this.energyStorage.getMaxEnergyStored())  {
-                    this.itemProcessingTimer = this.itemProcessingMaximum = consumeFuel();
-                    this.isActive  = true;
-                }
-            }
 
-            if(this.energyStorage.getEnergyStored() > 0)
-            {
-                ArrayList<IEnergyStorage> receivers = new ArrayList<>();
-                for(EnumFacing facing : EnumFacing.VALUES)
-                {
-                    IEnergyStorage storage = this.getPowerReceiver(facing);
-                    if(storage != null && storage.canReceive())
-                        receivers.add(storage);
-                }
-
-                if(receivers.size() != 0) {
-                    int energyRate = Math.min(ENERGY_TRANSFER_RATE / receivers.size(), this.energyStorage.getEnergyStored());
-                    int energyLeft = Math.min(ENERGY_TRANSFER_RATE, this.energyStorage.getEnergyStored());
-                    for (IEnergyStorage storage : receivers) {
-                        if(energyLeft <= 0)
-                            break;
-                        energyLeft -= energyStorage.extractEnergy(storage.receiveEnergy(energyRate, false), false);
-                    }
-                }
-            }
         }
 
         if(this.probeDataProvider != null) {
             ProbeDataProviderGenerator probeData = (ProbeDataProviderGenerator)probeDataProvider;
             probeData.updateProbeEnergyData(this.energyStorage.getEnergyStored(), this.energyStorage.getMaxEnergyStored());
-            probeData.updateProbeFuelData(this.itemProcessingTimer, this.itemProcessingMaximum, this.isActive);
         }
 
         if(wasActive != isActive) {
@@ -213,30 +201,8 @@ public class TileEntityGenerator extends TileEntityBase {
         }
     }
 
-    private int checkPowerSide(int energyTransferRate, EnumFacing face)
-    {
-        IEnergyStorage energy = getPowerReceiver(face);
-        if(energy.getEnergyStored() < energy.getMaxEnergyStored()) {
-            int maximumTransfer = Math.min(energyTransferRate, energy.getMaxEnergyStored()-energy.getEnergyStored());
-            return energy.receiveEnergy(this.energyStorage.extractEnergy(maximumTransfer, false), false);
-        }
-        return 0;
-    }
+    private void pumpFluid() {
 
-    private IEnergyStorage getPowerReceiver(EnumFacing face) {
-        BlockPos poweredBlock = this.getPos().add(face.getDirectionVec());
-        if (world.getTileEntity(poweredBlock) != null && world.getTileEntity(poweredBlock).hasCapability(CapabilityEnergy.ENERGY, face))
-            return world.getTileEntity(poweredBlock).getCapability(CapabilityEnergy.ENERGY, face);
-        else
-            return null;
-    }
-
-    private int consumeFuel() {
-        ItemStack supplySlot = itemStackHandler.getStackInSlot(ContainerGenerator.GENERATOR_SUPPLY_SLOT);
-        int fuelValue = TileEntityFurnace.getItemBurnTime(supplySlot);
-        supplySlot.setCount(supplySlot.getCount()-1);
-        this.isActive = true;
-        return fuelValue;
     }
 
     @Nullable
@@ -253,17 +219,17 @@ public class TileEntityGenerator extends TileEntityBase {
 
     @Override
     public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn) {
-        return new ContainerGenerator(this, playerInventory);
+        return new ContainerPump(this, playerInventory);
     }
 
     @Override
     public String getGuiID() {
-        return "darkmachinations:generator";
+        return "darkmachinations:pump";
     }
 
     @Override
     public String getName() {
-        return this.hasCustomName() ? this.customName : "machine.generator";
+        return this.hasCustomName() ? this.customName : "machine.pump";
     }
 
     public void setCustomName(String name)
@@ -294,6 +260,9 @@ public class TileEntityGenerator extends TileEntityBase {
     @Override
     public void writeItemData(NBTTagCompound compound) {
         compound.setInteger("energy_stored", this.energyStorage.getEnergyStored());
+        NBTTagCompound fluid = new NBTTagCompound();
+        fluidTank.writeToNBT(fluid);
+        compound.setTag("fluid_stored", fluid);
     }
 
     @Override
@@ -305,6 +274,10 @@ public class TileEntityGenerator extends TileEntityBase {
                 energyStored = ENERGY_CAPACITY;
 
             this.energyStorage.setEnergyStored(energyStored);
+        }
+
+        if(compound.hasKey("fluid_stored")) {
+            this.fluidTank.readFromNBT(compound.getCompoundTag("fluid_stored"));
         }
     }
 }

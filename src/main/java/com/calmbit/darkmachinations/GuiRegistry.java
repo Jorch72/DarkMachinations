@@ -17,6 +17,7 @@ public class GuiRegistry implements IGuiHandler {
     public static final int GUI_MACHINE_COMPRESSOR = 1;
     public static final int GUI_MACHINE_GENERATOR = 2;
     public static final int GUI_MACHINE_BLOOMERY = 3;
+    public static final int GUI_MACHINE_PUMP = 4;
 
     @Nullable
     @Override
@@ -29,6 +30,8 @@ public class GuiRegistry implements IGuiHandler {
                 return new ContainerCompressor((TileEntityCompressor)world.getTileEntity(new BlockPos(x,y,z)), player.inventory);
             case GUI_MACHINE_GENERATOR:
                 return new ContainerGenerator((TileEntityGenerator)world.getTileEntity(new BlockPos(x,y,z)), player.inventory);
+            case GUI_MACHINE_PUMP:
+                return new ContainerPump((TileEntityPump)world.getTileEntity(new BlockPos(x,y,z)), player.inventory);
         }
         return null;
     }
@@ -45,6 +48,8 @@ public class GuiRegistry implements IGuiHandler {
                 return new GuiCompressor(getServerGuiElement(ID, player, world, x, y, z));
             case GUI_MACHINE_GENERATOR:
                 return new GuiGenerator(getServerGuiElement(ID, player, world, x, y, z));
+            case GUI_MACHINE_PUMP:
+                return new GuiPump(getServerGuiElement(ID, player, world, x, y, z));
         }
         return null;
     }

@@ -14,7 +14,7 @@ public class BlockBase extends Block implements IDivitaeBlock {
 
         this.name = name;
 
-        setUnlocalizedName(name);
+        setUnlocalizedName("darkmachinations."+name);
         setRegistryName(name);
     }
 

@@ -11,4 +11,4 @@ Goes well with [Correlated](https://github.com/elytra/Correlated), [Teckle](http
 
 ### [Falkreon](https://github.com/Falkreon)
 * Plate Textures
-* Machine Textures (Generator, Crusher, Base Textures)
+* Machine Textures (Generator, Crusher, Pump, Base Textures)

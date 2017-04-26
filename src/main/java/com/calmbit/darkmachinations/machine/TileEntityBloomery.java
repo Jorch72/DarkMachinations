@@ -3,6 +3,7 @@ package com.calmbit.darkmachinations.machine;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.items.ItemStackHandler;
 
 public class TileEntityBloomery extends TileEntityBase {
@@ -59,5 +60,15 @@ public class TileEntityBloomery extends TileEntityBase {
     @Override
     public boolean hasCustomName() {
         return false;
+    }
+
+    @Override
+    public void writeItemData(NBTTagCompound compound) {
+
+    }
+
+    @Override
+    public void readItemData(NBTTagCompound compound) {
+
     }
 }

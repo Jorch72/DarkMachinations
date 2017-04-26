@@ -1,51 +1,28 @@
-item.ingot_copper.name=Copper Ingot
-item.ingot_silver.name=Silver Ingot
-item.ingot_tin.name=Tin Ingot
-item.ingot_bronze.name=Bronze Ingot
-item.ingot_steel.name=Steel Ingot
-
-item.dust_bronze.name=Bronze Dust
-item.dust_copper.name=Copper Dust
-item.dust_gold.name=Gold Dust
-item.dust_iron.name=Iron Dust
-item.dust_silver.name=Silver Dust
-item.dust_tin.name=Tin Dust
-item.dust_steel.name=Steel Dust
-
-item.plate_bronze.name=Bronze Plate
-item.plate_copper.name=Copper Plate
-item.plate_gold.name=Gold Plate
-item.plate_iron.name=Iron Plate
-item.plate_silver.name=Silver Plate
-item.plate_tin.name=Tin Plate
-item.plate_steel.name=Steel Plate
-
-tile.ore_copper.name=Copper Ore
-tile.ore_silver.name=Silver Ore
-tile.ore_tin.name=Tin Ore
-item.machine_corner.name=Machine Corner
+item.darkmachinations.machine_corner.name=Machine Corner
 itemGroup.darkmachinations=Dark Machinations
 itemGroup.darkmachinations_af=Dank Machinations
 
 
-tile.machine_crusher.name=Crusher
-tile.machine_compressor.name=Compressor
-tile.machine_redstone_core.name=Redstone Machine Core
-tile.machine_generator.name=Solid-Fuel Generator
+tile.darkmachinations.machine_crusher.name=Crusher
+tile.darkmachinations.machine_compressor.name=Compressor
+tile.darkmachinations.machine_redstone_core.name=Redstone Machine Core
+tile.darkmachinations.machine_generator.name=Solid-Fuel Generator
 
-tile.cable_copper_insulated.name=Insulated Copper Cable
-tile.cable_tin_insulated.name=Insulated Tin Cable
-tile.cable_gold.name=Insulated Gold Cable
+tile.darkmachinations.cable_copper_insulated.name=Insulated Copper Cable
+tile.darkmachinations.cable_tin_insulated.name=Insulated Tin Cable
+tile.darkmachinations.cable_gold.name=Insulated Gold Cable
 
-tile.cable_copper_uninsulated.name=Uninsulated Copper Cable
-tile.cable_tin_uninsulated.name=Uninsulated Tin Cable
-tile.cable_gold_uninsulated.name=Uninsulated Gold Cable
+tile.darkmachinations.cable_copper_uninsulated.name=Uninsulated Copper Cable
+tile.darkmachinations.cable_tin_uninsulated.name=Uninsulated Tin Cable
+tile.darkmachinations.cable_gold_uninsulated.name=Uninsulated Gold Cable
 
-tile.machine_bloomery.name=Bloomery Controller
-tile.bloomery_brick.name=Bloomery Brick
+tile.darkmachinations.machine_bloomery.name=Bloomery Controller
+tile.darkmachinations.bloomery_brick.name=Bloomery Brick
 
-tile.cable_regular_endpoint.name=Cable Node
+tile.darkmachinations.cable_regular_endpoint.name=Cable Node
 
 subtitles.entity.golden_creeper.death=Golden Creepr Death
 subtitles.entity.golden_creeper.hurt=Golden Creeper Hurt
 subtitles.entity.golden_creeper.primed=Golden Creeper Hiss
+
+fluid.heavy_crude_oil=Heavy Crude Oil

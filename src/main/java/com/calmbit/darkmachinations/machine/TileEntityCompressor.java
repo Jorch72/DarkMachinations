@@ -55,6 +55,12 @@ public class TileEntityCompressor extends TileEntityBase {
         inCompressor = ItemStack.EMPTY;
     }
 
+    @Override
+    public NBTTagCompound getUpdateTag() {
+        NBTTagCompound update = new NBTTagCompound();
+        this.writeToNBT(update);
+        return update;
+    }
 
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
@@ -231,9 +237,7 @@ public class TileEntityCompressor extends TileEntityBase {
     @Nullable
     @Override
     public SPacketUpdateTileEntity getUpdatePacket() {
-        NBTTagCompound update = new NBTTagCompound();
-        this.writeToNBT(update);
-        return new SPacketUpdateTileEntity(this.pos, 1, update);
+        return new SPacketUpdateTileEntity(this.pos, 1, this.getUpdateTag());
     }
 
     @Override
@@ -280,5 +284,22 @@ public class TileEntityCompressor extends TileEntityBase {
     @Override
     public ItemStackHandler getItemStackHandler() {
         return this.itemStackHandler;
+    }
+
+    @Override
+    public void writeItemData(NBTTagCompound compound) {
+        compound.setInteger("energy_stored", this.energyStorage.getEnergyStored());
+    }
+
+    @Override
+    public void readItemData(NBTTagCompound compound) {
+        if(compound.hasKey("energy_stored")) {
+            int energyStored = compound.getInteger("energy_stored");
+
+            if(energyStored > ENERGY_CAPACITY)
+                energyStored = ENERGY_CAPACITY;
+
+            this.energyStorage.setEnergyStored(energyStored);
+        }
     }
 }

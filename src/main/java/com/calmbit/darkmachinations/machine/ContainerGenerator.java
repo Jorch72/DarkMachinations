@@ -34,7 +34,7 @@ public class ContainerGenerator extends ContainerBase<TileEntityGenerator> {
     @Override
     public void addListener(IContainerListener listener) {
         super.addListener(listener);
-        listener.sendProgressBarUpdate(this, TileEntityCrusher.FIELD_ENERGY_COUNT, this.tileEntity.energyStorage.getEnergyStored());
+        listener.sendProgressBarUpdate(this, TileEntityGenerator.FIELD_ENERGY_COUNT, this.tileEntity.energyStorage.getEnergyStored());
         listener.sendProgressBarUpdate(this, TileEntityGenerator.FIELD_ITEM_PROCESSING_TIME, this.tileEntity.itemProcessingTimer);
         listener.sendProgressBarUpdate(this, TileEntityGenerator.FIELD_ITEM_PROCESSING_MAX, this.tileEntity.itemProcessingMaximum);
     }

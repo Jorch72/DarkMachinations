@@ -8,21 +8,31 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public abstract class BlockMachineBase<TE extends TileEntityBase> extends Block implements IDivitaeBlock {
@@ -58,7 +68,7 @@ public abstract class BlockMachineBase<TE extends TileEntityBase> extends Block 
         this.name = name;
         this.guiID = guiID;
 
-        setUnlocalizedName(name);
+        setUnlocalizedName("darkmachinations."+name);
         setRegistryName(name);
         setCreativeTab(DarkMachinations.divitaeTab);
         setHarvestLevel("pickaxe", 1);
@@ -195,4 +205,59 @@ public abstract class BlockMachineBase<TE extends TileEntityBase> extends Block 
     @Nullable
     @Override
     public abstract TE createTileEntity(World world, IBlockState state);
+
+    @Override
+    public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced) {
+        NBTTagCompound compound = stack.getTagCompound();
+        if(compound != null) {
+            if (GuiScreen.isShiftKeyDown()) {
+                if (compound.hasKey("energy_stored"))
+                    tooltip.add(compound.getInteger("energy_stored") + "/" + TileEntityGenerator.ENERGY_CAPACITY + " FU");
+                if(compound.hasKey("fluid_stored")) {
+                    NBTTagCompound fluid = compound.getCompoundTag("fluid_stored");
+                    if(fluid.hasKey("FluidName"))
+                        tooltip.add(TextFormatting.BLUE.toString() + TextFormatting.ITALIC.toString() + "Fluid: " + TextFormatting.RESET.toString() + I18n.format("fluid." + fluid.getString("FluidName")) + ", " + fluid.getInteger("Amount") + "mb");
+                }
+            } else {
+                tooltip.add(TextFormatting.ITALIC.toString() + "Press SHIFT for more information...");
+            }
+        }
+    }
+
+    @Override
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        if(stack.hasTagCompound()) {
+            NBTTagCompound itemData = stack.getTagCompound();
+            if(worldIn.getTileEntity(pos) instanceof  TileEntityBase) {
+                ((TileEntityBase)worldIn.getTileEntity(pos)).readItemData(itemData);
+            }
+        }
+    }
+
+    @Override
+    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune)
+    {
+        ItemStack stack = new ItemStack(Item.getItemFromBlock(this), 1);
+        ArrayList<ItemStack> ret = new ArrayList<>();
+        if(world.getTileEntity(pos) instanceof TileEntityBase) {
+            NBTTagCompound compound = new NBTTagCompound();
+            ((TileEntityBase)world.getTileEntity(pos)).writeItemData(compound);
+            stack.setTagCompound(compound);
+        }
+        ret.add(stack);
+
+        return ret;
+    }
+    @Override
+    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest)
+    {
+        if (willHarvest) return true; //If it will harvest, delay deletion of the block until after getDrops
+        return super.removedByPlayer(state, world, pos, player, willHarvest);
+    }
+    @Override
+    public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, ItemStack tool)
+    {
+        super.harvestBlock(world, player, pos, state, te, tool);
+        world.setBlockToAir(pos);
+    }
 }

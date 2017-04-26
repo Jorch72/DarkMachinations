@@ -2,6 +2,7 @@ package com.calmbit.darkmachinations.machine;
 
 import com.calmbit.darkmachinations.generic.IUsableStrictness;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.world.IInteractionObject;
@@ -25,4 +26,6 @@ public abstract class TileEntityBase extends TileEntity implements IInteractionO
         return player.getDistanceSq(this.pos.getX() + 0.5D, this.pos.getY() + 0.5D, this.pos.getZ() + 0.5D) <= 64D;
     }
 
+    public abstract void writeItemData(NBTTagCompound compound);
+    public abstract void readItemData(NBTTagCompound compound);
 }

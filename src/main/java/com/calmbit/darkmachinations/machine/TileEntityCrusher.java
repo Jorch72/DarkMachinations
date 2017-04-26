@@ -55,6 +55,14 @@ public class TileEntityCrusher extends TileEntityBase {
         energyStorage.listen(this::markDirty);
         inCrusher = ItemStack.EMPTY;
     }
+
+    @Override
+    public NBTTagCompound getUpdateTag() {
+        NBTTagCompound update = new NBTTagCompound();
+        this.writeToNBT(update);
+        return update;
+    }
+
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
         if(capability == null)
@@ -255,9 +263,7 @@ public class TileEntityCrusher extends TileEntityBase {
     @Nullable
     @Override
     public SPacketUpdateTileEntity getUpdatePacket() {
-        NBTTagCompound update = new NBTTagCompound();
-        this.writeToNBT(update);
-        return new SPacketUpdateTileEntity(this.pos, 1, update);
+        return new SPacketUpdateTileEntity(this.pos, 1, this.getUpdateTag());
     }
 
     @Override
@@ -280,4 +286,23 @@ public class TileEntityCrusher extends TileEntityBase {
     public ItemStackHandler getItemStackHandler() {
         return itemStackHandler;
     }
+
+    @Override
+    public void writeItemData(NBTTagCompound compound) {
+        compound.setInteger("energy_stored", this.energyStorage.getEnergyStored());
+    }
+
+    @Override
+    public void readItemData(NBTTagCompound compound) {
+        if(compound.hasKey("energy_stored")) {
+            int energyStored = compound.getInteger("energy_stored");
+
+            if(energyStored > ENERGY_CAPACITY)
+                energyStored = ENERGY_CAPACITY;
+
+            this.energyStorage.setEnergyStored(energyStored);
+        }
+    }
+
+
 }

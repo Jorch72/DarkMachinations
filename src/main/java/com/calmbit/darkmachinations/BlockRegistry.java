@@ -14,6 +14,7 @@ public class BlockRegistry {
     public static BlockCompressor machine_compressor;
     public static BlockBase machine_redstone_core;
     public static BlockGenerator machine_generator;
+    public static BlockPump machine_pump;
 
     public static BlockBloomery machine_bloomery;
 
@@ -31,6 +32,7 @@ public class BlockRegistry {
         machine_compressor = registerBlock(new BlockCompressor());
         machine_redstone_core = registerBlock(new BlockBase(Material.IRON, "machine_redstone_core")).setCreativeTab(DarkMachinations.divitaeTab);
         machine_generator = registerBlock(new BlockGenerator());
+        machine_pump = registerBlock(new BlockPump());
 
         machine_bloomery = registerBlock(new BlockBloomery());
 

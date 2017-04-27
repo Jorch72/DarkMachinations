@@ -1,6 +1,7 @@
 package com.calmbit.darkmachinations;
 
 import com.calmbit.darkmachinations.machine.*;
+import com.elytradev.concrete.inventory.gui.ConcreteContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.math.BlockPos;
@@ -47,7 +48,7 @@ public class GuiRegistry implements IGuiHandler {
             case GUI_MACHINE_COMPRESSOR:
                 return new GuiCompressor(getServerGuiElement(ID, player, world, x, y, z));
             case GUI_MACHINE_GENERATOR:
-                return new GuiGenerator(getServerGuiElement(ID, player, world, x, y, z));
+                return new GuiGenerator((ConcreteContainer) getServerGuiElement(ID, player, world, x, y, z));
             case GUI_MACHINE_PUMP:
                 return new GuiPump(getServerGuiElement(ID, player, world, x, y, z));
         }

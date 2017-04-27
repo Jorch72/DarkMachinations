@@ -1,6 +1,7 @@
 package com.calmbit.darkmachinations.machine;
 
 import com.calmbit.darkmachinations.generic.IUsableStrictness;
+import com.elytradev.concrete.inventory.IContainerInventoryHolder;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -9,7 +10,7 @@ import net.minecraft.world.IInteractionObject;
 import net.minecraft.world.IWorldNameable;
 
 public abstract class TileEntityBase extends TileEntity implements IInteractionObject,
-        IWorldNameable, IUsableStrictness, ITickable, ITEFieldable, ITEActivatable, ITEStackHandler {
+        IWorldNameable, IUsableStrictness, ITickable, ITEFieldable, ITEActivatable, ITEStackHandler, IContainerInventoryHolder {
 
     @Override
     public boolean isUseableByPlayer(EntityPlayer player) {
@@ -25,6 +26,7 @@ public abstract class TileEntityBase extends TileEntity implements IInteractionO
 
         return player.getDistanceSq(this.pos.getX() + 0.5D, this.pos.getY() + 0.5D, this.pos.getZ() + 0.5D) <= 64D;
     }
+
 
     public abstract void writeItemData(NBTTagCompound compound);
     public abstract void readItemData(NBTTagCompound compound);

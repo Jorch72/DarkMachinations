@@ -1,8 +1,11 @@
 package com.calmbit.darkmachinations.machine;
 
+import com.elytradev.concrete.inventory.ConcreteItemStorage;
+import com.elytradev.concrete.inventory.ValidatedInventoryView;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -70,5 +73,10 @@ public class TileEntityBloomery extends TileEntityBase {
     @Override
     public void readItemData(NBTTagCompound compound) {
 
+    }
+
+    @Override
+    public IInventory getContainerInventory() {
+        return new ValidatedInventoryView((ConcreteItemStorage) this.getItemStackHandler());
     }
 }

@@ -3,10 +3,14 @@ package com.calmbit.darkmachinations.machine;
 import com.calmbit.darkmachinations.DarkMachinations;
 import com.calmbit.darkmachinations.generic.EnergyProvider;
 import com.calmbit.darkmachinations.generic.EnergyUser;
+import com.elytradev.concrete.inventory.ConcreteItemStorage;
+import com.elytradev.concrete.inventory.IContainerInventoryHolder;
+import com.elytradev.concrete.inventory.ValidatedInventoryView;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -26,9 +30,9 @@ import net.minecraftforge.items.ItemStackHandler;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 
-public class TileEntityGenerator extends TileEntityBase {
+public class TileEntityGenerator extends TileEntityBase implements IContainerInventoryHolder {
 
-    public ItemStackHandler itemStackHandler;
+    public ConcreteItemStorage itemStackHandler;
     public EnergyUser energyStorage;
     public Object probeDataProvider;
     public String customName;
@@ -50,7 +54,7 @@ public class TileEntityGenerator extends TileEntityBase {
     public int itemProcessingMaximum;
 
     public TileEntityGenerator() {
-        itemStackHandler = new ItemStackHandler(SLOT_COUNT);
+        itemStackHandler = new ConcreteItemStorage(SLOT_COUNT).withValidators((stack) -> (TileEntityFurnace.isItemFuel(stack)));
         energyStorage = new EnergyProvider(ENERGY_CAPACITY, ENERGY_TRANSFER_RATE);
         energyStorage.listen(this::markDirty);
     }
@@ -306,5 +310,20 @@ public class TileEntityGenerator extends TileEntityBase {
 
             this.energyStorage.setEnergyStored(energyStored);
         }
+    }
+
+
+    @Override
+    public IInventory getContainerInventory() {
+        ValidatedInventoryView result = new ValidatedInventoryView(itemStackHandler);
+
+        if(!this.world.isRemote)
+            return result
+                    .withField(FIELD_ENERGY_COUNT, ()->this.energyStorage.getEnergyStored())
+                    .withField(FIELD_ENERGY_CAPACITY, ()->this.energyStorage.getMaxEnergyStored())
+                    .withField(FIELD_ITEM_PROCESSING_TIME, ()->this.itemProcessingTimer)
+                    .withField(FIELD_ITEM_PROCESSING_MAX, ()->this.itemProcessingMaximum);
+
+        return result;
     }
 }

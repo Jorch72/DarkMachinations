@@ -89,11 +89,11 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
     deobfCompile 'com.elytradev:probedataproviderapi:MC1.11.2_ver1.1.1'
 
-    compile 'com.elytradev:concrete:0.2.2:common'
+    deobfCompile 'com.elytradev:concrete:0.2.2:common'
     shadow 'com.elytradev:concrete:0.2.2:common'
 
-    compile 'com.elytradev:concrete:0.2.2:inventory'
-    shadow 'com.elytradev:concrete:0.2.2:inventory'
+    deobfCompile 'com.elytradev:concrete:0.2.2:gui'
+    shadow 'com.elytradev:concrete:0.2.2:gui'
 
 }
 

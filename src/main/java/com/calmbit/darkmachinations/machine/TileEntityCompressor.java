@@ -4,10 +4,13 @@ import com.calmbit.darkmachinations.CompressorRecipes;
 import com.calmbit.darkmachinations.DarkMachinations;
 import com.calmbit.darkmachinations.generic.EnergyReciever;
 import com.calmbit.darkmachinations.generic.EnergyUser;
+import com.elytradev.concrete.inventory.ConcreteItemStorage;
+import com.elytradev.concrete.inventory.ValidatedInventoryView;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -49,7 +52,7 @@ public class TileEntityCompressor extends TileEntityBase {
 
     public TileEntityCompressor()
     {
-        itemStackHandler = new ItemStackHandler(SLOT_COUNT);
+        itemStackHandler = new ConcreteItemStorage(SLOT_COUNT).withValidators((stack)->CompressorRecipes.INSTANCE.getRecipeResult(stack).isEmpty(), (stack)->false);
         energyStorage = new EnergyReciever(ENERGY_CAPACITY, ENERGY_TRANSFER_RATE);
         energyStorage.listen(this::markDirty);
         inCompressor = ItemStack.EMPTY;
@@ -301,5 +304,10 @@ public class TileEntityCompressor extends TileEntityBase {
 
             this.energyStorage.setEnergyStored(energyStored);
         }
+    }
+
+    @Override
+    public IInventory getContainerInventory() {
+        return new ValidatedInventoryView((ConcreteItemStorage) this.getItemStackHandler());
     }
 }

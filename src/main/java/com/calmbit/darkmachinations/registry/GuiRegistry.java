@@ -31,18 +31,26 @@ public class GuiRegistry implements IGuiHandler {
     @Nullable
     @Override
     public Container getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+        ConcreteContainer container = null;
         switch(ID)
         {
             case GUI_MACHINE_CRUSHER:
-                return new ContainerCrusher((TileEntityCrusher)world.getTileEntity(new BlockPos(x,y,z)), player.inventory);
+                container =  new ContainerCrusher((TileEntityCrusher)world.getTileEntity(new BlockPos(x,y,z)), player.inventory);
+                break;
             case GUI_MACHINE_COMPRESSOR:
-                return new ContainerCompressor((TileEntityCompressor)world.getTileEntity(new BlockPos(x,y,z)), player.inventory);
+                container = new ContainerCompressor((TileEntityCompressor)world.getTileEntity(new BlockPos(x,y,z)), player.inventory);
+                break;
             case GUI_MACHINE_GENERATOR:
-                return new ContainerGenerator((TileEntityGenerator)world.getTileEntity(new BlockPos(x,y,z)), player.inventory);
+                container = new ContainerGenerator((TileEntityGenerator)world.getTileEntity(new BlockPos(x,y,z)), player.inventory);
+                break;
             case GUI_MACHINE_PUMP:
-                return new ContainerPump((TileEntityPump)world.getTileEntity(new BlockPos(x,y,z)), player.inventory);
+                container = new ContainerPump((TileEntityPump)world.getTileEntity(new BlockPos(x,y,z)), player.inventory);
+                break;
         }
-        return null;
+        if(container != null)
+            container.validate();
+
+        return container;
     }
 
     @Nullable

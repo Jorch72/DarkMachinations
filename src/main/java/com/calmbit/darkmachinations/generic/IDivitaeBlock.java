@@ -1,4 +1,4 @@
-package com.calmbit.darkmachinations.block;
+package com.calmbit.darkmachinations.generic;
 
 import net.minecraft.item.ItemBlock;
 

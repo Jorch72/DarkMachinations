@@ -25,8 +25,8 @@ public class ContainerGenerator extends ContainerBase<TileEntityGenerator> {
         panel.add(WItemSlot.ofPlayerStorage(playerInventory), 0, 4);
         panel.add(WItemSlot.of(playerInventory, 0, 9, 1), 0, 8);
         panel.add(new WBar(
-                new ResourceLocation("darkmachinations","textures/gui/tileentity/energy_bar_bg.png"),
-                new ResourceLocation("darkmachinations","textures/gui/tileentity/energy_bar_fg.png"),
+                new ResourceLocation("darkmachinations","textures/gui/machine/energy_bar_bg.png"),
+                new ResourceLocation("darkmachinations","textures/gui/machine/energy_bar_fg.png"),
                 generatorInventory,
                 TileEntityGenerator.FIELD_ENERGY_COUNT,
                 TileEntityGenerator.FIELD_ENERGY_CAPACITY,

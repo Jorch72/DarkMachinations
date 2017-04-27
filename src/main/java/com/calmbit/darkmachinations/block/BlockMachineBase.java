@@ -1,6 +1,7 @@
 package com.calmbit.darkmachinations.block;
 
 import com.calmbit.darkmachinations.DarkMachinations;
+import com.calmbit.darkmachinations.generic.IDivitaeBlock;
 import com.calmbit.darkmachinations.tileentity.TileEntityBase;
 import com.calmbit.darkmachinations.tileentity.TileEntityGenerator;
 import net.minecraft.block.Block;

@@ -1,6 +1,7 @@
 package com.calmbit.darkmachinations.block;
 
 import com.calmbit.darkmachinations.DarkMachinations;
+import com.calmbit.darkmachinations.generic.IDivitaeBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;

@@ -1,12 +1,10 @@
 package com.calmbit.darkmachinations.registry;
 
+import com.calmbit.darkmachinations.DarkMachinations;
 import com.calmbit.darkmachinations.monster.EntityGoldenCreeper;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
-/**
- * Created by Ethan on 2017-03-26.
- */
 public class EntityRegistry {
 
     public static int ID = 0;

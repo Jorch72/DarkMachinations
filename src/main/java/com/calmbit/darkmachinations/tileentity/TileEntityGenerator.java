@@ -57,9 +57,12 @@ public class TileEntityGenerator extends TileEntityBase implements IContainerInv
 
     public TileEntityGenerator() {
         itemStackHandler = new ConcreteItemStorage(SLOT_COUNT).withValidators((stack) -> (TileEntityFurnace.isItemFuel(stack)));
+        itemStackHandler.listen(this::markDirty);
         energyStorage = new EnergyProvider(ENERGY_CAPACITY, ENERGY_TRANSFER_RATE);
         energyStorage.listen(this::markDirty);
     }
+
+
 
     @Override
     public NBTTagCompound getUpdateTag() {

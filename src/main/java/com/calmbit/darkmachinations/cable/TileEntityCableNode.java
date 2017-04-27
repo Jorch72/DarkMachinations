@@ -2,8 +2,11 @@ package com.calmbit.darkmachinations.cable;
 
 
 import com.calmbit.darkmachinations.DarkMachinations;
+import com.calmbit.darkmachinations.block.BlockCableEndpoint;
+import com.calmbit.darkmachinations.energy.NetworkedEnergyUser;
 import com.calmbit.darkmachinations.network.EnergyNetwork;
 import com.calmbit.darkmachinations.network.EnergyNetworkNode;
+import com.calmbit.darkmachinations.probe.ProbeDataProviderCable;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;

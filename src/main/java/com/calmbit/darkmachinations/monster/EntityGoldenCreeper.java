@@ -1,8 +1,8 @@
 package com.calmbit.darkmachinations.monster;
 
 
-import com.calmbit.darkmachinations.LootTableRegistry;
-import com.calmbit.darkmachinations.SoundRegistry;
+import com.calmbit.darkmachinations.registry.LootTableRegistry;
+import com.calmbit.darkmachinations.registry.SoundRegistry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;

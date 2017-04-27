@@ -1,7 +1,7 @@
 package com.calmbit.darkmachinations.network;
 
 
-import com.calmbit.darkmachinations.NetworkRegistry;
+import com.calmbit.darkmachinations.registry.NetworkRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;

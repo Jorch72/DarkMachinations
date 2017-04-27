@@ -1,7 +1,7 @@
 package com.calmbit.darkmachinations.proxy;
 
 import com.calmbit.darkmachinations.DarkMachinations;
-import com.calmbit.darkmachinations.FluidRegistry;
+import com.calmbit.darkmachinations.registry.FluidRegistry;
 import com.calmbit.darkmachinations.monster.EntityGoldenCreeper;
 import com.calmbit.darkmachinations.monster.RenderGoldenCreeper;
 import net.minecraft.block.state.IBlockState;

@@ -1,7 +1,8 @@
 package com.calmbit.darkmachinations;
 
-import com.calmbit.darkmachinations.generic.DarkMachinationsCreativeTab;
+import com.calmbit.darkmachinations.gui.creative.DarkMachinationsCreativeTab;
 import com.calmbit.darkmachinations.proxy.CommonProxy;
+import com.calmbit.darkmachinations.registry.*;
 import com.calmbit.darkmachinations.world.WorldGen;
 import com.elytradev.probe.api.IProbeDataProvider;
 import net.minecraftforge.common.capabilities.Capability;

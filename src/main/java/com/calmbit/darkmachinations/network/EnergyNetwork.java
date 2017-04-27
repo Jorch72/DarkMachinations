@@ -1,7 +1,7 @@
 package com.calmbit.darkmachinations.network;
 
 
-import com.calmbit.darkmachinations.NetworkRegistry;
+import com.calmbit.darkmachinations.registry.NetworkRegistry;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 

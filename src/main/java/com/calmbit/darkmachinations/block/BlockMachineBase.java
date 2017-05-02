@@ -129,7 +129,7 @@ public abstract class BlockMachineBase<TE extends TileEntityBase> extends Block 
             if(crusher.getActive())
                 machineState = EnumMachineState.ON;
         }
-        return state.withProperty(STATE, machineState);
+            return state.withProperty(STATE, machineState);
     }
 
     @Override

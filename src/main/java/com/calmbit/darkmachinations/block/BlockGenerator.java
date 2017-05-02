@@ -25,4 +25,5 @@ public class BlockGenerator extends BlockMachineBase<TileEntityGenerator> {
         return new TileEntityGenerator();
     }
 
+
 }

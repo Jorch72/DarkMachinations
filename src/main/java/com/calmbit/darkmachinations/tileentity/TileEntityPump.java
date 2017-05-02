@@ -9,11 +9,13 @@ import com.calmbit.darkmachinations.fluid.FluidBuffer;
 import com.calmbit.darkmachinations.probe.ProbeDataProviderGenerator;
 import com.elytradev.concrete.inventory.ConcreteItemStorage;
 import com.elytradev.concrete.inventory.ValidatedInventoryView;
+import com.elytradev.concrete.inventory.Validators;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -59,7 +61,7 @@ public class TileEntityPump extends TileEntityBase {
     public int pumpTimerMaximum;
 
     public TileEntityPump() {
-        itemStackHandler = new ItemStackHandler(SLOT_COUNT);
+        itemStackHandler = new ConcreteItemStorage(SLOT_COUNT).withValidators((stack) -> stack.getItem() instanceof ItemBlock);
         fluidTank = new FluidBuffer(FLUID_CAPACITY);
         fluidTank.setFluid(new FluidStack(FluidRegistry.fluid_heavy_crude_oil, 1000));
         fluidTank.listen(this::markDirty);

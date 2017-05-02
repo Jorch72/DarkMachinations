@@ -8,6 +8,7 @@ import com.calmbit.darkmachinations.energy.EnergyUser;
 import com.calmbit.darkmachinations.probe.ProbeDataProviderMachine;
 import com.elytradev.concrete.inventory.ConcreteItemStorage;
 import com.elytradev.concrete.inventory.ValidatedInventoryView;
+import com.elytradev.concrete.inventory.Validators;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -54,7 +55,7 @@ public class TileEntityCompressor extends TileEntityBase {
 
     public TileEntityCompressor()
     {
-        itemStackHandler = new ConcreteItemStorage(SLOT_COUNT).withValidators((stack)->CompressorRecipes.INSTANCE.getRecipeResult(stack).isEmpty(), (stack)->false);
+        itemStackHandler = new ConcreteItemStorage(SLOT_COUNT).withValidators((stack)->CompressorRecipes.INSTANCE.getRecipeResult(stack).isEmpty(), Validators.NOTHING);
         energyStorage = new EnergyReciever(ENERGY_CAPACITY, ENERGY_TRANSFER_RATE);
         energyStorage.listen(this::markDirty);
         inCompressor = ItemStack.EMPTY;

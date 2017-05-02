@@ -52,7 +52,7 @@ jar {
 
 shadowJar {
     classifier = ''
-    relocate 'com.elytradev.concrete', 'com.CalmBit.darkmachinations.repackage.com.elytradev.concrete'
+    relocate 'com.elytradev.concrete', 'com.calmbit.darkmachinations.repackage.com.elytradev.concrete'
     configurations = [project.configurations.shadow]
 }
 
@@ -90,10 +90,10 @@ dependencies {
     deobfCompile 'com.elytradev:probedataproviderapi:MC1.11.2_ver1.1.1'
 
     deobfCompile 'com.elytradev:concrete:0.2.2:common'
-    shadow 'com.elytradev:concrete:0.2.2:common'
+    //shadow 'com.elytradev:concrete:0.2.2:common'
 
     deobfCompile 'com.elytradev:concrete:0.2.2:gui'
-    shadow 'com.elytradev:concrete:0.2.2:gui'
+    //shadow 'com.elytradev:concrete:0.2.2:gui'
 
 }
 

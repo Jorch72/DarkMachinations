@@ -8,6 +8,7 @@ import com.calmbit.darkmachinations.energy.EnergyUser;
 import com.calmbit.darkmachinations.probe.ProbeDataProviderMachine;
 import com.elytradev.concrete.inventory.ConcreteItemStorage;
 import com.elytradev.concrete.inventory.ValidatedInventoryView;
+import com.elytradev.concrete.inventory.Validators;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -55,7 +56,7 @@ public class TileEntityCrusher extends TileEntityBase {
 
 
     public TileEntityCrusher() {
-        itemStackHandler = new ItemStackHandler(SLOT_COUNT);
+        itemStackHandler = new ConcreteItemStorage(SLOT_COUNT).withValidators((stack) -> CrusherRecipes.INSTANCE.getRecipeResult(stack).getCount() != 0, Validators.NOTHING);
         energyStorage = new EnergyReciever(ENERGY_CAPACITY, ENERGY_TRANSFER_RATE);
         energyStorage.listen(this::markDirty);
         inCrusher = ItemStack.EMPTY;

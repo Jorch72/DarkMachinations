@@ -28,8 +28,8 @@ public class ContainerGenerator extends ContainerBase<TileEntityGenerator> {
                 new ResourceLocation("darkmachinations","textures/gui/machine/energy_bar_bg.png"),
                 new ResourceLocation("darkmachinations","textures/gui/machine/energy_bar_fg.png"),
                 generatorInventory,
-                TileEntityGenerator.FIELD_ENERGY_COUNT,
-                TileEntityGenerator.FIELD_ENERGY_CAPACITY,
+                TileEntityGenerator.FIELD_ITEM_PROCESSING_TIME,
+                TileEntityGenerator.FIELD_ITEM_PROCESSING_MAX,
                 Direction.UP), 0, 0, 1, 3);
     }
 

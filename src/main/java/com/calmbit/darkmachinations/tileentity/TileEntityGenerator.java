@@ -8,6 +8,7 @@ import com.calmbit.darkmachinations.probe.ProbeDataProviderGenerator;
 import com.elytradev.concrete.inventory.ConcreteItemStorage;
 import com.elytradev.concrete.inventory.IContainerInventoryHolder;
 import com.elytradev.concrete.inventory.ValidatedInventoryView;
+import com.elytradev.concrete.inventory.Validators;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -56,7 +57,7 @@ public class TileEntityGenerator extends TileEntityBase implements IContainerInv
     public int itemProcessingMaximum;
 
     public TileEntityGenerator() {
-        itemStackHandler = new ConcreteItemStorage(SLOT_COUNT).withValidators((stack) -> (TileEntityFurnace.isItemFuel(stack)));
+        itemStackHandler = new ConcreteItemStorage(SLOT_COUNT).withValidators(Validators.FURNACE_FUELS);
         itemStackHandler.listen(this::markDirty);
         energyStorage = new EnergyProvider(ENERGY_CAPACITY, ENERGY_TRANSFER_RATE);
         energyStorage.listen(this::markDirty);

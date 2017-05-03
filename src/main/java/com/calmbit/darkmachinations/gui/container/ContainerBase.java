@@ -9,8 +9,8 @@ public abstract class ContainerBase<TE extends TileEntityBase> extends ConcreteC
 
     public TE tileEntity;
 
-    public ContainerBase(TE tileEntity, IInventory playerInventory) {
-        super(playerInventory, tileEntity.getContainerInventory());
+    public ContainerBase(TE tileEntity, IInventory playerInventory, IInventory containerInventory) {
+        super(playerInventory, containerInventory);
         this.tileEntity = tileEntity;
     }
 

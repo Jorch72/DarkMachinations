@@ -8,8 +8,8 @@ public class ContainerCompressor extends ContainerBase<TileEntityCompressor> {
     public static final int COMPRESSOR_SUPPLY_SLOT= 0;
     public static final int COMPRESSOR_PRODUCT_SLOT=1;
 
-    public ContainerCompressor(TileEntityCompressor compressor, IInventory playerInventory)
+    public ContainerCompressor(TileEntityCompressor compressor, IInventory playerInventory, IInventory compressorInventory)
     {
-        super(compressor, playerInventory);
+        super(compressor, playerInventory, compressorInventory);
     }
 }

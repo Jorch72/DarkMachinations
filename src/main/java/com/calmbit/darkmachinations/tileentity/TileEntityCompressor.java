@@ -254,7 +254,7 @@ public class TileEntityCompressor extends TileEntityBase {
 
     @Override
     public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn) {
-        return new ContainerCompressor(this, playerInventory);
+        return new ContainerCompressor(this, playerInventory, this.getContainerInventory());
     }
 
     @Override

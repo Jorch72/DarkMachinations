@@ -8,7 +8,10 @@ import com.calmbit.darkmachinations.gui.container.ContainerCompressor;
 import com.calmbit.darkmachinations.gui.container.ContainerCrusher;
 import com.calmbit.darkmachinations.gui.container.ContainerGenerator;
 import com.calmbit.darkmachinations.gui.container.ContainerPump;
-import com.calmbit.darkmachinations.tileentity.*;
+import com.calmbit.darkmachinations.tileentity.TileEntityCompressor;
+import com.calmbit.darkmachinations.tileentity.TileEntityCrusher;
+import com.calmbit.darkmachinations.tileentity.TileEntityGenerator;
+import com.calmbit.darkmachinations.tileentity.TileEntityPump;
 import com.elytradev.concrete.inventory.gui.ConcreteContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -35,16 +38,16 @@ public class GuiRegistry implements IGuiHandler {
         switch(ID)
         {
             case GUI_MACHINE_CRUSHER:
-                container =  new ContainerCrusher((TileEntityCrusher)world.getTileEntity(new BlockPos(x,y,z)), player.inventory);
+                container =  new ContainerCrusher((TileEntityCrusher)world.getTileEntity(new BlockPos(x,y,z)), player.inventory,((TileEntityCrusher) world.getTileEntity(new BlockPos(x,y,z))).getContainerInventory());
                 break;
             case GUI_MACHINE_COMPRESSOR:
-                container = new ContainerCompressor((TileEntityCompressor)world.getTileEntity(new BlockPos(x,y,z)), player.inventory);
+                container = new ContainerCompressor((TileEntityCompressor)world.getTileEntity(new BlockPos(x,y,z)), player.inventory,((TileEntityCompressor) world.getTileEntity(new BlockPos(x,y,z))).getContainerInventory());
                 break;
             case GUI_MACHINE_GENERATOR:
-                container = new ContainerGenerator((TileEntityGenerator)world.getTileEntity(new BlockPos(x,y,z)), player.inventory);
+                container = new ContainerGenerator((TileEntityGenerator)world.getTileEntity(new BlockPos(x,y,z)), player.inventory,((TileEntityGenerator) world.getTileEntity(new BlockPos(x,y,z))).getContainerInventory());
                 break;
             case GUI_MACHINE_PUMP:
-                container = new ContainerPump((TileEntityPump)world.getTileEntity(new BlockPos(x,y,z)), player.inventory);
+                container = new ContainerPump((TileEntityPump)world.getTileEntity(new BlockPos(x,y,z)), player.inventory, ((TileEntityPump) world.getTileEntity(new BlockPos(x,y,z))).getContainerInventory());
                 break;
         }
         if(container != null)
@@ -66,7 +69,7 @@ public class GuiRegistry implements IGuiHandler {
             case GUI_MACHINE_GENERATOR:
                 return new GuiGenerator((ConcreteContainer) getServerGuiElement(ID, player, world, x, y, z));
             case GUI_MACHINE_PUMP:
-                return new GuiPump(getServerGuiElement(ID, player, world, x, y, z));
+                return new GuiPump((ConcreteContainer) getServerGuiElement(ID, player, world, x, y, z));
         }
         return null;
     }

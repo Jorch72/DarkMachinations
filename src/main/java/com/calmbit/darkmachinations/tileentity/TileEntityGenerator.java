@@ -263,7 +263,7 @@ public class TileEntityGenerator extends TileEntityBase implements IContainerInv
 
     @Override
     public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn) {
-        return new ContainerGenerator(this, playerInventory);
+        return new ContainerGenerator(this, playerInventory, this.getContainerInventory());
     }
 
     @Override

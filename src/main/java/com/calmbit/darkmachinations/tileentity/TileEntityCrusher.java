@@ -132,7 +132,7 @@ public class TileEntityCrusher extends TileEntityBase {
 
     @Override
     public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn) {
-        return new ContainerCrusher(this, playerInventory);
+        return new ContainerCrusher(this, playerInventory, this.getContainerInventory());
     }
 
     @Override

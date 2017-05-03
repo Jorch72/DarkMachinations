@@ -26,6 +26,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -35,7 +36,7 @@ import javax.annotation.Nullable;
 
 public class TileEntityPump extends TileEntityBase {
 
-    public ItemStackHandler itemStackHandler;
+    public ConcreteItemStorage itemStackHandler;
     public FluidBuffer fluidTank;
     public EnergyUser energyStorage;
     public Object probeDataProvider;
@@ -63,7 +64,7 @@ public class TileEntityPump extends TileEntityBase {
     public TileEntityPump() {
         itemStackHandler = new ConcreteItemStorage(SLOT_COUNT).withValidators((stack) -> stack.getItem() instanceof ItemBlock);
         fluidTank = new FluidBuffer(FLUID_CAPACITY);
-        fluidTank.setFluid(new FluidStack(FluidRegistry.fluid_heavy_crude_oil, 1000));
+        //fluidTank.setFluid(new FluidStack(FluidRegistry.fluid_heavy_crude_oil, 1000));
         fluidTank.listen(this::markDirty);
         energyStorage = new EnergyUser(ENERGY_CAPACITY, ENERGY_TRANSFER_RATE);
         energyStorage.listen(this::markDirty);
@@ -190,7 +191,7 @@ public class TileEntityPump extends TileEntityBase {
         ItemStack supplySlot = itemStackHandler.getStackInSlot(ContainerGenerator.GENERATOR_SUPPLY_SLOT);
 
         if (!this.world.isRemote) {
-
+            fluidTank.fill(new FluidStack(net.minecraftforge.fluids.FluidRegistry.WATER, 100), true);
         }
 
         if(this.probeDataProvider != null) {
@@ -226,7 +227,7 @@ public class TileEntityPump extends TileEntityBase {
 
     @Override
     public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn) {
-        return new ContainerPump(this, playerInventory);
+        return new ContainerPump(this, playerInventory, this.getContainerInventory());
     }
 
     @Override
@@ -290,6 +291,15 @@ public class TileEntityPump extends TileEntityBase {
 
     @Override
     public IInventory getContainerInventory() {
-        return new ValidatedInventoryView((ConcreteItemStorage) this.getItemStackHandler());
+        ValidatedInventoryView result = new ValidatedInventoryView(itemStackHandler);
+
+        if(!this.world.isRemote)
+            return result
+                    .withField(FIELD_ENERGY_COUNT, ()->this.energyStorage.getEnergyStored())
+                    .withField(FIELD_ENERGY_CAPACITY, ()->this.energyStorage.getMaxEnergyStored())
+                    .withField(FIELD_PUMP_TIMER, ()->this.FIELD_PUMP_TIMER)
+                    .withField(FIELD_PUMP_TIMER_MAX, ()->this.FIELD_PUMP_TIMER_MAX);
+
+        return result;
     }
 }

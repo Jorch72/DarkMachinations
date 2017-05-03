@@ -12,11 +12,9 @@ public class ContainerGenerator extends ContainerBase<TileEntityGenerator> {
 
     public static final int GENERATOR_SUPPLY_SLOT= 0;
 
-    public ContainerGenerator(TileEntityGenerator generator, IInventory playerInventory)
+    public ContainerGenerator(TileEntityGenerator generator, IInventory playerInventory, IInventory generatorInventory)
     {
-        super(generator, playerInventory);
-
-        IInventory generatorInventory = generator.getContainerInventory();
+        super(generator, playerInventory, generatorInventory);
 
         WGridPanel panel = new WGridPanel();
         this.setRootPanel(panel);
@@ -28,8 +26,8 @@ public class ContainerGenerator extends ContainerBase<TileEntityGenerator> {
                 new ResourceLocation("darkmachinations","textures/gui/machine/energy_bar_bg.png"),
                 new ResourceLocation("darkmachinations","textures/gui/machine/energy_bar_fg.png"),
                 generatorInventory,
-                TileEntityGenerator.FIELD_ITEM_PROCESSING_TIME,
-                TileEntityGenerator.FIELD_ITEM_PROCESSING_MAX,
+                TileEntityGenerator.FIELD_ENERGY_COUNT,
+                TileEntityGenerator.FIELD_ENERGY_CAPACITY,
                 Direction.UP), 0, 0, 1, 3);
     }
 

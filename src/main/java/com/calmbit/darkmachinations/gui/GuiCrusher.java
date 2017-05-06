@@ -27,7 +27,7 @@ public class GuiCrusher extends GuiContainer {
         {
             List list = new ArrayList();
             list.add("Energy: " + crusherContainer.tileEntity.getField(TileEntityCrusher.FIELD_ENERGY_COUNT) + "/" + crusherContainer.tileEntity.getField(TileEntityCrusher.FIELD_ENERGY_CAPACITY));
-            this.drawHoveringText(list, mouseX-i, mouseY-j, this.fontRendererObj);
+            this.drawHoveringText(list, mouseX-i, mouseY-j, this.fontRenderer);
         }
     }
 

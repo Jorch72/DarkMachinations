@@ -26,7 +26,7 @@ public class GuiCompressor extends GuiContainer{
         {
             List list = new ArrayList();
             list.add("Energy: " + compressorContainer.tileEntity.getField(TileEntityCompressor.FIELD_ENERGY_COUNT) + "/" + compressorContainer.tileEntity.getField(TileEntityCompressor.FIELD_ENERGY_CAPACITY));
-            this.drawHoveringText(list, mouseX-i, mouseY-j, this.fontRendererObj);
+            this.drawHoveringText(list, mouseX-i, mouseY-j, this.fontRenderer);
         }
     }
 

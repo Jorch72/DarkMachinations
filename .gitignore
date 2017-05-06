@@ -11,6 +11,9 @@ build/
 out/
 run/
 bin/
+config/
+logs/
+saves/
 
 # Run cruft
 minecraft/

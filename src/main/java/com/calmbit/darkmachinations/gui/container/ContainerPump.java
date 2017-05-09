@@ -1,10 +1,7 @@
 package com.calmbit.darkmachinations.gui.container;
 
 import com.calmbit.darkmachinations.tileentity.TileEntityPump;
-import com.elytradev.concrete.inventory.gui.widget.WBar;
-import com.elytradev.concrete.inventory.gui.widget.WFluidBar;
-import com.elytradev.concrete.inventory.gui.widget.WGridPanel;
-import com.elytradev.concrete.inventory.gui.widget.WItemSlot;
+import com.elytradev.concrete.inventory.gui.widget.*;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ResourceLocation;
 
@@ -16,23 +13,24 @@ public class ContainerPump extends ContainerBase<TileEntityPump> {
     {
         super(pump, playerInventory, pumpInventory);
 
-        WGridPanel panel = new WGridPanel();
+        WPlainPanel panel = new WPlainPanel();
         this.setRootPanel(panel);
 
-        panel.add(WItemSlot.of(pumpInventory, 0), 4, 1);
-        panel.add(WItemSlot.ofPlayerStorage(playerInventory), 0, 4);
-        panel.add(WItemSlot.of(playerInventory, 0, 9, 1), 0, 8);
+        panel.add(WItemSlot.of(pumpInventory, 0), 144, 60);
+        panel.add(WItemSlot.ofPlayerStorage(playerInventory), 0, 84);
+        panel.add(WItemSlot.of(playerInventory, 0, 9, 1), 0, 144);
         panel.add(new WBar(
                 new ResourceLocation("darkmachinations","textures/gui/machine/energy_bar_bg.png"),
                 new ResourceLocation("darkmachinations","textures/gui/machine/energy_bar_fg.png"),
                 pumpInventory,
                 TileEntityPump.FIELD_ENERGY_COUNT,
                 TileEntityPump.FIELD_ENERGY_CAPACITY,
-                WBar.Direction.UP), 0, 0, 1, 3);
+                WBar.Direction.UP), 0, 10, 18, 68);
         panel.add(new WFluidBar(
                 new ResourceLocation("darkmachinations","textures/gui/machine/energy_bar_bg.png"),
                 pump.fluidTank,
-                WFluidBar.Direction.UP), 1,0,2,3);
+                WFluidBar.Direction.UP),20, 10, 18, 68);
+        panel.add(new WLabel("Pump"), 0, 0);
     }
 
 }

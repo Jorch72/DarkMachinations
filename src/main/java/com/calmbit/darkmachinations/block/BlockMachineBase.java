@@ -211,7 +211,7 @@ public abstract class BlockMachineBase<TE extends TileEntityBase> extends Block 
         if(compound != null) {
             if (GuiScreen.isShiftKeyDown()) {
                 if (compound.hasKey("energy_stored"))
-                    tooltip.add(compound.getInteger("energy_stored") + "/" + TileEntityGenerator.ENERGY_CAPACITY + " FU");
+                    tooltip.add(TextFormatting.RED.toString() + TextFormatting.ITALIC.toString() + "Energy: " + TextFormatting.RESET.toString() + compound.getInteger("energy_stored") + "/" + TileEntityGenerator.ENERGY_CAPACITY + " FU");
                 if(compound.hasKey("fluid_stored")) {
                     NBTTagCompound fluid = compound.getCompoundTag("fluid_stored");
                     if(fluid.hasKey("FluidName"))

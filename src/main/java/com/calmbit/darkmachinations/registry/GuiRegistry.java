@@ -65,7 +65,7 @@ public class GuiRegistry implements IGuiHandler {
             case GUI_MACHINE_CRUSHER:
                 return new GuiCrusher(getServerGuiElement(ID, player, world, x, y, z));
             case GUI_MACHINE_COMPRESSOR:
-                return new GuiCompressor(getServerGuiElement(ID, player, world, x, y, z));
+                return new GuiCompressor((ConcreteContainer)getServerGuiElement(ID, player, world, x, y, z));
             case GUI_MACHINE_GENERATOR:
                 return new GuiGenerator((ConcreteContainer) getServerGuiElement(ID, player, world, x, y, z));
             case GUI_MACHINE_PUMP:

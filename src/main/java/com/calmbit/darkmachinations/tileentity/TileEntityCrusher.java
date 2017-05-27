@@ -7,6 +7,7 @@ import com.calmbit.darkmachinations.energy.EnergyReciever;
 import com.calmbit.darkmachinations.energy.EnergyUser;
 import com.calmbit.darkmachinations.probe.ProbeDataProviderMachine;
 import com.elytradev.concrete.inventory.ConcreteItemStorage;
+import com.elytradev.concrete.inventory.StandardMachineSlots;
 import com.elytradev.concrete.inventory.ValidatedInventoryView;
 import com.elytradev.concrete.inventory.Validators;
 import net.minecraft.block.BlockHorizontal;
@@ -158,7 +159,7 @@ public class TileEntityCrusher extends TileEntityBase {
     @Override
     public void update() {
 
-        ItemStack supplySlot = itemStackHandler.getStackInSlot(ContainerCrusher.CRUSHER_SUPPLY_SLOT);
+        ItemStack supplySlot = itemStackHandler.getStackInSlot(StandardMachineSlots.INPUT);
 
         if(!this.world.isRemote) {
             if (this.isActive) {
@@ -178,7 +179,7 @@ public class TileEntityCrusher extends TileEntityBase {
                         inCrusher.setCount(1);
                         ItemStack supplyDecrement = supplySlot.copy();
                         supplyDecrement.setCount(supplySlot.getCount()-1);
-                        this.itemStackHandler.setStackInSlot(ContainerCrusher.CRUSHER_SUPPLY_SLOT, new ItemStack(supplySlot.getItem(), supplySlot.getCount() - 1, supplySlot.getItemDamage()));
+                        this.itemStackHandler.setStackInSlot(StandardMachineSlots.INPUT, new ItemStack(supplySlot.getItem(), supplySlot.getCount() - 1, supplySlot.getItemDamage()));
                         this.itemProcessingTimer = this.itemProcessingMaximum;
                         this.isActive = true;
                     }
@@ -207,14 +208,14 @@ public class TileEntityCrusher extends TileEntityBase {
     public void grindItem()
     {
         ItemStack product = CrusherRecipes.INSTANCE.getRecipeResult(inCrusher);
-        ItemStack productSlot = this.itemStackHandler.getStackInSlot(ContainerCrusher.CRUSHER_PRODUCT_SLOT);
+        ItemStack productSlot = this.itemStackHandler.getStackInSlot(StandardMachineSlots.OUTPUT);
 
         if (productSlot.isEmpty())
-            this.itemStackHandler.setStackInSlot(ContainerCrusher.CRUSHER_PRODUCT_SLOT, product.copy());
+            this.itemStackHandler.setStackInSlot(StandardMachineSlots.OUTPUT, product.copy());
         else if (productSlot.getItem() == product.getItem() && productSlot.getItemDamage() == product.getItemDamage() && product.getCount() + productSlot.getCount() <= 64) {
             ItemStack adjustedQtyProduct = product.copy();
             adjustedQtyProduct.setCount(product.getCount() + productSlot.getCount());
-            this.itemStackHandler.setStackInSlot(ContainerCrusher.CRUSHER_PRODUCT_SLOT, new ItemStack(product.getItem(), product.getCount() + productSlot.getCount(), product.getItemDamage()));
+            this.itemStackHandler.setStackInSlot(StandardMachineSlots.OUTPUT, new ItemStack(product.getItem(), product.getCount() + productSlot.getCount(), product.getItemDamage()));
         }
         else
             return;

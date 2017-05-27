@@ -7,6 +7,7 @@ import com.calmbit.darkmachinations.energy.EnergyReciever;
 import com.calmbit.darkmachinations.energy.EnergyUser;
 import com.calmbit.darkmachinations.probe.ProbeDataProviderMachine;
 import com.elytradev.concrete.inventory.ConcreteItemStorage;
+import com.elytradev.concrete.inventory.StandardMachineSlots;
 import com.elytradev.concrete.inventory.ValidatedInventoryView;
 import com.elytradev.concrete.inventory.Validators;
 import net.minecraft.block.BlockHorizontal;
@@ -31,7 +32,7 @@ import javax.annotation.Nullable;
 
 public class TileEntityCompressor extends TileEntityBase {
 
-    public ItemStackHandler itemStackHandler;
+    public ConcreteItemStorage itemStackHandler;
     public EnergyUser energyStorage;
     public Object probeDataProvider;
     public String customName;
@@ -55,7 +56,7 @@ public class TileEntityCompressor extends TileEntityBase {
 
     public TileEntityCompressor()
     {
-        itemStackHandler = new ConcreteItemStorage(SLOT_COUNT).withValidators((stack)->CompressorRecipes.INSTANCE.getRecipeResult(stack).isEmpty(), Validators.NOTHING);
+        itemStackHandler = new ConcreteItemStorage(SLOT_COUNT).withValidators((stack)->!CompressorRecipes.INSTANCE.getRecipeResult(stack).isEmpty(), Validators.NOTHING);
         energyStorage = new EnergyReciever(ENERGY_CAPACITY, ENERGY_TRANSFER_RATE);
         energyStorage.listen(this::markDirty);
         inCompressor = ItemStack.EMPTY;
@@ -172,7 +173,7 @@ public class TileEntityCompressor extends TileEntityBase {
     }
     @Override
     public void update() {
-        ItemStack supplySlot = itemStackHandler.getStackInSlot(ContainerCompressor.COMPRESSOR_SUPPLY_SLOT);
+        ItemStack supplySlot = itemStackHandler.getStackInSlot(StandardMachineSlots.INPUT);
 
         if(!this.world.isRemote) {
             if (this.isActive) {
@@ -192,7 +193,7 @@ public class TileEntityCompressor extends TileEntityBase {
                         inCompressor.setCount(1);
                         ItemStack supplyDecrement = supplySlot.copy();
                         supplyDecrement.setCount(supplySlot.getCount()-1);
-                        this.itemStackHandler.setStackInSlot(ContainerCompressor.COMPRESSOR_SUPPLY_SLOT, supplyDecrement);
+                        this.itemStackHandler.setStackInSlot(StandardMachineSlots.INPUT, supplyDecrement);
                         this.itemProcessingTimer = this.itemProcessingMaximum;
                         this.isActive = true;
                     }
@@ -219,14 +220,14 @@ public class TileEntityCompressor extends TileEntityBase {
     public void compressItem()
     {
         ItemStack product = CompressorRecipes.INSTANCE.getRecipeResult(inCompressor);
-        ItemStack productSlot = this.itemStackHandler.getStackInSlot(ContainerCompressor.COMPRESSOR_PRODUCT_SLOT);
+        ItemStack productSlot = this.itemStackHandler.getStackInSlot(StandardMachineSlots.OUTPUT);
 
         if (productSlot.isEmpty())
-            this.itemStackHandler.setStackInSlot(ContainerCompressor.COMPRESSOR_PRODUCT_SLOT, product.copy());
+            this.itemStackHandler.setStackInSlot(StandardMachineSlots.OUTPUT, product.copy());
         else if (productSlot.getItem() == product.getItem() && productSlot.getItemDamage() == product.getItemDamage() &&  product.getCount() + productSlot.getCount() <= 64) {
             ItemStack adjustedQtyProduct = product.copy();
             adjustedQtyProduct.setCount(product.getCount() + productSlot.getCount());
-            this.itemStackHandler.setStackInSlot(ContainerCompressor.COMPRESSOR_PRODUCT_SLOT, adjustedQtyProduct);
+            this.itemStackHandler.setStackInSlot(StandardMachineSlots.OUTPUT, adjustedQtyProduct);
         }
         else
             return;
@@ -311,6 +312,15 @@ public class TileEntityCompressor extends TileEntityBase {
 
     @Override
     public IInventory getContainerInventory() {
-        return new ValidatedInventoryView((ConcreteItemStorage) this.getItemStackHandler());
+        ValidatedInventoryView result = new ValidatedInventoryView(itemStackHandler);
+
+        if(!this.world.isRemote)
+            return result
+                    .withField(FIELD_ENERGY_COUNT, ()->this.energyStorage.getEnergyStored())
+                    .withField(FIELD_ENERGY_CAPACITY, ()->this.energyStorage.getMaxEnergyStored())
+                    .withField(FIELD_ITEM_PROCESSING_TIME, ()->this.itemProcessingTimer)
+                    .withField(FIELD_ITEM_PROCESSING_MAX, ()->this.itemProcessingMaximum);
+
+        return result;
     }
 }

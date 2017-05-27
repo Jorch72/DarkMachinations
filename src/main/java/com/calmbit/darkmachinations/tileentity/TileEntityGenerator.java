@@ -5,10 +5,7 @@ import com.calmbit.darkmachinations.energy.EnergyProvider;
 import com.calmbit.darkmachinations.energy.EnergyUser;
 import com.calmbit.darkmachinations.gui.container.ContainerGenerator;
 import com.calmbit.darkmachinations.probe.ProbeDataProviderGenerator;
-import com.elytradev.concrete.inventory.ConcreteItemStorage;
-import com.elytradev.concrete.inventory.IContainerInventoryHolder;
-import com.elytradev.concrete.inventory.ValidatedInventoryView;
-import com.elytradev.concrete.inventory.Validators;
+import com.elytradev.concrete.inventory.*;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -170,7 +167,7 @@ public class TileEntityGenerator extends TileEntityBase implements IContainerInv
     }
     @Override
     public void update() {
-        ItemStack supplySlot = itemStackHandler.getStackInSlot(ContainerGenerator.GENERATOR_SUPPLY_SLOT);
+        ItemStack supplySlot = itemStackHandler.getStackInSlot(StandardMachineSlots.INPUT);
 
         if (!this.world.isRemote) {
             if (this.itemProcessingTimer != 0) {
@@ -242,7 +239,7 @@ public class TileEntityGenerator extends TileEntityBase implements IContainerInv
     }
 
     private int consumeFuel() {
-        ItemStack supplySlot = itemStackHandler.getStackInSlot(ContainerGenerator.GENERATOR_SUPPLY_SLOT);
+        ItemStack supplySlot = itemStackHandler.getStackInSlot(StandardMachineSlots.INPUT);
         int fuelValue = TileEntityFurnace.getItemBurnTime(supplySlot);
         supplySlot.setCount(supplySlot.getCount()-1);
         this.isActive = true;

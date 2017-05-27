@@ -7,6 +7,7 @@ tile.darkmachinations.machine_crusher.name=Crusher
 tile.darkmachinations.machine_compressor.name=Compressor
 tile.darkmachinations.machine_redstone_core.name=Redstone Machine Core
 tile.darkmachinations.machine_generator.name=Solid-Fuel Generator
+tile.darkmachinations.machine_pump.name=Pump
 
 tile.darkmachinations.cable_copper_insulated.name=Insulated Copper Cable
 tile.darkmachinations.cable_tin_insulated.name=Insulated Tin Cable

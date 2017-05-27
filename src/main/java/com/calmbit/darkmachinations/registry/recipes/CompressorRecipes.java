@@ -21,6 +21,11 @@ public class CompressorRecipes {
         this.addRecipe("ingotIron", "plateIron");
         this.addRecipe("ingotSilver", "plateSilver");
         this.addRecipe("ingotTin", "plateTin");
+        this.addRecipe("ingotLead", "plateLead");
+        this.addRecipe("ingotBrass", "plateBrass");
+        this.addRecipe("ingotNickel", "plateNickel");
+        this.addRecipe("ingotPlatinum", "platePlatinum");
+
     }
 
     public void addRecipe(String supplyDict, String productDict, int qty)

@@ -3,11 +3,13 @@ package com.calmbit.darkmachinations.tileentity;
 import com.calmbit.darkmachinations.DarkMachinations;
 import com.calmbit.darkmachinations.gui.container.ContainerGenerator;
 import com.calmbit.darkmachinations.gui.container.ContainerPump;
+import com.calmbit.darkmachinations.probe.ProbeDataProviderPump;
 import com.calmbit.darkmachinations.registry.FluidRegistry;
 import com.calmbit.darkmachinations.energy.EnergyUser;
 import com.calmbit.darkmachinations.fluid.FluidBuffer;
 import com.calmbit.darkmachinations.probe.ProbeDataProviderGenerator;
 import com.elytradev.concrete.inventory.ConcreteItemStorage;
+import com.elytradev.concrete.inventory.StandardMachineSlots;
 import com.elytradev.concrete.inventory.ValidatedInventoryView;
 import com.elytradev.concrete.inventory.Validators;
 import net.minecraft.block.BlockHorizontal;
@@ -102,8 +104,8 @@ public class TileEntityPump extends TileEntityBase {
         if(capability == DarkMachinations.PROBE_CAPABILITY)
         {
             if(probeDataProvider == null) {
-                probeDataProvider = new ProbeDataProviderGenerator();
-                ((ProbeDataProviderGenerator)probeDataProvider).setItemStackHandler(itemStackHandler);
+                probeDataProvider = new ProbeDataProviderPump();
+                ((ProbeDataProviderPump)probeDataProvider).setItemStackHandler(itemStackHandler);
             }
             return (T)probeDataProvider;
         }
@@ -188,15 +190,17 @@ public class TileEntityPump extends TileEntityBase {
     }
     @Override
     public void update() {
-        ItemStack supplySlot = itemStackHandler.getStackInSlot(ContainerGenerator.GENERATOR_SUPPLY_SLOT);
+        ItemStack supplySlot = itemStackHandler.getStackInSlot(StandardMachineSlots.INPUT);
 
         if (!this.world.isRemote) {
             fluidTank.fill(new FluidStack(net.minecraftforge.fluids.FluidRegistry.WATER, 100), true);
         }
 
         if(this.probeDataProvider != null) {
-            ProbeDataProviderGenerator probeData = (ProbeDataProviderGenerator)probeDataProvider;
+            ProbeDataProviderPump probeData = (ProbeDataProviderPump) probeDataProvider;
             probeData.updateProbeEnergyData(this.energyStorage.getEnergyStored(), this.energyStorage.getMaxEnergyStored());
+            probeData.updateProbeFuelData(this.pumpTimer, this.pumpTimerMaximum, this.getActive());
+            probeData.updateProbeFluidTank(this.fluidTank);
         }
 
         if(wasActive != isActive) {

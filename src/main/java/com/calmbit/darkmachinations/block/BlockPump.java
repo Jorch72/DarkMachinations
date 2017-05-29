@@ -24,4 +24,9 @@ public class BlockPump extends BlockMachineBase<TileEntityPump>{
     public TileEntityPump createTileEntity(World world, IBlockState state) {
         return new TileEntityPump();
     }
+
+    @Override
+    public boolean getUseNeighborBrightness(IBlockState state) {
+        return true;
+    }
 }

@@ -29,7 +29,7 @@ public class ContainerPump extends ContainerBase<TileEntityPump> {
                 new ResourceLocation("darkmachinations","textures/gui/machine/energy_bar_bg.png"),
                 new ResourceLocation("darkmachinations","textures/gui/machine/fluid_bar_fg.png"),
                 pump.fluidTank,
-                WFluidBar.Direction.RIGHT),20, 10, 18*2, 68);
+                WFluidBar.Direction.RIGHT),20, 10, 18, 68);
         panel.add(new WLabel("Pump"), 0, 0);
     }
 

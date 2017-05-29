@@ -1,15 +1,15 @@
 package com.calmbit.darkmachinations.proxy;
 
 import com.calmbit.darkmachinations.DarkMachinations;
+import com.calmbit.darkmachinations.client.RenderPump;
 import com.calmbit.darkmachinations.registry.FluidRegistry;
-import com.calmbit.darkmachinations.monster.EntityGoldenCreeper;
-import com.calmbit.darkmachinations.monster.RenderGoldenCreeper;
+import com.calmbit.darkmachinations.tileentity.TileEntityPump;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 
 @SuppressWarnings("MethodCallSideOnly")
 public class ClientProxy extends CommonProxy {
@@ -27,11 +27,11 @@ public class ClientProxy extends CommonProxy {
                 return heavyCrudeOilLocation;
             }
         });
-        RenderingRegistry.registerEntityRenderingHandler(EntityGoldenCreeper.class, RenderGoldenCreeper::new);
     }
     @Override
     public void registerItemRenderer(Item item, int meta, String id)
     {
         ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(DarkMachinations.DARKMACHINATIONS_MOD_ID + ":" + id, "inventory"));
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPump.class, new RenderPump());
     }
 }

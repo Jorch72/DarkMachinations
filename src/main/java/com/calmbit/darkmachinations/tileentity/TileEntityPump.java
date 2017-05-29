@@ -192,10 +192,6 @@ public class TileEntityPump extends TileEntityBase {
     public void update() {
         ItemStack supplySlot = itemStackHandler.getStackInSlot(StandardMachineSlots.INPUT);
 
-        if (!this.world.isRemote) {
-            fluidTank.fill(new FluidStack(net.minecraftforge.fluids.FluidRegistry.WATER, 100), true);
-        }
-
         if(this.probeDataProvider != null) {
             ProbeDataProviderPump probeData = (ProbeDataProviderPump) probeDataProvider;
             probeData.updateProbeEnergyData(this.energyStorage.getEnergyStored(), this.energyStorage.getMaxEnergyStored());

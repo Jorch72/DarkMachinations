@@ -1,7 +1,6 @@
 package com.calmbit.darkmachinations.gui.container;
 
 import com.calmbit.darkmachinations.tileentity.TileEntityCompressor;
-import com.calmbit.darkmachinations.tileentity.TileEntityGenerator;
 import com.elytradev.concrete.inventory.StandardMachineSlots;
 import com.elytradev.concrete.inventory.gui.widget.WBar;
 import com.elytradev.concrete.inventory.gui.widget.WItemSlot;

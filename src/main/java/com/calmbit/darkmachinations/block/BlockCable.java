@@ -80,6 +80,10 @@ public class BlockCable extends BlockBase {
 
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        reappraiseCable(worldIn, pos);
+    }
+
+    private void reappraiseCable(World worldIn, BlockPos pos) {
         if(!worldIn.isRemote) {
             for (EnumFacing facing : EnumFacing.VALUES) {
                 BlockPos neighbour = pos.add(facing.getDirectionVec());

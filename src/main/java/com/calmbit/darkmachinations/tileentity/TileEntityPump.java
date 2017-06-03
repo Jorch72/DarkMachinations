@@ -13,8 +13,10 @@ import com.elytradev.concrete.inventory.StandardMachineSlots;
 import com.elytradev.concrete.inventory.ValidatedInventoryView;
 import com.elytradev.concrete.inventory.Validators;
 import net.minecraft.block.BlockHorizontal;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemBlock;
@@ -24,10 +26,12 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.fluids.BlockFluidBase;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -40,6 +44,12 @@ import javax.annotation.Nullable;
 
 public class TileEntityPump extends TileEntityBase {
 
+    public enum PumpState {
+        LOWERING_PUMP,
+        FLUID_SEARCHING,
+        DEADLOCKED
+    };
+
     public ConcreteItemStorage itemStackHandler;
     public FluidBuffer fluidTank;
     public EnergyUser energyStorage;
@@ -49,12 +59,11 @@ public class TileEntityPump extends TileEntityBase {
     public boolean isActive;
     public boolean wasActive;
 
-
     public static final int SLOT_COUNT = 1;
     public static final int ENERGY_CAPACITY = 10000;
     public static final int ENERGY_TRANSFER_RATE = 100;
-
     public static final int FLUID_CAPACITY = 10000;
+
     public static final int FIELD_ENERGY_COUNT = 0;
     public static final int FIELD_ENERGY_CAPACITY = 1;
     public static final int FIELD_PUMP_TIMER = 2;
@@ -62,8 +71,19 @@ public class TileEntityPump extends TileEntityBase {
     public static final int FIELD_FLUID_LEVEL = 4;
     public static final int FIELD_FLUID_CAPACITY = 5;
 
+    public static final int FIELD_TOOB_HEIGHT = 6;
+
     public int pumpTimer;
     public int pumpTimerMaximum;
+
+    public int toobHeight;
+
+    public float renderToobHeightCurr;
+    public float renderToobHeightMax;
+
+    public float tR, tG, tB;
+
+    public PumpState pumpState = PumpState.LOWERING_PUMP;
 
     public TileEntityPump() {
         itemStackHandler = new ConcreteItemStorage(SLOT_COUNT).withValidators((stack) -> stack.getItem() instanceof ItemBlock);
@@ -72,6 +92,8 @@ public class TileEntityPump extends TileEntityBase {
         fluidTank.listen(this::markDirty);
         energyStorage = new EnergyUser(ENERGY_CAPACITY, ENERGY_TRANSFER_RATE);
         energyStorage.listen(this::markDirty);
+        pumpTimerMaximum = 40;
+        tR = tG= tB = 1.0f;
     }
 
     @Override
@@ -125,6 +147,10 @@ public class TileEntityPump extends TileEntityBase {
         compound.setBoolean("isActive", this.isActive);
         compound.setInteger("pumpTimer", this.pumpTimer);
         compound.setInteger("pumpTimerMax", this.pumpTimerMaximum);
+        compound.setInteger("toobHeight", this.toobHeight);
+        compound.setFloat("tR", this.tR);
+        compound.setFloat("tG", this.tG);
+        compound.setFloat("tB", this.tB);
         return super.writeToNBT(compound);
     }
 
@@ -137,6 +163,10 @@ public class TileEntityPump extends TileEntityBase {
         this.isActive = compound.getBoolean("isActive");
         this.pumpTimer = compound.getInteger("pumpTimer");
         this.pumpTimerMaximum = compound.getInteger("pumpTimerMax");
+        this.toobHeight = compound.getInteger("toobHeight");
+        this.tR = compound.getFloat("tR");
+        this.tG = compound.getFloat("tG");
+        this.tB = compound.getFloat("tB");
     }
 
     public int getField(int id)
@@ -155,6 +185,8 @@ public class TileEntityPump extends TileEntityBase {
                 return this.fluidTank.getFluidAmount();
             case FIELD_FLUID_CAPACITY:
                 return this.fluidTank.getCapacity();
+            case FIELD_TOOB_HEIGHT:
+                return this.toobHeight;
             default:
                 return 0;
         }
@@ -186,6 +218,8 @@ public class TileEntityPump extends TileEntityBase {
                 break;
             case FIELD_FLUID_CAPACITY:
                 this.fluidTank.setCapacity(value);
+            case FIELD_TOOB_HEIGHT:
+                this.toobHeight = value;
             default:
                 break;
         }
@@ -201,7 +235,63 @@ public class TileEntityPump extends TileEntityBase {
             probeData.updateProbeFluidTank(this.fluidTank);
         }
 
-        if(wasActive != isActive) {
+        boolean markDirty = false;
+
+        if(!world.isRemote) {
+            pumpTimer--;
+            switch(pumpState) {
+                case LOWERING_PUMP: {
+                    if (pumpTimer <= 0) {
+                        tR = 0.0f;
+                        tG = 0.0f;
+                        tB = 1.0f;
+                        markDirty = true;
+                        BlockPos blockPos = new BlockPos(pos.getX(), pos.getY() - toobHeight - 1, pos.getZ());
+                        IBlockState blockAtPos = world.getBlockState(blockPos);
+
+                        if (blockAtPos.getBlock() instanceof BlockFluidBase) {
+                            pumpState = PumpState.FLUID_SEARCHING;
+                        } else if (world.getBlockState(blockPos).getBlock() == Blocks.AIR) {
+                            toobHeight++;
+                        } else {
+                            pumpState = PumpState.DEADLOCKED;
+                        }
+
+
+                        pumpTimer = pumpTimerMaximum;
+                    }
+                    break;
+                }
+                case DEADLOCKED: {
+                    if (pumpTimer <= 0) {
+                        tR = 1.0f;
+                        tG = 0.0f;
+                        tB = 0.0f;
+                        markDirty = true;
+                        BlockPos blockPos = new BlockPos(pos.getX(), pos.getY() - toobHeight - 1, pos.getZ());
+
+                        if (world.getBlockState(blockPos).getBlock() == Blocks.AIR) {
+                            pumpState = PumpState.LOWERING_PUMP;
+                            markDirty = true;
+                        }
+                        pumpTimer = pumpTimerMaximum;
+                    }
+                    break;
+                }
+                case FLUID_SEARCHING: {
+                    if(pumpTimer <= 0) {
+                        tR = 0.0f;
+                        tG = 1.0f;
+                        tB = 0.0f;
+                        markDirty = true;
+                        pumpTimer = pumpTimerMaximum;
+                    }
+                    break;
+                }
+            }
+        }
+
+        if(wasActive != isActive || markDirty) {
             wasActive = isActive;
             this.world.notifyBlockUpdate(this.pos, this.world.getBlockState(this.pos), this.world.getBlockState(this.pos), 3);
             this.world.markBlockRangeForRenderUpdate(this.pos, this.pos);

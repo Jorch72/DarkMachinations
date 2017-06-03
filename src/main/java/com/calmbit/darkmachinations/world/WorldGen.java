@@ -7,6 +7,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeDesert;
 import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.feature.WorldGenLakes;
@@ -35,9 +37,23 @@ public class WorldGen implements IWorldGenerator{
 
     public void generateOil(World world, Random rand, int chunkX, int chunkZ, int chances) {
         WorldGenLakes lakeGen = new WorldGenLakes(FluidRegistry.heavy_crude_oil);
-        BlockPos pos = new BlockPos((chunkX*16) + rand.nextInt(16), 0, (chunkZ*16) + rand.nextInt(16));
-        pos = pos.add(0, world.getHeight(pos.getX(), pos.getZ()), 0);
-        lakeGen.generate(world, rand, pos);
+        BlockPos pos = new BlockPos((chunkX*16) + rand.nextInt(16), 256, (chunkZ*16) + rand.nextInt(16));
+        Biome biome = world.getBiome(pos);
+
+        if(biome instanceof BiomeDesert) {
+            if(rand.nextInt(10) == 0) {
+                lakeGen.generate(world, rand, pos);
+            }
+        } else if(biome.getTempCategory() == Biome.TempCategory.MEDIUM) {
+            if(rand.nextInt(30) == 0) {
+                lakeGen.generate(world, rand, pos);
+            }
+        } else {
+            if(rand.nextInt(100) == 0) {
+                lakeGen.generate(world, rand, pos);
+            }
+        }
+
     }
 
 }

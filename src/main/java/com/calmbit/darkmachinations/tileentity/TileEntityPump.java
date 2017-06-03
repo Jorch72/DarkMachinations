@@ -60,8 +60,8 @@ public class TileEntityPump extends TileEntityBase {
     public boolean wasActive;
 
     public static final int SLOT_COUNT = 1;
-    public static final int ENERGY_CAPACITY = 10000;
-    public static final int ENERGY_TRANSFER_RATE = 100;
+    public static final int ENERGY_CAPACITY = 1000;
+    public static final int ENERGY_TRANSFER_RATE = 20;
     public static final int FLUID_CAPACITY = 10000;
 
     public static final int FIELD_ENERGY_COUNT = 0;

@@ -41,9 +41,9 @@ public class TileEntityGenerator extends TileEntityBase implements IContainerInv
     public boolean wasActive;
 
     public static final int SLOT_COUNT = 1;
-    public static final int ENERGY_CAPACITY = 10000;
-    public static final int ENERGY_TRANSFER_RATE = 100;
-    public static final int ENERGY_GENERATION_RATE = 125;
+    public static final int ENERGY_CAPACITY = 2000;
+    public static final int ENERGY_TRANSFER_RATE = 20;
+    public static final int ENERGY_GENERATION_RATE = 5;
 
     public static final int FIELD_ENERGY_COUNT = 0;
     public static final int FIELD_ENERGY_CAPACITY = 1;

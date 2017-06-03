@@ -41,9 +41,9 @@ public class TileEntityCrusher extends TileEntityBase {
     public boolean wasActive;
 
     public static final int SLOT_COUNT = 2;
-    public static final int ENERGY_CAPACITY = 10000;
-    public static final int ENERGY_TRANSFER_RATE = 100;
-    public static final int ENERGY_USAGE_RATE = 25;
+    public static final int ENERGY_CAPACITY = 1000;
+    public static final int ENERGY_TRANSFER_RATE = 20;
+    public static final int ENERGY_USAGE_RATE = 60;
 
     public static final int FIELD_ENERGY_COUNT = 0;
     public static final int FIELD_ENERGY_CAPACITY = 1;

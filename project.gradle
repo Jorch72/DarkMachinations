@@ -1,0 +1,35 @@
+// See https://github.com/elytra/Skeleton/wiki for what all these values mean
+
+ext {
+	group = 'com.elytradev'
+	projectName = 'darkmachinations'
+
+	useElytraVersionFormat = false
+	version = '1.12.1-0.1.0'
+
+	concreteVersion = '0.3.2-SNAPSHOT'
+	concreteModules = [ 'all' ]
+
+	coremod = null
+	miniVersion = null
+
+	language = 'java'
+
+	forge = '1.12.1-14.22.0.2474'
+	mappings = 'snapshot_20170908'
+
+	enforceLicenseHeaders = false
+
+	verbose = false
+}
+
+if (!ext.early) {
+repositories {
+	// the skeleton already defines mavenCentral, jcenter, and the Elytra repo
+	// will also have Shadowfacts' maven if the language is set to kotlin
+}
+
+dependencies {
+	deobfCompile 'com.elytradev:probedataproviderapi:MC1.12_ver1.1.1'
+}
+}

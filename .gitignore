@@ -1,30 +1,27 @@
-# Gradle (but not gradlew!)
-.gradle/
+# Compiled nonsense that does not belong in *source* control
+/build
+/bin
+/.gradle
+/minecraft
+/out
+/run
 
-# Eclipse-generated files
-.project
+# IDE nonsense that could go in source control but really shouldn't
 .classpath
-.settings/
-
-# Built artifacts
-build/
-out/
-run/
-bin/
-config/
-logs/
-saves/
-
-# Run cruft
-minecraft/
-
-!src/main/resources/assets/minecraft/
-
-# Non-java files
-*.txt
+.project
+.metadata
+.settings
+*.launch
 *.iml
+.idea
+
+# Extra IDEA stuff
 *.ipr
 *.iws
 
-# System-created cruft
-**/Thumbs.db
+# Sekrit files
+private.properties
+
+# Files from bad operating systems :^)
+Thumbs.db
+.DS_Store

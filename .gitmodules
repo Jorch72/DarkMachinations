@@ -1,3 +1,4 @@
 [submodule "Concrete"]
 	path = Concrete
 	url = https://github.com/elytra/Concrete
+	branch = 1.11.2

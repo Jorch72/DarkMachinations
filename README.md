@@ -2,7 +2,7 @@
 
 # Dark Machinations
 
-[![Jenkins Status](https://img.shields.io/jenkins/s/https/ci.elytradev.com/job/elytra/job/DarkMachinations/job/master.svg)](https://ci.elytradev.com/job/elytra/job/DarkMachinations/job/master/)
+[![Jenkins Status](https://img.shields.io/jenkins/s/https/ci.elytradev.com/job/elytra/job/DarkMachinations/job/1.12.1.svg)](https://ci.elytradev.com/job/elytra/job/DarkMachinations/job/1.12.1/)
 
 [>> Downloads <<](https://github.com/elytra/DarkMachinations/releases)
 

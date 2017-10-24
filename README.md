@@ -1,9 +1,13 @@
-<img src="src/main/resources/logo.png" height=128 width=128 align="right">
+<img src="src/main/resources/logo.png" align="right" width="180px">
 
 # Dark Machinations
-## A technology mod for 1.11.2
 
-[![Jenkins](https://img.shields.io/jenkins/s/https/ci.elytradev.com/job/elytra/job/DarkMachinations/job/master.svg)](https://ci.elytradev.com/job/elytra/job/DarkMachinations/job/master/)
+[![Jenkins Status](https://img.shields.io/jenkins/s/https/ci.elytradev.com/job/elytra/job/DarkMachinations/job/master.svg)](https://ci.elytradev.com/job/elytra/job/DarkMachinations/job/master/)
+
+[>> Downloads <<](https://github.com/elytra/DarkMachinations/releases)
+
+*Technology with a bit of cocoa.*
+
 
 Dark Machinations aims to be a technology mod that strikes a better balance than more traditional tech mods, while retaining the feel of playing some of these mods, and the unbridled fun of creating sprawling and impressive tech chains.
 

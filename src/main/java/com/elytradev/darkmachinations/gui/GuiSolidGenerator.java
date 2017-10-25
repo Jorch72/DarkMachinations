@@ -1,18 +1,18 @@
 package com.elytradev.darkmachinations.gui;
 
-import com.elytradev.darkmachinations.gui.container.ContainerPump;
+import com.elytradev.darkmachinations.gui.container.ContainerSolidGenerator;
 import com.elytradev.concrete.inventory.gui.ConcreteContainer;
 import com.elytradev.concrete.inventory.gui.client.ConcreteGui;
 import com.elytradev.concrete.inventory.gui.widget.WItemSlot;
 
-public class GuiPump extends ConcreteGui{
+public class GuiSolidGenerator extends ConcreteGui{
 
-	private final ContainerPump pumpContainer;
+	private final ContainerSolidGenerator generatorContainer;
 
 	private WItemSlot itemSlots;
-	public GuiPump(ConcreteContainer inventorySlotsIn) {
+	public GuiSolidGenerator(ConcreteContainer inventorySlotsIn) {
 		super(inventorySlotsIn);
-		this.pumpContainer = (ContainerPump) inventorySlotsIn;
+		this.generatorContainer = (ContainerSolidGenerator) inventorySlotsIn;
 	}
 
 	@Override

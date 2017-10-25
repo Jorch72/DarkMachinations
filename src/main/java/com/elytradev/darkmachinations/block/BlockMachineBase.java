@@ -3,7 +3,7 @@ package com.elytradev.darkmachinations.block;
 import com.elytradev.darkmachinations.DarkMachinations;
 import com.elytradev.darkmachinations.generic.IDarmaBlock;
 import com.elytradev.darkmachinations.tileentity.TileEntityBase;
-import com.elytradev.darkmachinations.tileentity.TileEntityGenerator;
+import com.elytradev.darkmachinations.tileentity.TileEntitySolidGenerator;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
@@ -222,7 +222,7 @@ public abstract class BlockMachineBase<TE extends TileEntityBase> extends Block 
 		if(compound != null) {
 			if (GuiScreen.isShiftKeyDown()) {
 				if (compound.hasKey("energy_stored"))
-					tooltip.add(TextFormatting.RED.toString() + TextFormatting.ITALIC.toString() + "Energy: " + TextFormatting.RESET.toString() + compound.getInteger("energy_stored") + "/" + TileEntityGenerator.ENERGY_CAPACITY + " FU");
+					tooltip.add(TextFormatting.RED.toString() + TextFormatting.ITALIC.toString() + "Energy: " + TextFormatting.RESET.toString() + compound.getInteger("energy_stored") + "/" + TileEntitySolidGenerator.ENERGY_CAPACITY + " FU");
 				if(compound.hasKey("fluid_stored")) {
 					NBTTagCompound fluid = compound.getCompoundTag("fluid_stored");
 					if(fluid.hasKey("FluidName"))

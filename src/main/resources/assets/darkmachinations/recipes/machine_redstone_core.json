@@ -1,0 +1,24 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "CPC",
+    "PRP",
+    "CPC"
+  ],
+  "key": {
+    "C": {
+      "item": "darkmachinations:machine_corner"
+    },
+    "P": {
+      "type": "forge:ore_dict",
+      "ore": "plateSteel"
+    },
+    "R": {
+      "type": "forge:ore_dict",
+      "ore": "blockRedstone"
+    }
+  },
+  "result": {
+    "item": "darkmachinations:machine_redstone_core"
+  }
+}

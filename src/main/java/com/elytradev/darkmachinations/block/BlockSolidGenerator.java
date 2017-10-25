@@ -1,8 +1,7 @@
 package com.elytradev.darkmachinations.block;
 
-import com.elytradev.darkmachinations.tileentity.TileEntityCompressor;
-import com.elytradev.darkmachinations.registry.GuiRegistry;
 import com.elytradev.darkmachinations.tileentity.TileEntitySolidGenerator;
+import com.elytradev.darkmachinations.registry.GuiRegistry;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
@@ -15,21 +14,20 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class BlockCompressor extends BlockMachineBase<TileEntityCompressor> {
-	public BlockCompressor() {
-		super(Material.IRON, "machine_compressor", GuiRegistry.GUI_MACHINE_COMPRESSOR);
+public class BlockSolidGenerator extends BlockMachineBase<TileEntitySolidGenerator> {
+	public BlockSolidGenerator() {
+		super(Material.IRON, "machine_solid_generator", GuiRegistry.GUI_MACHINE_SOLID_GENERATOR);
 	}
 
 
 	@Override
-	public Class<TileEntityCompressor> getTileEntityClass() {
-		return TileEntityCompressor.class;
+	public Class<TileEntitySolidGenerator> getTileEntityClass() {
+		return TileEntitySolidGenerator.class;
 	}
 
 	@Nullable
 	@Override
-	public TileEntityCompressor createTileEntity(World world, IBlockState state) {
-		return new TileEntityCompressor();
+	public TileEntitySolidGenerator createTileEntity(World world, IBlockState state) {
+		return new TileEntitySolidGenerator();
 	}
-
 }

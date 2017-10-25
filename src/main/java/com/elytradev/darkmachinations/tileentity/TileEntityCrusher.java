@@ -32,7 +32,7 @@ import javax.annotation.Nullable;
 
 public class TileEntityCrusher extends TileEntityBase {
 
-	public ItemStackHandler itemStackHandler;
+	public ConcreteItemStorage itemStackHandler;
 	public EnergyUser energyStorage;
 	public String customName;
 
@@ -43,7 +43,7 @@ public class TileEntityCrusher extends TileEntityBase {
 	public static final int SLOT_COUNT = 2;
 	public static final int ENERGY_CAPACITY = 1000;
 	public static final int ENERGY_TRANSFER_RATE = 20;
-	public static final int ENERGY_USAGE_RATE = 60;
+	public static final int ENERGY_USAGE_RATE = 10;
 
 	public static final int FIELD_ENERGY_COUNT = 0;
 	public static final int FIELD_ENERGY_CAPACITY = 1;
@@ -116,6 +116,7 @@ public class TileEntityCrusher extends TileEntityBase {
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setTag("inventory", itemStackHandler.serializeNBT());
+		compound.setTag("inCrusher", inCrusher.serializeNBT());
 		energyStorage.writeToNBT(compound);
 		compound.setBoolean("isActive", this.isActive);
 		compound.setInteger("itemProcessingTimer", this.itemProcessingTimer);
@@ -127,6 +128,7 @@ public class TileEntityCrusher extends TileEntityBase {
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
 		itemStackHandler.deserializeNBT(compound.getCompoundTag("inventory"));
+		this.inCrusher = new ItemStack(compound.getCompoundTag("inCrusher"));
 		energyStorage.readFromNBT(compound);
 		this.isActive = compound.getBoolean("isActive");
 		this.itemProcessingTimer = compound.getInteger("itemProcessingTimer");
@@ -181,7 +183,7 @@ public class TileEntityCrusher extends TileEntityBase {
 						inCrusher.setCount(1);
 						ItemStack supplyDecrement = supplySlot.copy();
 						supplyDecrement.setCount(supplySlot.getCount()-1);
-						this.itemStackHandler.setStackInSlot(StandardMachineSlots.INPUT, new ItemStack(supplySlot.getItem(), supplySlot.getCount() - 1, supplySlot.getItemDamage()));
+						this.itemStackHandler.setStackInSlot(StandardMachineSlots.INPUT, supplyDecrement);
 						this.itemProcessingTimer = this.itemProcessingMaximum;
 						this.isActive = true;
 					}
@@ -217,7 +219,7 @@ public class TileEntityCrusher extends TileEntityBase {
 		else if (productSlot.getItem() == product.getItem() && productSlot.getItemDamage() == product.getItemDamage() && product.getCount() + productSlot.getCount() <= 64) {
 			ItemStack adjustedQtyProduct = product.copy();
 			adjustedQtyProduct.setCount(product.getCount() + productSlot.getCount());
-			this.itemStackHandler.setStackInSlot(StandardMachineSlots.OUTPUT, new ItemStack(product.getItem(), product.getCount() + productSlot.getCount(), product.getItemDamage()));
+			this.itemStackHandler.setStackInSlot(StandardMachineSlots.OUTPUT, adjustedQtyProduct);
 		}
 		else
 			return;
@@ -315,7 +317,16 @@ public class TileEntityCrusher extends TileEntityBase {
 
 	@Override
 	public IInventory getContainerInventory() {
-		return new ValidatedInventoryView((ConcreteItemStorage) this.getItemStackHandler());
+		ValidatedInventoryView result = new ValidatedInventoryView(itemStackHandler);
+
+		if(!this.world.isRemote)
+			return result
+					.withField(FIELD_ENERGY_COUNT, ()->this.energyStorage.getEnergyStored())
+					.withField(FIELD_ENERGY_CAPACITY, ()->this.energyStorage.getMaxEnergyStored())
+					.withField(FIELD_ITEM_PROCESSING_TIME, ()->this.itemProcessingTimer)
+					.withField(FIELD_ITEM_PROCESSING_MAX, ()->this.itemProcessingMaximum);
+
+		return result;
 	}
 
 

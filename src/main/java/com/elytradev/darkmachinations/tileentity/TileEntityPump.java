@@ -8,6 +8,7 @@ import com.elytradev.darkmachinations.fluid.FluidBuffer;
 import com.elytradev.concrete.inventory.ConcreteItemStorage;
 import com.elytradev.concrete.inventory.StandardMachineSlots;
 import com.elytradev.concrete.inventory.ValidatedInventoryView;
+import com.elytradev.darkmachinations.registry.FluidRegistry;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -27,6 +28,7 @@ import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fluids.BlockFluidBase;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -83,7 +85,7 @@ public class TileEntityPump extends TileEntityBase {
 				.withValidators((stack) -> stack.getItem() instanceof ItemBlock)
 				.withName("tile.darkmachinations.machine_pump.name");
 		fluidTank = new FluidBuffer(FLUID_CAPACITY);
-		//fluidTank.setFluid(new FluidStack(FluidRegistry.fluid_heavy_crude_oil, 1000));
+		fluidTank.setFluid(new FluidStack(FluidRegistry.fluid_heavy_crude_oil, 2000));
 		fluidTank.listen(this::markDirty);
 		energyStorage = new EnergyUser(ENERGY_CAPACITY, ENERGY_TRANSFER_RATE);
 		energyStorage.listen(this::markDirty);

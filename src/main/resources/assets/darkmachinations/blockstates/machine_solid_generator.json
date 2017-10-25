@@ -1,17 +1,17 @@
 {
     "forge_marker": 1,
     "defaults": {
-        "model": "darkmachinations:generator"
+        "model": "darkmachinations:solid_generator"
     },
     "variants": {
         "inventory": {
-            "model": "darkmachinations:generator"
+            "model": "darkmachinations:solid_generator"
         },
         "state": {
             "off": {},
             "on": {
                 "textures": {
-                    "front": "darkmachinations:blocks/generator_front_on"
+                    "front": "darkmachinations:blocks/solid_generator_front_on"
                 }
             }
         },

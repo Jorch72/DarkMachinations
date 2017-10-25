@@ -28,7 +28,7 @@ public class ContainerCompressor extends ContainerBase<TileEntityCompressor> {
 				compressorInventory,
 				TileEntityCompressor.FIELD_ENERGY_COUNT,
 				TileEntityCompressor.FIELD_ENERGY_CAPACITY,
-				WBar.Direction.UP), 0, 10, 18, 68);
+				WBar.Direction.UP).withTooltip("%d/%d FU"), 0, 10, 18, 68);
 		panel.add(new WBar(
 				new ResourceLocation("darkmachinations", "textures/gui/machine/compressor_arrow_down_bg.png"),
 				new ResourceLocation("darkmachinations", "textures/gui/machine/compressor_arrow_down_fg.png"),

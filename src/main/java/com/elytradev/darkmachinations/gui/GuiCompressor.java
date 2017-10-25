@@ -13,9 +13,11 @@ public class GuiCompressor extends ConcreteGui{
 		this.compressorContainer = (ContainerCompressor) inventorySlotsIn;
 	}
 
+	@Override
+	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+		this.drawDefaultBackground();
+		super.drawScreen(mouseX, mouseY, partialTicks);
+		this.renderHoveredToolTip(mouseX, mouseY);
+	}
 
-	// Progress Indicator - 100,33 24x17
-	// Power Indicator - 19,8 12x70
-	// Top Compressor - 72, 5 32x22
-	// Bottom Compressor - 72, 53 32x22
 }

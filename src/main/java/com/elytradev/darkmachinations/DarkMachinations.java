@@ -50,6 +50,8 @@ public class DarkMachinations {
 
 	static {
 		net.minecraftforge.fluids.FluidRegistry.enableUniversalBucket();
+		net.minecraftforge.fluids.FluidRegistry.addBucketForFluid(net.minecraftforge.fluids.FluidRegistry.WATER);
+		net.minecraftforge.fluids.FluidRegistry.addBucketForFluid(net.minecraftforge.fluids.FluidRegistry.LAVA);
 	}
 
 	@Mod.EventHandler

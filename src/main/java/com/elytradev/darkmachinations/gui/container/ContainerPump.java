@@ -24,12 +24,12 @@ public class ContainerPump extends ContainerBase<TileEntityPump> {
 				pumpInventory,
 				TileEntityPump.FIELD_ENERGY_COUNT,
 				TileEntityPump.FIELD_ENERGY_CAPACITY,
-				WBar.Direction.UP), 0, 10, 18, 68);
+				WBar.Direction.UP).withTooltip("%d/%d FU"), 0, 10, 18, 68);
 		panel.add(new WFluidBar(
 				new ResourceLocation("darkmachinations","textures/gui/machine/energy_bar_bg.png"),
 				new ResourceLocation("darkmachinations","textures/gui/machine/fluid_bar_fg.png"),
 				pump.fluidTank,
-				WFluidBar.Direction.RIGHT),20, 10, 18, 68);
+				WFluidBar.Direction.UP).withTooltip("%d/%d mB"),20, 10, 18, 68);
 		panel.add(new WLabel("Pump"), 0, 0);
 	}
 

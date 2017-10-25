@@ -3,7 +3,7 @@ package com.elytradev.darkmachinations.tileentity;
 import com.elytradev.darkmachinations.DarkMachinations;
 import com.elytradev.darkmachinations.energy.EnergyProvider;
 import com.elytradev.darkmachinations.energy.EnergyUser;
-import com.elytradev.darkmachinations.gui.container.ContainerGenerator;
+import com.elytradev.darkmachinations.gui.container.ContainerSolidGenerator;
 import com.elytradev.darkmachinations.probe.ProbeDataProviderGenerator;
 import com.elytradev.concrete.inventory.*;
 import net.minecraft.block.BlockHorizontal;
@@ -30,7 +30,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 
-public class TileEntityGenerator extends TileEntityBase implements IContainerInventoryHolder {
+public class TileEntitySolidGenerator extends TileEntityBase implements IContainerInventoryHolder {
 
 	public ConcreteItemStorage itemStackHandler;
 	public EnergyUser energyStorage;
@@ -53,10 +53,10 @@ public class TileEntityGenerator extends TileEntityBase implements IContainerInv
 	public int itemProcessingTimer;
 	public int itemProcessingMaximum;
 
-	public TileEntityGenerator() {
+	public TileEntitySolidGenerator() {
 		itemStackHandler = new ConcreteItemStorage(SLOT_COUNT)
 				.withValidators(Validators.FURNACE_FUELS)
-				.withName("tile.darkmachinations.machine_generator.name");
+				.withName("tile.darkmachinations.machine_solid_generator.name");
 		itemStackHandler.listen(this::markDirty);
 		energyStorage = new EnergyProvider(ENERGY_CAPACITY, ENERGY_TRANSFER_RATE);
 		energyStorage.listen(this::markDirty);
@@ -262,17 +262,17 @@ public class TileEntityGenerator extends TileEntityBase implements IContainerInv
 
 	@Override
 	public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn) {
-		return new ContainerGenerator(this, playerInventory, this.getContainerInventory());
+		return new ContainerSolidGenerator(this, playerInventory, this.getContainerInventory());
 	}
 
 	@Override
 	public String getGuiID() {
-		return "darkmachinations:generator";
+		return "darkmachinations:solid_generator";
 	}
 
 	@Override
 	public String getName() {
-		return this.hasCustomName() ? this.customName : "tileentity.generator";
+		return this.hasCustomName() ? this.customName : "darkmachinations.tileentity.solid_generator";
 	}
 
 	public void setCustomName(String name)

@@ -6,7 +6,7 @@ itemGroup.darkmachinations_af=Dank Machinations
 tile.darkmachinations.machine_crusher.name=Crusher
 tile.darkmachinations.machine_compressor.name=Compressor
 tile.darkmachinations.machine_redstone_core.name=Redstone Machine Core
-tile.darkmachinations.machine_generator.name=Solid-Fuel Generator
+tile.darkmachinations.machine_solid_generator.name=Solid-Fuel Generator
 tile.darkmachinations.machine_pump.name=Pump
 
 tile.darkmachinations.cable_copper_insulated.name=Insulated Copper Cable
@@ -22,8 +22,5 @@ tile.darkmachinations.bloomery_brick.name=Bloomery Brick
 
 tile.darkmachinations.cable_regular_endpoint.name=Cable Node
 
-subtitles.entity.golden_creeper.death=Golden Creepr Death
-subtitles.entity.golden_creeper.hurt=Golden Creeper Hurt
-subtitles.entity.golden_creeper.primed=Golden Creeper Hiss
-
-fluid.heavy_crude_oil=Heavy Crude Oil
+fluid.darkmachinations.heavy_crude_oil=Heavy Crude Oil
+fluid.darkmachinations.fuel=Fuel

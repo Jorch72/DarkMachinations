@@ -1,15 +1,15 @@
 package com.elytradev.darkmachinations.gui.container;
 
-import com.elytradev.darkmachinations.tileentity.TileEntityGenerator;
+import com.elytradev.darkmachinations.tileentity.TileEntitySolidGenerator;
 import com.elytradev.concrete.inventory.StandardMachineSlots;
 import com.elytradev.concrete.inventory.gui.widget.*;
 import com.elytradev.concrete.inventory.gui.widget.WBar.Direction;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ResourceLocation;
 
-public class ContainerGenerator extends ContainerBase<TileEntityGenerator> {
+public class ContainerSolidGenerator extends ContainerBase<TileEntitySolidGenerator> {
 
-	public ContainerGenerator(TileEntityGenerator generator, IInventory playerInventory, IInventory generatorInventory)
+	public ContainerSolidGenerator(TileEntitySolidGenerator generator, IInventory playerInventory, IInventory generatorInventory)
 	{
 		super(generator, playerInventory, generatorInventory);
 
@@ -23,15 +23,15 @@ public class ContainerGenerator extends ContainerBase<TileEntityGenerator> {
 				new ResourceLocation("darkmachinations","textures/gui/machine/energy_bar_bg.png"),
 				new ResourceLocation("darkmachinations","textures/gui/machine/energy_bar_fg.png"),
 				generatorInventory,
-				TileEntityGenerator.FIELD_ENERGY_COUNT,
-				TileEntityGenerator.FIELD_ENERGY_CAPACITY,
-				WBar.Direction.UP), 0, 10, 18, 68);
+				TileEntitySolidGenerator.FIELD_ENERGY_COUNT,
+				TileEntitySolidGenerator.FIELD_ENERGY_CAPACITY,
+				WBar.Direction.UP).withTooltip("%d/%d FU"), 0, 10, 18, 68);
 		panel.add(new WBar(
 				new ResourceLocation("darkmachinations", "textures/gui/machine/burning_bg.png"),
 				new ResourceLocation("darkmachinations", "textures/gui/machine/burning_fg.png"),
 				generatorInventory,
-				TileEntityGenerator.FIELD_ITEM_PROCESSING_TIME,
-				TileEntityGenerator.FIELD_ITEM_PROCESSING_MAX,
+				TileEntitySolidGenerator.FIELD_ITEM_PROCESSING_TIME,
+				TileEntitySolidGenerator.FIELD_ITEM_PROCESSING_MAX,
 				Direction.UP), 4*18, 36, 14, 14);
 		panel.add(new WLabel("Solid-Fuel Generator"), 0, 0);
 	}

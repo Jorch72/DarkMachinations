@@ -18,7 +18,7 @@ public class BlockRegistry {
 	public static final BlockCrusher machine_crusher = new BlockCrusher();
 	public static final BlockCompressor machine_compressor = new BlockCompressor();
 	public static final BlockBase machine_redstone_core = new BlockBase(Material.IRON, "machine_redstone_core").setCreativeTab(DarkMachinations.divitaeTab);
-	public static final BlockGenerator machine_generator = new BlockGenerator();
+	public static final BlockSolidGenerator machine_generator = new BlockSolidGenerator();
 	public static final BlockPump machine_pump = new BlockPump();
 
 	public static final BlockBloomery machine_bloomery = new BlockBloomery();
@@ -32,6 +32,8 @@ public class BlockRegistry {
 	public static final BlockCableEndpoint cable_regular_node = new BlockCableEndpoint("cable_regular_node");
 
 	public static final BlockFluidHeavyCrudeOil heavy_crude_oil = new BlockFluidHeavyCrudeOil(FluidRegistry.fluid_heavy_crude_oil, MaterialLiquid.WATER);
+	public static final BlockFluidFuel fuel = new BlockFluidFuel(FluidRegistry.fluid_fuel, MaterialLiquid.WATER);
+	public static final BlockFluidHydrogenGas hydrogen_gas = new BlockFluidHydrogenGas(FluidRegistry.fluid_hydrogen_gas, MaterialLiquid.WATER);
 
 	private static void registerBlock(IForgeRegistry<Block> registry, IDarmaBlock block)
 	{
@@ -79,6 +81,8 @@ public class BlockRegistry {
 		registerBlock(registry, cable_tin_uninsulated);
 		registerBlock(registry, cable_regular_node);
 		registerBlock(registry, heavy_crude_oil);
+		registerBlock(registry, fuel);
+		registerBlock(registry, hydrogen_gas);
 	}
 
 	public static void registerItemBlocks(IForgeRegistry<Item> registry) {
@@ -96,6 +100,8 @@ public class BlockRegistry {
 		registerItemBlock(registry, cable_tin_uninsulated.getItemBlock());
 		registerItemBlock(registry, cable_regular_node.getItemBlock());
 		registerItemBlock(registry, heavy_crude_oil.getItemBlock());
+		registerItemBlock(registry, fuel.getItemBlock());
+		registerItemBlock(registry, hydrogen_gas.getItemBlock());
 	}
 
 	public static void registerBlockModels() {
@@ -112,5 +118,7 @@ public class BlockRegistry {
 		registerBlockModel(cable_gold_uninsulated);
 		registerBlockModel(cable_tin_uninsulated);
 		registerBlockModel(cable_regular_node);
+		registerBlockModel(fuel);
+		registerBlockModel(hydrogen_gas);
 	}
 }

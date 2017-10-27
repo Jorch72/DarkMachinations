@@ -1,17 +1,8 @@
 package com.elytradev.darkmachinations.registry;
 
-import com.elytradev.darkmachinations.gui.GuiCompressor;
-import com.elytradev.darkmachinations.gui.GuiCrusher;
-import com.elytradev.darkmachinations.gui.GuiSolidGenerator;
-import com.elytradev.darkmachinations.gui.GuiPump;
-import com.elytradev.darkmachinations.gui.container.ContainerCompressor;
-import com.elytradev.darkmachinations.gui.container.ContainerCrusher;
-import com.elytradev.darkmachinations.gui.container.ContainerSolidGenerator;
-import com.elytradev.darkmachinations.gui.container.ContainerPump;
-import com.elytradev.darkmachinations.tileentity.TileEntityCompressor;
-import com.elytradev.darkmachinations.tileentity.TileEntityCrusher;
-import com.elytradev.darkmachinations.tileentity.TileEntitySolidGenerator;
-import com.elytradev.darkmachinations.tileentity.TileEntityPump;
+import com.elytradev.darkmachinations.gui.*;
+import com.elytradev.darkmachinations.gui.container.*;
+import com.elytradev.darkmachinations.tileentity.*;
 import com.elytradev.concrete.inventory.gui.ConcreteContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -30,6 +21,7 @@ public class GuiRegistry implements IGuiHandler {
 	public static final int GUI_MACHINE_SOLID_GENERATOR = 2;
 	public static final int GUI_MACHINE_BLOOMERY = 3;
 	public static final int GUI_MACHINE_PUMP = 4;
+	public static final int GUI_MACHINE_ELECTRIC_FURNACE = 5;
 
 	@Nullable
 	@Override
@@ -48,6 +40,9 @@ public class GuiRegistry implements IGuiHandler {
 				break;
 			case GUI_MACHINE_PUMP:
 				container = new ContainerPump((TileEntityPump)world.getTileEntity(new BlockPos(x,y,z)), player.inventory, ((TileEntityPump) world.getTileEntity(new BlockPos(x,y,z))).getContainerInventory());
+				break;
+			case GUI_MACHINE_ELECTRIC_FURNACE:
+				container = new ContainerElectricFurnace((TileEntityElectricFurnace)world.getTileEntity(new BlockPos(x,y,z)), player.inventory, ((TileEntityElectricFurnace)world.getTileEntity(new BlockPos(x,y,z))).getContainerInventory());
 				break;
 		}
 		if(container != null)
@@ -70,6 +65,8 @@ public class GuiRegistry implements IGuiHandler {
 				return new GuiSolidGenerator((ConcreteContainer) getServerGuiElement(ID, player, world, x, y, z));
 			case GUI_MACHINE_PUMP:
 				return new GuiPump((ConcreteContainer) getServerGuiElement(ID, player, world, x, y, z));
+			case GUI_MACHINE_ELECTRIC_FURNACE:
+				return new GuiElectricFurnace((ConcreteContainer) getServerGuiElement(ID, player, world, x, y, z));
 		}
 		return null;
 	}

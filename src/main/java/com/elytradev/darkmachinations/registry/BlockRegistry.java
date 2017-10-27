@@ -20,6 +20,7 @@ public class BlockRegistry {
 	public static final BlockBase machine_redstone_core = new BlockBase(Material.IRON, "machine_redstone_core").setCreativeTab(DarkMachinations.divitaeTab);
 	public static final BlockSolidGenerator machine_generator = new BlockSolidGenerator();
 	public static final BlockPump machine_pump = new BlockPump();
+	public static final BlockElectricFurnace machine_electric_furnace = new BlockElectricFurnace();
 
 	public static final BlockBloomery machine_bloomery = new BlockBloomery();
 
@@ -72,6 +73,7 @@ public class BlockRegistry {
 		registerBlock(registry, machine_redstone_core);
 		registerBlock(registry, machine_generator);
 		registerBlock(registry, machine_pump);
+		registerBlock(registry, machine_electric_furnace);
 		registerBlock(registry, machine_bloomery);
 		registerBlock(registry, cable_copper_insulated);
 		registerBlock(registry, cable_gold_insulated);
@@ -91,6 +93,7 @@ public class BlockRegistry {
 		registerItemBlock(registry, machine_redstone_core.getItemBlock());
 		registerItemBlock(registry, machine_generator.getItemBlock());
 		registerItemBlock(registry, machine_pump.getItemBlock());
+		registerItemBlock(registry, machine_electric_furnace.getItemBlock());
 		registerItemBlock(registry, machine_bloomery.getItemBlock());
 		registerItemBlock(registry, cable_copper_insulated.getItemBlock());
 		registerItemBlock(registry, cable_gold_insulated.getItemBlock());
@@ -110,6 +113,7 @@ public class BlockRegistry {
 		registerBlockModel(machine_redstone_core);
 		registerBlockModel(machine_generator);
 		registerBlockModel(machine_pump);
+		registerBlockModel(machine_electric_furnace);
 		registerBlockModel(machine_bloomery);
 		registerBlockModel(cable_copper_insulated);
 		registerBlockModel(cable_gold_insulated);

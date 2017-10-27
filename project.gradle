@@ -31,5 +31,7 @@ repositories {
 
 dependencies {
 	deobfCompile 'com.elytradev:probedataproviderapi:MC1.12_ver1.1.1'
+	deobfCompile "com.elytradev:phosphorus:1.12.1-0.1.0.8"
+	compile 'com.elytradev:mirage:2.0.3-rc2-SNAPSHOT'
 }
 }

@@ -35,14 +35,14 @@ public class ContainerCompressor extends ContainerBase<TileEntityCompressor> {
 				compressorInventory,
 				TileEntityCompressor.FIELD_ITEM_PROCESSING_TIME,
 				TileEntityCompressor.FIELD_ITEM_PROCESSING_MAX,
-				WBar.Direction.UP), (int)(3.6*18), 8, 32, 22);
+				WBar.Direction.DOWN), (int)(3.6*18), 8, 32, 22);
 		panel.add(new WBar(
 				new ResourceLocation("darkmachinations", "textures/gui/machine/compressor_arrow_up_bg.png"),
 				new ResourceLocation("darkmachinations", "textures/gui/machine/compressor_arrow_up_fg.png"),
 				compressorInventory,
 				TileEntityCompressor.FIELD_ITEM_PROCESSING_TIME,
 				TileEntityCompressor.FIELD_ITEM_PROCESSING_MAX,
-				WBar.Direction.DOWN), (int)(3.6*18), 48, 32, 22);
+				WBar.Direction.UP), (int)(3.6*18), 48, 32, 22);
 		panel.add(new WBar(
 				new ResourceLocation("darkmachinations", "textures/gui/machine/arrow_right_bg.png"),
 				new ResourceLocation("darkmachinations", "textures/gui/machine/arrow_right_fg.png"),

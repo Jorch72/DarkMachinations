@@ -8,6 +8,7 @@ tile.darkmachinations.machine_compressor.name=Compressor
 tile.darkmachinations.machine_redstone_core.name=Redstone Machine Core
 tile.darkmachinations.machine_solid_generator.name=Solid-Fuel Generator
 tile.darkmachinations.machine_pump.name=Pump
+tile.darkmachinations.machine_electric_furnace.name=Electric Furnace
 
 tile.darkmachinations.cable_copper_insulated.name=Insulated Copper Cable
 tile.darkmachinations.cable_tin_insulated.name=Insulated Tin Cable
@@ -24,3 +25,4 @@ tile.darkmachinations.cable_regular_endpoint.name=Cable Node
 
 fluid.darkmachinations.heavy_crude_oil=Heavy Crude Oil
 fluid.darkmachinations.fuel=Fuel
+fluid.darkmachinations.hydrogen_gas=Hydrogen Gas

@@ -1,21 +1,21 @@
 package com.elytradev.darkmachinations.tileentity;
 
-import com.elytradev.darkmachinations.gui.container.ContainerCompressor;
-import com.elytradev.darkmachinations.registry.recipes.CompressorRecipes;
-import com.elytradev.darkmachinations.DarkMachinations;
-import com.elytradev.darkmachinations.energy.EnergyReciever;
-import com.elytradev.darkmachinations.energy.EnergyUser;
-import com.elytradev.darkmachinations.probe.ProbeDataProviderMachine;
 import com.elytradev.concrete.inventory.ConcreteItemStorage;
 import com.elytradev.concrete.inventory.StandardMachineSlots;
 import com.elytradev.concrete.inventory.ValidatedInventoryView;
 import com.elytradev.concrete.inventory.Validators;
+import com.elytradev.darkmachinations.DarkMachinations;
+import com.elytradev.darkmachinations.energy.EnergyReciever;
+import com.elytradev.darkmachinations.energy.EnergyUser;
+import com.elytradev.darkmachinations.gui.container.ContainerElectricFurnace;
+import com.elytradev.darkmachinations.probe.ProbeDataProviderMachine;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -30,21 +30,20 @@ import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
 
-public class TileEntityCompressor extends TileEntityBase {
+public class TileEntityElectricFurnace extends TileEntityBase {
 
 	public ConcreteItemStorage itemStackHandler;
 	public EnergyUser energyStorage;
 	public Object probeDataProvider;
 	public String customName;
 
-	public ItemStack inCompressor;
 	public boolean isActive;
 	public boolean wasActive;
 
 	public static final int SLOT_COUNT = 2;
 	public static final int ENERGY_CAPACITY = 1000;
 	public static final int ENERGY_TRANSFER_RATE = 20;
-	public static final int ENERGY_USAGE_RATE = 10;
+	public static final int ENERGY_USAGE_RATE = 5;
 
 	public static final int FIELD_ENERGY_COUNT = 0;
 	public static final int FIELD_ENERGY_CAPACITY = 1;
@@ -54,14 +53,13 @@ public class TileEntityCompressor extends TileEntityBase {
 	public int itemProcessingTimer;
 	public int itemProcessingMaximum = 100;
 
-	public TileEntityCompressor()
+	public TileEntityElectricFurnace()
 	{
 		itemStackHandler = new ConcreteItemStorage(SLOT_COUNT)
-				.withValidators((stack)->!CompressorRecipes.INSTANCE.getRecipeResult(stack).isEmpty(), Validators.NOTHING)
-				.withName("tile.darkmachinations.machine_compressor.name");
+				.withValidators((stack)->!FurnaceRecipes.instance().getSmeltingResult(stack).isEmpty(), Validators.NOTHING)
+				.withName("tile.darkmachinations.machine_electric_furnace.name");
 		energyStorage = new EnergyReciever(ENERGY_CAPACITY, ENERGY_TRANSFER_RATE);
 		energyStorage.listen(this::markDirty);
-		inCompressor = ItemStack.EMPTY;
 	}
 
 	@Override
@@ -113,7 +111,6 @@ public class TileEntityCompressor extends TileEntityBase {
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setTag("inventory", itemStackHandler.serializeNBT());
-		compound.setTag("inCompressor", inCompressor.serializeNBT());
 		energyStorage.writeToNBT(compound);
 		compound.setBoolean("isActive", this.isActive);
 		compound.setInteger("itemProcessingTimer", this.itemProcessingTimer);
@@ -125,7 +122,6 @@ public class TileEntityCompressor extends TileEntityBase {
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
 		itemStackHandler.deserializeNBT(compound.getCompoundTag("inventory"));
-		inCompressor = new ItemStack(compound.getCompoundTag("inCompressor"));
 		energyStorage.readFromNBT(compound);
 		this.isActive = compound.getBoolean("isActive");
 		this.itemProcessingTimer = compound.getInteger("itemProcessingTimer");
@@ -179,23 +175,19 @@ public class TileEntityCompressor extends TileEntityBase {
 
 		if(!this.world.isRemote) {
 			if (this.isActive) {
-				if (this.itemProcessingTimer == this.itemProcessingMaximum) {
-					this.compressItem();
+				if (this.itemProcessingTimer == 0) {
+					this.smeltItem();
 				} else if (this.energyStorage.getEnergyStored() >= ENERGY_USAGE_RATE) {
-					this.itemProcessingTimer++;
+					this.itemProcessingTimer--;
 					this.energyStorage.setEnergyStored(this.energyStorage.getEnergyStored()-ENERGY_USAGE_RATE);
 				}
 			}
 
 			if (!isActive && this.energyStorage.getEnergyStored() >= ENERGY_USAGE_RATE) {
 				if (!supplySlot.isEmpty()) {
-					ItemStack product = CompressorRecipes.INSTANCE.getRecipeResult(supplySlot);
+					ItemStack product = FurnaceRecipes.instance().getSmeltingResult(supplySlot.copy());
 					if (!product.isEmpty()) {
-						inCompressor = supplySlot.copy();
-						inCompressor.setCount(1);
-						ItemStack supplyDecrement = supplySlot.copy();
-						supplyDecrement.setCount(supplySlot.getCount()-1);
-						this.itemStackHandler.setStackInSlot(StandardMachineSlots.INPUT, supplyDecrement);
+						this.itemProcessingTimer = this.itemProcessingMaximum;
 						this.isActive = true;
 					}
 				}
@@ -218,30 +210,32 @@ public class TileEntityCompressor extends TileEntityBase {
 		}
 	}
 
-	public void compressItem()
+	public void smeltItem()
 	{
-		ItemStack product = CompressorRecipes.INSTANCE.getRecipeResult(inCompressor);
 		ItemStack productSlot = this.itemStackHandler.getStackInSlot(StandardMachineSlots.OUTPUT);
+		ItemStack product = FurnaceRecipes.instance()
+				.getSmeltingResult(this.itemStackHandler.getStackInSlot(StandardMachineSlots.INPUT));
 
-		if (productSlot.isEmpty()) {
+		ItemStack supplyDecrement = this.itemStackHandler.getStackInSlot(StandardMachineSlots.INPUT);
+		supplyDecrement.setCount(supplyDecrement.getCount()-1);
+		this.itemStackHandler.setStackInSlot(StandardMachineSlots.INPUT, supplyDecrement);
+
+		if (productSlot.isEmpty())
 			this.itemStackHandler.setStackInSlot(StandardMachineSlots.OUTPUT, product.copy());
-			this.itemProcessingTimer = 0;
-		}
-		else if (productSlot.getItem() == product.getItem() && productSlot.getItemDamage() == product.getItemDamage() &&  product.getCount() + productSlot.getCount() <= 64) {
+		else if (productSlot.getItem() == product.getItem() && productSlot.getItemDamage() == product.getItemDamage()
+				&&  product.getCount() + productSlot.getCount() <= 64) {
 			ItemStack adjustedQtyProduct = product.copy();
 			adjustedQtyProduct.setCount(product.getCount() + productSlot.getCount());
 			this.itemStackHandler.setStackInSlot(StandardMachineSlots.OUTPUT, adjustedQtyProduct);
-			this.itemProcessingTimer = 0;
 		}
 		else
 			return;
 
-		this.inCompressor = ItemStack.EMPTY;
 		this.isActive = false;
 	}
 
 	@SideOnly(Side.CLIENT)
-	public static boolean isActive(TileEntityCompressor inventory) {
+	public static boolean isActive(TileEntityElectricFurnace inventory) {
 		return inventory.getField(FIELD_ITEM_PROCESSING_TIME) > 0;
 	}
 
@@ -259,17 +253,17 @@ public class TileEntityCompressor extends TileEntityBase {
 
 	@Override
 	public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn) {
-		return new ContainerCompressor(this, playerInventory, this.getContainerInventory());
+		return new ContainerElectricFurnace(this, playerInventory, this.getContainerInventory());
 	}
 
 	@Override
 	public String getGuiID() {
-		return "darkmachinations:compressor";
+		return "darkmachinations:electric_furnace";
 	}
 
 	@Override
 	public String getName() {
-		return this.hasCustomName() ? this.customName : "tileentity.compressor";
+		return this.hasCustomName() ? this.customName : "tileentity.electric_furnace";
 	}
 
 	public void setCustomName(String name)

@@ -1,0 +1,9 @@
+{
+    "parent": "block/orientable",
+    "textures": {
+        "top": "darkmachinations:blocks/machine_side",
+        "front": "darkmachinations:blocks/electric_furnace_front_off",
+        "side": "darkmachinations:blocks/machine_side",
+        "down": "darkmachinations:blocks/machine_bottom"
+    }
+}

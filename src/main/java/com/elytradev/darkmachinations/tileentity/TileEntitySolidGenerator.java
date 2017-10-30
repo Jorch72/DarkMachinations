@@ -6,8 +6,6 @@ import com.elytradev.darkmachinations.energy.EnergyUser;
 import com.elytradev.darkmachinations.gui.container.ContainerSolidGenerator;
 import com.elytradev.darkmachinations.probe.ProbeDataProviderGenerator;
 import com.elytradev.concrete.inventory.*;
-import com.elytradev.mirage.lighting.IColoredLight;
-import com.elytradev.mirage.lighting.Light;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -33,8 +31,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 
-@Optional.Interface(iface="com.elytradev.mirage.lighting.IColoredLight", modid="mirage")
-public class TileEntitySolidGenerator extends TileEntityBase implements IContainerInventoryHolder, IColoredLight {
+public class TileEntitySolidGenerator extends TileEntityBase implements IContainerInventoryHolder {
 
 	public ConcreteItemStorage itemStackHandler;
 	public EnergyUser energyStorage;
@@ -334,15 +331,5 @@ public class TileEntitySolidGenerator extends TileEntityBase implements IContain
 					.withField(FIELD_ITEM_PROCESSING_MAX, ()->this.itemProcessingMaximum);
 
 		return result;
-	}
-
-	@Nullable
-	@Override
-	public Light getColoredLight() {
-		return Light.builder()
-				.pos(this.pos)
-				.color(0xfca211, false)
-				.radius(2)
-				.build();
 	}
 }

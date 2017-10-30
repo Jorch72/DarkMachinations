@@ -2,8 +2,8 @@
     "parent": "block/orientable",
     "textures": {
         "top": "darkmachinations:blocks/machine_side",
-        "front": "darkmachinations:blocks/power_cell_front_on",
-        "side": "darkmachinations:blocks/power_cell_side_on",
+        "front": "darkmachinations:blocks/power_cell_front_off",
+        "side": "darkmachinations:blocks/power_cell_side_off",
         "down": "darkmachinations:blocks/machine_bottom"
     }
 }

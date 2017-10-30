@@ -19,12 +19,19 @@ public class ClientProxy extends CommonProxy {
 	public void init()
 	{
 		super.init();
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPump.class, new RenderPump());
 	}
 
 	@Override
 	public void registerItemRenderer(Item item, int meta, String id)
 	{
-		ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(DarkMachinations.DARKMACHINATIONS_MOD_ID + ":" + id, "inventory"));
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPump.class, new RenderPump());
+		this.registerItemRenderer(item, meta, id, "inventory");
 	}
+
+	@Override
+	public void registerItemRenderer(Item item, int meta, String id, String variant)
+	{
+		ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(DarkMachinations.DARKMACHINATIONS_MOD_ID + ":" + id, variant));
+	}
+
 }

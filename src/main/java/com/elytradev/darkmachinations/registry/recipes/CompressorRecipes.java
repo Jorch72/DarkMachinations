@@ -3,18 +3,19 @@ package com.elytradev.darkmachinations.registry.recipes;
 import com.elytradev.darkmachinations.DarkMachinations;
 import com.google.common.collect.Maps;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.OreIngredient;
 
 import java.util.Map;
 
 public class CompressorRecipes {
 	public static final CompressorRecipes INSTANCE = new CompressorRecipes();
 
-	private final Map<ItemStack, ItemStack> recipeList = Maps.newHashMap();
+	private final Map<Ingredient, ItemStack> recipeList = Maps.newHashMap();
 
-	public CompressorRecipes()
-	{
+	public CompressorRecipes() {
 		this.addRecipe("ingotBronze", "plateBronze");
 		this.addRecipe("ingotCopper", "plateCopper");
 		this.addRecipe("ingotGold", "plateGold");
@@ -28,8 +29,7 @@ public class CompressorRecipes {
 
 	}
 
-	public void addRecipe(String supplyDict, String productDict, int qty)
-	{
+	public void addRecipe(String supplyDict, String productDict, int qty) {
 		NonNullList<ItemStack> supplyList = OreDictionary.getOres(supplyDict);
 		NonNullList<ItemStack> productList = OreDictionary.getOres(productDict);
 
@@ -40,22 +40,16 @@ public class CompressorRecipes {
 
 		ItemStack product = productList.get(0);
 
-		for(ItemStack supplyStack : supplyList) {
-			if(!this.recipeList.containsKey(supplyStack))
-				this.recipeList.put(supplyStack, product.copy());
-		}
+		this.recipeList.put(new OreIngredient(supplyDict), product.copy());
 	}
 
 	public void addRecipe(String supplyDict, String productDict) {
 		addRecipe(supplyDict, productDict, 1);
 	}
 
-	public ItemStack getRecipeResult(ItemStack supply)
-	{
-		for(Map.Entry<ItemStack, ItemStack> entry : recipeList.entrySet())
-		{
-			if(entry.getKey().getItem() ==  supply.getItem() && entry.getKey().getItemDamage() == supply.getItemDamage())
-			{
+	public ItemStack getRecipeResult(ItemStack supply) {
+		for (Map.Entry<Ingredient, ItemStack> entry : recipeList.entrySet()) {
+			if (entry.getKey().apply(supply)) {
 				return entry.getValue();
 			}
 		}

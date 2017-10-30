@@ -1,11 +1,25 @@
 {
     "forge_marker": 1,
     "defaults": {
+        "transform": "forge:default-block",
         "model": "darkmachinations:power_cell"
     },
     "variants": {
-        "inventory": {
-            "model": "darkmachinations:power_cell"
+        "inventory": [{}],
+        "inventory_creative": [{
+            "textures": {
+                "front": "darkmachinations:blocks/power_cell_front_on_creative",
+                "side": "darkmachinations:blocks/power_cell_side_on_creative"
+            }
+        }],
+        "creative":{
+            "true": {
+                "textures": {
+                    "front": "darkmachinations:blocks/power_cell_front_on_creative",
+                    "side": "darkmachinations:blocks/power_cell_side_on_creative"
+                }
+            },
+            "false": {}
         },
         "facing": {
             "north": {},

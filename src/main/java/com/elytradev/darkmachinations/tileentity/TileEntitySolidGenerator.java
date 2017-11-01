@@ -1,11 +1,12 @@
 package com.elytradev.darkmachinations.tileentity;
 
+import com.elytradev.concrete.inventory.*;
 import com.elytradev.darkmachinations.DarkMachinations;
 import com.elytradev.darkmachinations.energy.EnergyProvider;
 import com.elytradev.darkmachinations.energy.EnergyUser;
+import com.elytradev.darkmachinations.generic.ITEStackHandler;
 import com.elytradev.darkmachinations.gui.container.ContainerSolidGenerator;
 import com.elytradev.darkmachinations.probe.ProbeDataProviderGenerator;
-import com.elytradev.concrete.inventory.*;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -22,7 +23,6 @@ import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -31,7 +31,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 
-public class TileEntitySolidGenerator extends TileEntityBase implements IContainerInventoryHolder {
+public class TileEntitySolidGenerator extends TileEntityBase implements ITEStackHandler, IContainerInventoryHolder {
 
 	public ConcreteItemStorage itemStackHandler;
 	public EnergyUser energyStorage;

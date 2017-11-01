@@ -5,6 +5,7 @@ import com.elytradev.darkmachinations.block.*;
 import com.elytradev.darkmachinations.cable.TileEntityCableNode;
 import com.elytradev.darkmachinations.generic.IDarmaBlock;
 import com.elytradev.darkmachinations.generic.IOreDict;
+import com.elytradev.darkmachinations.tileentity.TileEntityPowerCell;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialLiquid;
@@ -37,20 +38,19 @@ public class BlockRegistry {
 	public static final BlockFluidFuel fuel = new BlockFluidFuel(FluidRegistry.fluid_fuel, MaterialLiquid.WATER);
 	public static final BlockFluidHydrogenGas hydrogen_gas = new BlockFluidHydrogenGas(FluidRegistry.fluid_hydrogen_gas, MaterialLiquid.WATER);
 
-	private static void registerBlock(IForgeRegistry<Block> registry, IDarmaBlock block)
-	{
+	private static void registerBlock(IForgeRegistry<Block> registry, IDarmaBlock block) {
 		registry.register(((Block)block));
 
-		if(block instanceof IOreDict)
-		{
+		if(block instanceof IOreDict) {
 			((IOreDict)block).registerOreDict();
 		}
-		if(block instanceof BlockMachineBase)
-		{
+		if(block instanceof BlockMachineBase) {
 			GameRegistry.registerTileEntity(((BlockMachineBase<?>)block).getTileEntityClass(), ((Block)block).getRegistryName().toString());
 		}
-		if(block instanceof BlockCableEndpoint)
-		{
+		else if(block instanceof BlockPowerCell) {
+			GameRegistry.registerTileEntity(TileEntityPowerCell.class, ((Block)block).getRegistryName().toString());
+		}
+		if(block instanceof BlockCableEndpoint) {
 			GameRegistry.registerTileEntity(TileEntityCableNode.class, ((Block)block).getRegistryName().toString());
 		}
 	}

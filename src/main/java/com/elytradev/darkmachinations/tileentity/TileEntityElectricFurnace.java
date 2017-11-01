@@ -1,12 +1,10 @@
 package com.elytradev.darkmachinations.tileentity;
 
-import com.elytradev.concrete.inventory.ConcreteItemStorage;
-import com.elytradev.concrete.inventory.StandardMachineSlots;
-import com.elytradev.concrete.inventory.ValidatedInventoryView;
-import com.elytradev.concrete.inventory.Validators;
+import com.elytradev.concrete.inventory.*;
 import com.elytradev.darkmachinations.DarkMachinations;
 import com.elytradev.darkmachinations.energy.EnergyReciever;
 import com.elytradev.darkmachinations.energy.EnergyUser;
+import com.elytradev.darkmachinations.generic.ITEStackHandler;
 import com.elytradev.darkmachinations.gui.container.ContainerElectricFurnace;
 import com.elytradev.darkmachinations.probe.ProbeDataProviderMachine;
 import net.minecraft.block.BlockHorizontal;
@@ -30,7 +28,7 @@ import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
 
-public class TileEntityElectricFurnace extends TileEntityBase {
+public class TileEntityElectricFurnace extends TileEntityBase implements ITEStackHandler, IContainerInventoryHolder {
 
 	public ConcreteItemStorage itemStackHandler;
 	public EnergyUser energyStorage;

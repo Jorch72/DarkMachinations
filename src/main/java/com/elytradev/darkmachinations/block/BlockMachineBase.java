@@ -2,6 +2,7 @@ package com.elytradev.darkmachinations.block;
 
 import com.elytradev.darkmachinations.DarkMachinations;
 import com.elytradev.darkmachinations.generic.IDarmaBlock;
+import com.elytradev.darkmachinations.generic.ITEStackHandler;
 import com.elytradev.darkmachinations.tileentity.TileEntityBase;
 import com.elytradev.darkmachinations.tileentity.TileEntitySolidGenerator;
 import net.minecraft.block.Block;
@@ -169,15 +170,15 @@ public abstract class BlockMachineBase<TE extends TileEntityBase> extends Block 
 
 
 	@Override
-	public void breakBlock(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state)
-	{
+	public void breakBlock(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state) {
 		TE tileEntity = (TE)worldIn.getTileEntity(pos);
 
-		if (tileEntity != null)
+		if (tileEntity != null && tileEntity instanceof ITEStackHandler)
 		{
-			for(int i =0;i < tileEntity.getItemStackHandler().getSlots();i++)
+			ITEStackHandler handler = (ITEStackHandler)tileEntity;
+			for(int i =0;i < handler.getItemStackHandler().getSlots();i++)
 			{
-				InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), tileEntity.getItemStackHandler().getStackInSlot(i));
+				InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), handler.getItemStackHandler().getStackInSlot(i));
 			}
 		}
 

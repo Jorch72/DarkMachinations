@@ -1,8 +1,10 @@
 package com.elytradev.darkmachinations.proxy;
 
 import com.elytradev.darkmachinations.DarkMachinations;
+import com.elytradev.darkmachinations.client.RenderPowerCell;
 import com.elytradev.darkmachinations.client.RenderPump;
 import com.elytradev.darkmachinations.registry.BlockRegistry;
+import com.elytradev.darkmachinations.tileentity.TileEntityPowerCell;
 import com.elytradev.darkmachinations.tileentity.TileEntityPump;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -20,6 +22,7 @@ public class ClientProxy extends CommonProxy {
 	{
 		super.init();
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPump.class, new RenderPump());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPowerCell.class, new RenderPowerCell());
 	}
 
 	@Override

@@ -1,6 +1,8 @@
 package com.elytradev.darkmachinations.tileentity;
 
+import com.elytradev.concrete.inventory.IContainerInventoryHolder;
 import com.elytradev.darkmachinations.DarkMachinations;
+import com.elytradev.darkmachinations.generic.ITEStackHandler;
 import com.elytradev.darkmachinations.gui.container.ContainerPump;
 import com.elytradev.darkmachinations.probe.ProbeDataProviderPump;
 import com.elytradev.darkmachinations.energy.EnergyUser;
@@ -37,7 +39,7 @@ import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
 
-public class TileEntityPump extends TileEntityBase {
+public class TileEntityPump extends TileEntityBase implements ITEStackHandler, IContainerInventoryHolder {
 
 	public enum PumpState {
 		LOWERING_PUMP,

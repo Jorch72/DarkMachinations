@@ -2,9 +2,7 @@ package com.elytradev.darkmachinations.tileentity;
 
 import com.elytradev.darkmachinations.generic.ITEActivatable;
 import com.elytradev.darkmachinations.generic.ITEFieldable;
-import com.elytradev.darkmachinations.generic.ITEStackHandler;
 import com.elytradev.darkmachinations.generic.IUsableStrictness;
-import com.elytradev.concrete.inventory.IContainerInventoryHolder;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -13,7 +11,7 @@ import net.minecraft.world.IInteractionObject;
 import net.minecraft.world.IWorldNameable;
 
 public abstract class TileEntityBase extends TileEntity implements IInteractionObject,
-		IWorldNameable, IUsableStrictness, ITickable, ITEFieldable, ITEActivatable, ITEStackHandler, IContainerInventoryHolder {
+		IWorldNameable, IUsableStrictness, ITickable, ITEFieldable, ITEActivatable {
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {

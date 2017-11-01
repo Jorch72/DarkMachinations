@@ -1,7 +1,9 @@
 package com.elytradev.darkmachinations.tileentity;
 
 import com.elytradev.concrete.inventory.ConcreteItemStorage;
+import com.elytradev.concrete.inventory.IContainerInventoryHolder;
 import com.elytradev.concrete.inventory.ValidatedInventoryView;
+import com.elytradev.darkmachinations.generic.ITEStackHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -9,7 +11,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityBloomery extends TileEntityBase {
+public class TileEntityBloomery extends TileEntityBase implements ITEStackHandler, IContainerInventoryHolder {
 	@Override
 	public void setField(int id, int value) {
 

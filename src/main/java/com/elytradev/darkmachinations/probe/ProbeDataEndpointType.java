@@ -63,7 +63,7 @@ public class ProbeDataEndpointType implements IProbeData {
 	@Nonnull
 	@Override
 	public ITextComponent getLabel() {
-		if(nodeType != null)
+		if (nodeType != null)
 			return new TextComponentString(nodeType.toString());
 		else
 			return new TextComponentString("No Endpoint Type");

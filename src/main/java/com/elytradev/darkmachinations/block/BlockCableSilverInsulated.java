@@ -28,7 +28,7 @@
 package com.elytradev.darkmachinations.block;
 
 
-import com.elytradev.darkmachinations.cable.TileEntityCableNode;
+import com.elytradev.darkmachinations.tileentity.TileEntityCableNode;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -43,7 +43,9 @@ public class BlockCableSilverInsulated extends BlockCable {
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
-		if((worldIn.getTileEntity(pos) != null) && (worldIn.getTileEntity(pos) instanceof TileEntityCableNode))
-			((TileEntityCableNode)worldIn.getTileEntity(pos)).assignCableType(BlockCableEndpoint.BlockCableType.SILVER_INSULATED);
+		if ((worldIn.getTileEntity(pos) != null) && (worldIn.getTileEntity(pos) instanceof TileEntityCableNode)) {
+			((TileEntityCableNode) worldIn.getTileEntity(pos))
+					.assignCableType(BlockCableEndpoint.BlockCableType.SILVER_INSULATED);
+		}
 	}
 }

@@ -1,0 +1,18 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "forge:fluid",
+    "transform": "forge:default-item"
+  },
+  "variants": {
+    "fuel": [{
+      "custom": {"fluid": "darkmachinations.fuel"}
+    }],
+    "heavy_crude_oil": [{
+      "custom": {"fluid": "darkmachinations.heavy_crude_oil"}
+    }],
+    "hydrogen_gas": [{
+      "custom": {"fluid": "darkmachinations.hydrogen_gas"}
+    }]
+  }
+}

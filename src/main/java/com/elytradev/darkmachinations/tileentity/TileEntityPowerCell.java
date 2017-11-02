@@ -28,7 +28,6 @@
 package com.elytradev.darkmachinations.tileentity;
 
 import com.elytradev.concrete.inventory.IContainerInventoryHolder;
-import com.elytradev.concrete.inventory.ValidatedInventoryView;
 import com.elytradev.darkmachinations.DarkMachinations;
 import com.elytradev.darkmachinations.energy.EnergyCell;
 import com.elytradev.darkmachinations.energy.EnergyCellCreative;
@@ -70,6 +69,10 @@ public class TileEntityPowerCell extends TileEntityBase implements IContainerInv
 	private boolean isActive;
 	private boolean wasActive;
 
+	public TileEntityPowerCell() {
+		this(false);
+	}
+
 	public TileEntityPowerCell(boolean creative) {
 		isCreative = creative;
 		energyStorage = creative ?  new EnergyCellCreative(ENERGY_TRANSFER_RATE) :
@@ -86,31 +89,23 @@ public class TileEntityPowerCell extends TileEntityBase implements IContainerInv
 
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		if(capability == null)
+		if (capability == null)
 			return false;
-
-		if (capability == DarkMachinations.PROBE_CAPABILITY) {
+		if (capability == DarkMachinations.PROBE_CAPABILITY)
 			return true;
-		}
-		if(capability == CapabilityEnergy.ENERGY)
-		{
+		if (capability == CapabilityEnergy.ENERGY)
 			return (world.getBlockState(pos).getValue(BlockHorizontal.FACING) != facing);
-		}
 		return super.hasCapability(capability, facing);
 	}
 
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		if(capability == null)
+		if (capability == null)
 			return null;
-
-		if(capability == CapabilityEnergy.ENERGY && (world.getBlockState(pos).getValue(BlockHorizontal.FACING) != facing))
-		{
+		if (capability == CapabilityEnergy.ENERGY && (world.getBlockState(pos).getValue(BlockHorizontal.FACING) != facing))
 			return (T) energyStorage;
-		}
-		if(capability == DarkMachinations.PROBE_CAPABILITY)
-		{
-			if(probeDataProvider == null) {
+		if (capability == DarkMachinations.PROBE_CAPABILITY) {
+			if (probeDataProvider == null) {
 				probeDataProvider = new ProbeDataProviderMachine();
 			}
 			return (T)probeDataProvider;
@@ -120,19 +115,39 @@ public class TileEntityPowerCell extends TileEntityBase implements IContainerInv
 
 	@Override
 	public void writeItemData(NBTTagCompound compound) {
-		compound.setInteger("energy_stored", this.energyStorage.getEnergyStored());
+		if (!this.isCreative) {
+			compound.setInteger("energy_stored", this.energyStorage.getEnergyStored());
+		}
 	}
 
 	@Override
 	public void readItemData(NBTTagCompound compound) {
-		if(compound.hasKey("energy_stored")) {
+		if (!this.isCreative && compound.hasKey("energy_stored")) {
 			int energyStored = compound.getInteger("energy_stored");
 
-			if(energyStored > ENERGY_CAPACITY)
+			if (energyStored > ENERGY_CAPACITY)
 				energyStored = ENERGY_CAPACITY;
 
 			this.energyStorage.setEnergyStored(energyStored);
 		}
+	}
+
+	@Override
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+		if (!this.isCreative) {
+			energyStorage.writeToNBT(compound);
+			compound.setBoolean("isActive", this.isActive);
+		}
+		return super.writeToNBT(compound);
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound compound) {
+		if (this.isCreative)
+			return;
+		super.readFromNBT(compound);
+		energyStorage.readFromNBT(compound);
+		this.isActive = compound.getBoolean("isActive");
 	}
 
 	@Override
@@ -147,7 +162,7 @@ public class TileEntityPowerCell extends TileEntityBase implements IContainerInv
 
 	@Override
 	public String getName() {
-		return this.hasCustomName() ? this.customName : "tileentity.power_cell";
+		return this.hasCustomName() ? this.customName : "darkmachinations.tileentity.power_cell";
 	}
 
 	public void setCustomName(String name)
@@ -157,7 +172,7 @@ public class TileEntityPowerCell extends TileEntityBase implements IContainerInv
 
 	@Override
 	public boolean hasCustomName() {
-		return !this.customName.isEmpty();
+		return (this.customName != null && !this.customName.isEmpty());
 	}
 
 	@Override
@@ -174,13 +189,17 @@ public class TileEntityPowerCell extends TileEntityBase implements IContainerInv
 	public void setField(int id, int value) {
 		switch(id)
 		{
-			case FIELD_ENERGY_COUNT:
+			case FIELD_ENERGY_COUNT: {
 				this.energyStorage.setEnergyStored(value);
 				break;
-			case FIELD_ENERGY_CAPACITY:
+			}
+			case FIELD_ENERGY_CAPACITY: {
 				this.energyStorage.setEnergyCapacity(value);
-			default:
 				break;
+			}
+			default: {
+				break;
+			}
 		}
 	}
 
@@ -188,12 +207,15 @@ public class TileEntityPowerCell extends TileEntityBase implements IContainerInv
 	public int getField(int id) {
 		switch(id)
 		{
-			case FIELD_ENERGY_COUNT:
+			case FIELD_ENERGY_COUNT: {
 				return this.energyStorage.getEnergyStored();
-			case FIELD_ENERGY_CAPACITY:
+			}
+			case FIELD_ENERGY_CAPACITY: {
 				return this.energyStorage.getMaxEnergyStored();
-			default:
+			}
+			default: {
 				return 0;
+			}
 		}
 	}
 
@@ -204,21 +226,19 @@ public class TileEntityPowerCell extends TileEntityBase implements IContainerInv
 
 	@Override
 	public void update() {
-		if(this.energyStorage.getEnergyStored() > 0)
-		{
+		if (this.energyStorage.getEnergyStored() > 0) {
 			ArrayList<IEnergyStorage> receivers = new ArrayList<>();
-			for(EnumFacing facing : EnumFacing.VALUES)
-			{
+			for (EnumFacing facing : EnumFacing.VALUES) {
 				IEnergyStorage storage = this.getPowerReceiver(facing);
-				if(storage != null && storage.canReceive())
+				if (storage != null && storage.canReceive())
 					receivers.add(storage);
 			}
 
-			if(receivers.size() != 0) {
+			if (receivers.size() != 0) {
 				int energyRate = Math.min(ENERGY_TRANSFER_RATE / receivers.size(), this.energyStorage.getEnergyStored());
 				int energyLeft = Math.min(ENERGY_TRANSFER_RATE, this.energyStorage.getEnergyStored());
 				for (IEnergyStorage storage : receivers) {
-					if(energyLeft <= 0)
+					if (energyLeft <= 0)
 						break;
 					energyLeft -= energyStorage.extractEnergy(storage.receiveEnergy(energyRate, false), false);
 				}
@@ -231,10 +251,9 @@ public class TileEntityPowerCell extends TileEntityBase implements IContainerInv
 		}
 	}
 
-	private int checkPowerSide(int energyTransferRate, EnumFacing face)
-	{
+	private int checkPowerSide(int energyTransferRate, EnumFacing face) {
 		IEnergyStorage energy = getPowerReceiver(face);
-		if(energy.getEnergyStored() < energy.getMaxEnergyStored()) {
+		if (energy.getEnergyStored() < energy.getMaxEnergyStored()) {
 			int maximumTransfer = Math.min(energyTransferRate, energy.getMaxEnergyStored()-energy.getEnergyStored());
 			return energy.receiveEnergy(this.energyStorage.extractEnergy(maximumTransfer, false), false);
 		}
@@ -263,12 +282,13 @@ public class TileEntityPowerCell extends TileEntityBase implements IContainerInv
 
 	@Override
 	public IInventory getContainerInventory() {
-		FakeInventoryView result = new FakeInventoryView();
+		FakeInventoryView result = new FakeInventoryView(this.getName());
 
-		if(!this.world.isRemote)
+		if (!this.world.isRemote) {
 			return result
-					.withField(FIELD_ENERGY_COUNT, ()->this.energyStorage.getEnergyStored())
-					.withField(FIELD_ENERGY_CAPACITY, ()->this.energyStorage.getMaxEnergyStored());
+					.withField(FIELD_ENERGY_COUNT, () -> this.energyStorage.getEnergyStored())
+					.withField(FIELD_ENERGY_CAPACITY, () -> this.energyStorage.getMaxEnergyStored());
+		}
 
 		return result;
 	}

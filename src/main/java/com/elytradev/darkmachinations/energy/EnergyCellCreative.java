@@ -55,7 +55,7 @@ public class EnergyCellCreative extends EnergyCell {
 	@Override
 	public int extractEnergy(int maxExtract, boolean simulate) {
 		int actualTransfer = Math.min(maxExtract, this.maxExtract);
-		if(actualTransfer != 0 && !simulate) this.markDirty();
+		if (actualTransfer != 0 && !simulate) this.markDirty();
 		return actualTransfer;
 	}
 }

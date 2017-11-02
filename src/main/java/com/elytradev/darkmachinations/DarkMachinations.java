@@ -29,7 +29,7 @@ package com.elytradev.darkmachinations;
 
 import com.elytradev.darkmachinations.gui.creative.DarkMachinationsCreativeTab;
 import com.elytradev.darkmachinations.proxy.CommonProxy;
-import com.elytradev.darkmachinations.registry.*;
+import com.elytradev.darkmachinations.init.*;
 import com.elytradev.darkmachinations.world.WorldGen;
 import com.elytradev.probe.api.IProbeDataProvider;
 import net.minecraft.block.Block;
@@ -50,19 +50,19 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 @Mod(
-		modid = DarkMachinations.DARKMACHINATIONS_MOD_ID,
-		name = DarkMachinations.DARKMACHINATIONS_NAME,
-		version = DarkMachinations.DARKMACHINATIONS_VERSION)
+		modid = DarkMachinations.MOD_ID,
+		name = DarkMachinations.MOD_NAME,
+		version = DarkMachinations.MOD_VERSION)
 @Mod.EventBusSubscriber
 public class DarkMachinations {
 
-	public static final String DARKMACHINATIONS_MOD_ID = "darkmachinations";
-		public static final String DARKMACHINATIONS_NAME = "Dark Machinations";
-	public static final String DARKMACHINATIONS_VERSION = "1.12.1-0.1.0";
+	public static final String MOD_ID = "darkmachinations";
+	public static final String MOD_NAME = "Dark Machinations";
+	public static final String MOD_VERSION = "1.12.1-0.1.0";
 
-	public static final DarkMachinationsCreativeTab divitaeTab = new DarkMachinationsCreativeTab(DARKMACHINATIONS_MOD_ID);
+	public static final DarkMachinationsCreativeTab divitaeTab = new DarkMachinationsCreativeTab(MOD_ID);
 
-	@Mod.Instance(DARKMACHINATIONS_MOD_ID)
+	@Mod.Instance(MOD_ID)
 	public static DarkMachinations instance;
 
 	@SidedProxy(
@@ -70,7 +70,7 @@ public class DarkMachinations {
 			serverSide = "com.elytradev.darkmachinations.proxy.CommonProxy")
 	public static CommonProxy proxy;
 
-	public static final Logger LOG = LogManager.getLogger(DARKMACHINATIONS_NAME);
+	public static final Logger LOG = LogManager.getLogger(MOD_NAME);
 
 	@CapabilityInject(IProbeDataProvider.class)
 	public static Capability<IProbeDataProvider> PROBE_CAPABILITY = null;
@@ -82,46 +82,42 @@ public class DarkMachinations {
 	}
 
 	@Mod.EventHandler
-	public void preInit(FMLPreInitializationEvent event)
-	{
-		System.out.println(DARKMACHINATIONS_NAME + " is starting up!");
-		FluidRegistry.init();
+	public void preInit(FMLPreInitializationEvent event) {
+		System.out.println(MOD_NAME + " is starting up!");
+		DMFluids.init();
 		proxy.init();
-		RecipeRegistry.init();
 		GameRegistry.registerWorldGenerator(new WorldGen(), 3);
 	}
 
 	@Mod.EventHandler
-	public void init(FMLInitializationEvent event)
-	{
+	public void init(FMLInitializationEvent event) {
 
 	}
 
 	@Mod.EventHandler
-	public void postInit(FMLPostInitializationEvent event)
-	{
+	public void postInit(FMLPostInitializationEvent event) {
 
 	}
 
 	@SubscribeEvent
 	public static void registerBlocks(RegistryEvent.Register<Block> event) {
-		BlockRegistry.registerBlocks(event.getRegistry());
+		DMBlocks.registerBlocks(event.getRegistry());
 	}
 
 	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> event) {
-		ItemRegistry.registerItems(event.getRegistry());
-		BlockRegistry.registerItemBlocks(event.getRegistry());
+		DMItems.registerItems(event.getRegistry());
+		DMBlocks.registerItemBlocks(event.getRegistry());
 	}
 
 	@SubscribeEvent
 	public static void registerModels(ModelRegistryEvent event) {
-		BlockRegistry.registerBlockModels();
-		ItemRegistry.registerItemModels();
+		DMBlocks.registerBlockModels();
+		DMItems.registerItemModels();
 	}
 
 	@SubscribeEvent
 	public static void registerSounds(RegistryEvent.Register<SoundEvent> event) {
-		SoundRegistry.registerSounds(event.getRegistry());
+		DMSounds.registerSounds(event.getRegistry());
 	}
 }

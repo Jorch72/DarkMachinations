@@ -28,26 +28,38 @@
 package com.elytradev.darkmachinations.block;
 
 import com.elytradev.darkmachinations.DarkMachinations;
-import com.elytradev.darkmachinations.generic.IDarmaBlock;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.block.model.ModelBakery;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.item.ItemBlock;
-import net.minecraftforge.fluids.BlockFluidClassic;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.BlockFluidFinite;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class BlockFluidBaseFinite extends BlockFluidFinite implements IDarmaBlock {
+	private String name;
+
 	public BlockFluidBaseFinite(Fluid fluid, Material material, String name) {
 		super(fluid, material);
-		setUnlocalizedName(DarkMachinations.DARKMACHINATIONS_MOD_ID+"."+name);
+		this.name = name;
+		setUnlocalizedName(DarkMachinations.MOD_ID +"."+name);
 		setRegistryName(name);
 	}
 
 	@SideOnly(Side.CLIENT)
 	public void registerItemModel(ItemBlock itemBlock) {
-		ModelBakery.registerItemVariants(itemBlock);
+		ModelResourceLocation fluidLocation = new ModelResourceLocation(DarkMachinations.MOD_ID + ":fluid", name);
+		ModelLoader.registerItemVariants(itemBlock);
+		ModelLoader.setCustomMeshDefinition(itemBlock, stack -> fluidLocation);
+		ModelLoader.setCustomStateMapper(itemBlock.getBlock(), new StateMapperBase() {
+			@Override
+			protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
+				return fluidLocation;
+			}
+		});
 	}
 
 	public ItemBlock getItemBlock() {

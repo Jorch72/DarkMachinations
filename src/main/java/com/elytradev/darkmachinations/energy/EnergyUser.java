@@ -42,7 +42,7 @@ public class EnergyUser extends EnergyStorage {
 
 	public void setEnergyStored(int newStorage)
 	{
-		if(newStorage > this.capacity || newStorage < 0)
+		if (newStorage > this.capacity || newStorage < 0)
 			return;
 
 		else this.energy = newStorage;
@@ -53,7 +53,7 @@ public class EnergyUser extends EnergyStorage {
 	/* Borrowed with great thanks and love to Falkreon and Thermionics */
 
 	void markDirty() {
-		for(Runnable r : listeners) {
+		for (Runnable r : listeners) {
 			r.run();
 		}
 	}
@@ -72,24 +72,24 @@ public class EnergyUser extends EnergyStorage {
 
 	@Override
 	public int receiveEnergy(int maxReceive, boolean simulate) {
-		if(!simulate && this.canReceive()) markDirty();
+		if (!simulate && this.canReceive()) {
+			markDirty();
+		}
 		return super.receiveEnergy(maxReceive, simulate);
 	}
 
 	@Override
 	public int extractEnergy(int maxExtract, boolean simulate) {
-		if(!simulate && this.canExtract()) markDirty();
+		if (!simulate && this.canExtract()) markDirty();
 		return super.extractEnergy(maxExtract, simulate);
 	}
 
 
-	public void readFromNBT(NBTTagCompound compound)
-	{
+	public void readFromNBT(NBTTagCompound compound) {
 		this.energy = compound.getInteger("power_level");
 	}
 
-	public void writeToNBT(NBTTagCompound compound)
-	{
+	public void writeToNBT(NBTTagCompound compound) {
 		compound.setInteger("power_level", this.energy);
 	}
 }

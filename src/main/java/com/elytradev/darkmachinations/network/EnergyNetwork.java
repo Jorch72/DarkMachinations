@@ -28,7 +28,7 @@
 package com.elytradev.darkmachinations.network;
 
 
-import com.elytradev.darkmachinations.registry.NetworkRegistry;
+import com.elytradev.darkmachinations.init.NetworkHandler;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -46,14 +46,15 @@ public class EnergyNetwork {
 		this.nodes = new ArrayList<>();
 		this.edges = new ArrayList<>();
 		this.identifier = UUID.randomUUID();
-		NetworkRegistry.registerNetwork(worldIn, this);
+		NetworkHandler.registerNetwork(worldIn, this);
 	}
 
 	public void addNode(World worldIn, BlockPos node, EnergyNetworkNode.NodeType nodeType) {
-		if(!worldIn.isRemote) {
+		if (!worldIn.isRemote) {
 			EnergyNetworkNode createdNode = new EnergyNetworkNode(this, node, nodeType);
-			if (!nodes.contains(createdNode))
+			if (!nodes.contains(createdNode)) {
 				this.nodes.add(createdNode);
+			}
 			for (EnergyNetworkNode searchedNode : nodes) {
 				if (searchedNode.equals(createdNode))
 					continue;
@@ -62,24 +63,30 @@ public class EnergyNetwork {
 		}
 	}
 
-	public ArrayList<BlockPos> getMembersList() { return members;}
+	public ArrayList<BlockPos> getMembersList() {
+		return members;
+	}
 
-	public ArrayList<EnergyNetworkNode> getNodesList() { return nodes; }
+	public ArrayList<EnergyNetworkNode> getNodesList() {
+		return nodes;
+	}
 
 	public void addMember(BlockPos member) {
-		if(!this.members.contains(member))
+		if (!this.members.contains(member)) {
 			this.members.add(member);
+		}
 	}
 
 	public void removeMember(BlockPos member) {
-		if(this.members.contains(member))
+		if (this.members.contains(member)) {
 			this.members.remove(member);
+		}
 	}
 
 	public void removeNode(EnergyNetworkNode node) {
-		if(this.nodes.contains(node))
+		if (this.nodes.contains(node)) {
 			this.nodes.remove(node);
-
+		}
 		// TODO: Edges would be de-initialized here, too.
 	}
 

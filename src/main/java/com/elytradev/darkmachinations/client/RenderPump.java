@@ -47,10 +47,10 @@ public class RenderPump extends TileEntitySpecialRenderer<TileEntityPump> {
 		BufferBuilder bufferBuilder = tessellator.getBuffer();
 
 
-		if(delta == 0.0f)
+		if (delta == 0.0f)
 			delta = 1.0f/te.pumpTimerMaximum;
 
-		if(te.renderToobHeightCurr < te.renderToobHeightMax)
+		if (te.renderToobHeightCurr < te.renderToobHeightMax)
 			te.renderToobHeightCurr += delta;
 		else
 			te.renderToobHeightMax = te.toobHeight;
@@ -62,7 +62,7 @@ public class RenderPump extends TileEntitySpecialRenderer<TileEntityPump> {
 		GlStateManager.disableBlend();
 		GlStateManager.color(te.tR,te.tG,te.tB,1.0f);
 
-		bindTexture(new ResourceLocation("minecraft", "textures/blocks/iron_block.png"));
+		bindTexture(new ResourceLocation("darkmachinations", "textures/blocks/fluid_pipe.png"));
 		bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_NORMAL);
 
 		bufferBuilder.pos(0.25, 0.0, 0.25).tex(0, 0).normal(-1.0f, 0.0f, 0.0f).endVertex();

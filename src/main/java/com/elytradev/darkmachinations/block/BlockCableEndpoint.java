@@ -28,9 +28,9 @@
 package com.elytradev.darkmachinations.block;
 
 
-import com.elytradev.darkmachinations.registry.BlockRegistry;
-import com.elytradev.darkmachinations.registry.NetworkRegistry;
-import com.elytradev.darkmachinations.cable.TileEntityCableNode;
+import com.elytradev.darkmachinations.init.DMBlocks;
+import com.elytradev.darkmachinations.init.NetworkHandler;
+import com.elytradev.darkmachinations.tileentity.TileEntityCableNode;
 import com.elytradev.darkmachinations.network.EnergyNetworkNode;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -86,19 +86,21 @@ public class BlockCableEndpoint extends BlockCable {
 	@Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
 		TileEntityCableNode node = (TileEntityCableNode)world.getTileEntity(pos);
-		if(node != null)
+		if (node != null)
 			return super.getActualState(state, world, pos).withProperty(CABLE_TYPE, node.getCableType());
 		return super.getActualState(state, world, pos);
 	}
 
 	@Override
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-		if(!worldIn.isRemote)
+		if (!worldIn.isRemote)
 		{
 			TileEntityCableNode node = (TileEntityCableNode) worldIn.getTileEntity(pos);
-			UUID network = NetworkRegistry.getNetworkIdentityForBlock(pos);
-			if(network != null && node != null)
-				NetworkRegistry.getNetwork(network).removeNode(new EnergyNetworkNode(NetworkRegistry.getNetwork(network), pos, node.getNodeType()));
+			UUID network = NetworkHandler.getNetworkIdentityForBlock(pos);
+			if (network != null && node != null) {
+				NetworkHandler.getNetwork(network)
+						.removeNode(new EnergyNetworkNode(NetworkHandler.getNetwork(network), pos, node.getNodeType()));
+			}
 		}
 		super.breakBlock(worldIn, pos, state);
 	}
@@ -106,20 +108,27 @@ public class BlockCableEndpoint extends BlockCable {
 	@Override
 	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
 		switch(state.getValue(CABLE_TYPE)) {
-			case TIN_INSULATED:
-				return Item.getItemFromBlock(BlockRegistry.cable_tin_insulated);
-			case COPPER_INSULATED:
-				return Item.getItemFromBlock(BlockRegistry.cable_copper_insulated);
-			case GOLD_INSULATED:
-				return Item.getItemFromBlock(BlockRegistry.cable_gold_insulated);
-			case TIN_UNINSULATED:
-				return Item.getItemFromBlock(BlockRegistry.cable_tin_uninsulated);
-			case COPPER_UNINSULATED:
-				return Item.getItemFromBlock(BlockRegistry.cable_copper_uninsulated);
-			case GOLD_UNINSULATED:
-				return Item.getItemFromBlock(BlockRegistry.cable_gold_uninsulated);
-			default:
-				return Item.getItemFromBlock(BlockRegistry.cable_copper_uninsulated);
+			case TIN_INSULATED: {
+				return Item.getItemFromBlock(DMBlocks.cable_tin_insulated);
+			}
+			case COPPER_INSULATED: {
+				return Item.getItemFromBlock(DMBlocks.cable_copper_insulated);
+			}
+			case GOLD_INSULATED: {
+				return Item.getItemFromBlock(DMBlocks.cable_gold_insulated);
+			}
+			case TIN_UNINSULATED: {
+				return Item.getItemFromBlock(DMBlocks.cable_tin_uninsulated);
+			}
+			case COPPER_UNINSULATED: {
+				return Item.getItemFromBlock(DMBlocks.cable_copper_uninsulated);
+			}
+			case GOLD_UNINSULATED: {
+				return Item.getItemFromBlock(DMBlocks.cable_gold_uninsulated);
+			}
+			default: {
+				return Item.getItemFromBlock(DMBlocks.cable_copper_uninsulated);
+			}
 		}
 	}
 

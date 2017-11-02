@@ -27,17 +27,11 @@
 
 package com.elytradev.darkmachinations.tileentity;
 
-import com.elytradev.concrete.inventory.IContainerInventoryHolder;
+import com.elytradev.concrete.inventory.*;
 import com.elytradev.darkmachinations.DarkMachinations;
-import com.elytradev.darkmachinations.generic.ITEStackHandler;
+import com.elytradev.darkmachinations.energy.EnergyUser;
 import com.elytradev.darkmachinations.gui.container.ContainerPump;
 import com.elytradev.darkmachinations.probe.ProbeDataProviderPump;
-import com.elytradev.darkmachinations.energy.EnergyUser;
-import com.elytradev.darkmachinations.fluid.FluidBuffer;
-import com.elytradev.concrete.inventory.ConcreteItemStorage;
-import com.elytradev.concrete.inventory.StandardMachineSlots;
-import com.elytradev.concrete.inventory.ValidatedInventoryView;
-import com.elytradev.darkmachinations.registry.FluidRegistry;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -57,7 +51,6 @@ import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fluids.BlockFluidBase;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -72,10 +65,10 @@ public class TileEntityPump extends TileEntityBase implements ITEStackHandler, I
 		LOWERING_PUMP,
 		FLUID_SEARCHING,
 		DEADLOCKED
-	};
+	}
 
 	public ConcreteItemStorage itemStackHandler;
-	public FluidBuffer fluidTank;
+	public ConcreteFluidTank fluidTank;
 	public EnergyUser energyStorage;
 	public Object probeDataProvider;
 	public String customName;
@@ -112,9 +105,8 @@ public class TileEntityPump extends TileEntityBase implements ITEStackHandler, I
 	public TileEntityPump() {
 		itemStackHandler = new ConcreteItemStorage(SLOT_COUNT)
 				.withValidators((stack) -> stack.getItem() instanceof ItemBlock)
-				.withName("tile.darkmachinations.machine_pump.name");
-		fluidTank = new FluidBuffer(FLUID_CAPACITY);
-		fluidTank.setFluid(new FluidStack(FluidRegistry.fluid_heavy_crude_oil, 2000));
+				.withName(this.getName());
+		fluidTank = new ConcreteFluidTank(FLUID_CAPACITY).withFillValidator((stack)-> !stack.getFluid().isGaseous());
 		fluidTank.listen(this::markDirty);
 		energyStorage = new EnergyUser(ENERGY_CAPACITY, ENERGY_TRANSFER_RATE);
 		energyStorage.listen(this::markDirty);
@@ -131,37 +123,30 @@ public class TileEntityPump extends TileEntityBase implements ITEStackHandler, I
 
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || capability == DarkMachinations.PROBE_CAPABILITY
-				|| capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY
+				|| capability == DarkMachinations.PROBE_CAPABILITY
+				|| capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
 			return true;
-		}
-		if(capability == CapabilityEnergy.ENERGY) {
+		if (capability == CapabilityEnergy.ENERGY)
 			return world.getBlockState(pos).getValue(BlockHorizontal.FACING) != facing;
-		}
 		return super.hasCapability(capability, facing);
 	}
 
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
-		{
 			return (T) itemStackHandler;
-		}
-		if(capability == CapabilityEnergy.ENERGY && world.getBlockState(pos).getValue(BlockHorizontal.FACING) != facing)
-		{
+		if (capability == CapabilityEnergy.ENERGY && world.getBlockState(pos).getValue(BlockHorizontal.FACING) != facing)
 			return (T) energyStorage;
-		}
-		if(capability == DarkMachinations.PROBE_CAPABILITY)
-		{
-			if(probeDataProvider == null) {
+		if (capability == DarkMachinations.PROBE_CAPABILITY) {
+			if (probeDataProvider == null) {
 				probeDataProvider = new ProbeDataProviderPump();
 				((ProbeDataProviderPump)probeDataProvider).setItemStackHandler(itemStackHandler);
 			}
 			return (T)probeDataProvider;
 		}
-		if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
 			return (T)fluidTank;
-		}
 		return super.getCapability(capability, facing);
 	}
 
@@ -199,22 +184,30 @@ public class TileEntityPump extends TileEntityBase implements ITEStackHandler, I
 	{
 		switch(id)
 		{
-			case FIELD_ENERGY_COUNT:
+			case FIELD_ENERGY_COUNT: {
 				return this.energyStorage.getEnergyStored();
-			case FIELD_ENERGY_CAPACITY:
+			}
+			case FIELD_ENERGY_CAPACITY: {
 				return this.energyStorage.getMaxEnergyStored();
-			case FIELD_PUMP_TIMER:
+			}
+			case FIELD_PUMP_TIMER: {
 				return this.pumpTimer;
-			case FIELD_PUMP_TIMER_MAX:
+			}
+			case FIELD_PUMP_TIMER_MAX: {
 				return this.pumpTimerMaximum;
-			case FIELD_FLUID_LEVEL:
+			}
+			case FIELD_FLUID_LEVEL: {
 				return this.fluidTank.getFluidAmount();
-			case FIELD_FLUID_CAPACITY:
+			}
+			case FIELD_FLUID_CAPACITY: {
 				return this.fluidTank.getCapacity();
-			case FIELD_TOOB_HEIGHT:
+			}
+			case FIELD_TOOB_HEIGHT: {
 				return this.toobHeight;
-			default:
+			}
+			default: {
 				return 0;
+			}
 		}
 	}
 
@@ -227,34 +220,46 @@ public class TileEntityPump extends TileEntityBase implements ITEStackHandler, I
 	{
 		switch(id)
 		{
-			case FIELD_ENERGY_COUNT:
+			case FIELD_ENERGY_COUNT: {
 				this.energyStorage.setEnergyStored(value);
 				break;
-			case FIELD_ENERGY_CAPACITY:
+			}
+			case FIELD_ENERGY_CAPACITY: {
 				this.energyStorage.setEnergyCapacity(value);
-			case FIELD_PUMP_TIMER:
+				break;
+			}
+			case FIELD_PUMP_TIMER: {
 				this.pumpTimer = value;
 				break;
-			case FIELD_PUMP_TIMER_MAX:
+			}
+			case FIELD_PUMP_TIMER_MAX: {
 				this.pumpTimerMaximum = value;
 				break;
-			case FIELD_FLUID_LEVEL:
-				if(this.fluidTank.getFluid() != null)
+			}
+			case FIELD_FLUID_LEVEL: {
+				if (this.fluidTank.getFluid() != null) {
 					this.fluidTank.getFluid().amount = value;
+				}
 				break;
-			case FIELD_FLUID_CAPACITY:
+			}
+			case FIELD_FLUID_CAPACITY: {
 				this.fluidTank.setCapacity(value);
-			case FIELD_TOOB_HEIGHT:
-				this.toobHeight = value;
-			default:
 				break;
+			}
+			case FIELD_TOOB_HEIGHT: {
+				this.toobHeight = value;
+				break;
+			}
+			default: {
+				break;
+			}
 		}
 	}
 	@Override
 	public void update() {
 		ItemStack supplySlot = itemStackHandler.getStackInSlot(StandardMachineSlots.INPUT);
 
-		if(this.probeDataProvider != null) {
+		if (this.probeDataProvider != null) {
 			ProbeDataProviderPump probeData = (ProbeDataProviderPump) probeDataProvider;
 			probeData.updateProbeEnergyData(this.energyStorage.getEnergyStored(), this.energyStorage.getMaxEnergyStored());
 			probeData.updateProbeFuelData(this.pumpTimer, this.pumpTimerMaximum, this.getActive());
@@ -263,7 +268,7 @@ public class TileEntityPump extends TileEntityBase implements ITEStackHandler, I
 
 		boolean markDirty = false;
 
-		if(!world.isRemote) {
+		if (!world.isRemote) {
 			pumpTimer--;
 			switch(pumpState) {
 				case LOWERING_PUMP: {
@@ -305,7 +310,7 @@ public class TileEntityPump extends TileEntityBase implements ITEStackHandler, I
 					break;
 				}
 				case FLUID_SEARCHING: {
-					if(pumpTimer <= 0) {
+					if (pumpTimer <= 0) {
 						tR = 0.0f;
 						tG = 1.0f;
 						tB = 0.0f;
@@ -317,7 +322,7 @@ public class TileEntityPump extends TileEntityBase implements ITEStackHandler, I
 			}
 		}
 
-		if(wasActive != isActive || markDirty) {
+		if (wasActive != isActive || markDirty) {
 			wasActive = isActive;
 			this.world.notifyBlockUpdate(this.pos, this.world.getBlockState(this.pos), this.world.getBlockState(this.pos), 3);
 			this.world.markBlockRangeForRenderUpdate(this.pos, this.pos);
@@ -355,17 +360,16 @@ public class TileEntityPump extends TileEntityBase implements ITEStackHandler, I
 
 	@Override
 	public String getName() {
-		return this.hasCustomName() ? this.customName : "tileentity.pump";
+		return this.hasCustomName() ? this.customName : "darkmachinations.tileentity.pump";
 	}
 
-	public void setCustomName(String name)
-	{
+	public void setCustomName(String name) {
 		this.customName = name;
 	}
 
 	@Override
 	public boolean hasCustomName() {
-		return !this.customName.isEmpty();
+		return (this.customName != null && !this.customName.isEmpty());
 	}
 
 	@Override
@@ -393,16 +397,17 @@ public class TileEntityPump extends TileEntityBase implements ITEStackHandler, I
 
 	@Override
 	public void readItemData(NBTTagCompound compound) {
-		if(compound.hasKey("energy_stored")) {
+		if (compound.hasKey("energy_stored")) {
 			int energyStored = compound.getInteger("energy_stored");
 
-			if(energyStored > ENERGY_CAPACITY)
+			if (energyStored > ENERGY_CAPACITY) {
 				energyStored = ENERGY_CAPACITY;
+			}
 
 			this.energyStorage.setEnergyStored(energyStored);
 		}
 
-		if(compound.hasKey("fluid_stored")) {
+		if (compound.hasKey("fluid_stored")) {
 			this.fluidTank.readFromNBT(compound.getCompoundTag("fluid_stored"));
 		}
 	}
@@ -411,12 +416,13 @@ public class TileEntityPump extends TileEntityBase implements ITEStackHandler, I
 	public IInventory getContainerInventory() {
 		ValidatedInventoryView result = new ValidatedInventoryView(itemStackHandler);
 
-		if(!this.world.isRemote)
+		if (!this.world.isRemote) {
 			return result
-					.withField(FIELD_ENERGY_COUNT, ()->this.energyStorage.getEnergyStored())
-					.withField(FIELD_ENERGY_CAPACITY, ()->this.energyStorage.getMaxEnergyStored())
-					.withField(FIELD_PUMP_TIMER, ()->this.FIELD_PUMP_TIMER)
-					.withField(FIELD_PUMP_TIMER_MAX, ()->this.FIELD_PUMP_TIMER_MAX);
+					.withField(FIELD_ENERGY_COUNT, () -> this.energyStorage.getEnergyStored())
+					.withField(FIELD_ENERGY_CAPACITY, () -> this.energyStorage.getMaxEnergyStored())
+					.withField(FIELD_PUMP_TIMER, () -> this.FIELD_PUMP_TIMER)
+					.withField(FIELD_PUMP_TIMER_MAX, () -> this.FIELD_PUMP_TIMER_MAX);
+		}
 
 		return result;
 	}

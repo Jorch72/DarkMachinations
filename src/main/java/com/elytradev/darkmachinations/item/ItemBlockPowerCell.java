@@ -42,7 +42,7 @@ public class ItemBlockPowerCell extends ItemBlock {
 
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
-		return stack.getMetadata() >= 8 ? "tile.darkmachinations.creative_power_cell" : "tile.darkmachinations.power_dcll";
+		return stack.getMetadata() >= 8 ? "tile.darkmachinations.power_cell_creative" : "tile.darkmachinations.power_cell";
 	}
 
 	@Override

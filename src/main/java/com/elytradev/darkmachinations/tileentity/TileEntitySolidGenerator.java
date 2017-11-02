@@ -31,7 +31,6 @@ import com.elytradev.concrete.inventory.*;
 import com.elytradev.darkmachinations.DarkMachinations;
 import com.elytradev.darkmachinations.energy.EnergyProvider;
 import com.elytradev.darkmachinations.energy.EnergyUser;
-import com.elytradev.darkmachinations.generic.ITEStackHandler;
 import com.elytradev.darkmachinations.gui.container.ContainerSolidGenerator;
 import com.elytradev.darkmachinations.probe.ProbeDataProviderGenerator;
 import net.minecraft.block.BlockHorizontal;
@@ -84,7 +83,7 @@ public class TileEntitySolidGenerator extends TileEntityBase implements ITEStack
 	public TileEntitySolidGenerator() {
 		itemStackHandler = new ConcreteItemStorage(SLOT_COUNT)
 				.withValidators(Validators.FURNACE_FUELS)
-				.withName("tile.darkmachinations.machine_solid_generator.name");
+				.withName(this.getName());
 		itemStackHandler.listen(this::markDirty);
 		energyStorage = new EnergyProvider(ENERGY_CAPACITY, ENERGY_TRANSFER_RATE);
 		energyStorage.listen(this::markDirty);
@@ -101,31 +100,23 @@ public class TileEntitySolidGenerator extends TileEntityBase implements ITEStack
 
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
 			return true;
-		}
-		if(capability == DarkMachinations.PROBE_CAPABILITY) {
+		if (capability == DarkMachinations.PROBE_CAPABILITY)
 			return true;
-		}
-		if(capability == CapabilityEnergy.ENERGY) {
+		if (capability == CapabilityEnergy.ENERGY)
 			return world.getBlockState(pos).getValue(BlockHorizontal.FACING) != facing;
-		}
 		return super.hasCapability(capability, facing);
 	}
 
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
-		{
 			return (T) itemStackHandler;
-		}
-		if(capability == CapabilityEnergy.ENERGY && world.getBlockState(pos).getValue(BlockHorizontal.FACING) != facing)
-		{
+		if (capability == CapabilityEnergy.ENERGY && world.getBlockState(pos).getValue(BlockHorizontal.FACING) != facing)
 			return (T) energyStorage;
-		}
-		if(capability == DarkMachinations.PROBE_CAPABILITY)
-		{
-			if(probeDataProvider == null) {
+		if (capability == DarkMachinations.PROBE_CAPABILITY) {
+			if (probeDataProvider == null) {
 				probeDataProvider = new ProbeDataProviderGenerator();
 				((ProbeDataProviderGenerator)probeDataProvider).setItemStackHandler(itemStackHandler);
 			}
@@ -154,20 +145,23 @@ public class TileEntitySolidGenerator extends TileEntityBase implements ITEStack
 		this.itemProcessingMaximum = compound.getInteger("itemProcessingMaximum");
 	}
 
-	public int getField(int id)
-	{
-		switch(id)
-		{
-			case FIELD_ENERGY_COUNT:
+	public int getField(int id) {
+		switch(id) {
+			case FIELD_ENERGY_COUNT: {
 				return this.energyStorage.getEnergyStored();
-			case FIELD_ENERGY_CAPACITY:
+			}
+			case FIELD_ENERGY_CAPACITY: {
 				return this.energyStorage.getMaxEnergyStored();
-			case FIELD_ITEM_PROCESSING_TIME:
+			}
+			case FIELD_ITEM_PROCESSING_TIME: {
 				return this.itemProcessingTimer;
-			case FIELD_ITEM_PROCESSING_MAX:
+			}
+			case FIELD_ITEM_PROCESSING_MAX: {
 				return this.itemProcessingMaximum;
-			default:
+			}
+			default: {
 				return 0;
+			}
 		}
 	}
 
@@ -178,21 +172,26 @@ public class TileEntitySolidGenerator extends TileEntityBase implements ITEStack
 
 	public void setField(int id, int value)
 	{
-		switch(id)
-		{
-			case FIELD_ENERGY_COUNT:
+		switch(id) {
+			case FIELD_ENERGY_COUNT: {
 				this.energyStorage.setEnergyStored(value);
 				break;
-			case FIELD_ENERGY_CAPACITY:
+			}
+			case FIELD_ENERGY_CAPACITY: {
 				this.energyStorage.setEnergyCapacity(value);
-			case FIELD_ITEM_PROCESSING_TIME:
+				break;
+			}
+			case FIELD_ITEM_PROCESSING_TIME: {
 				this.itemProcessingTimer = value;
 				break;
-			case FIELD_ITEM_PROCESSING_MAX:
+			}
+			case FIELD_ITEM_PROCESSING_MAX: {
 				this.itemProcessingMaximum = value;
 				break;
-			default:
+			}
+			default: {
 				break;
+			}
 		}
 	}
 	@Override
@@ -206,27 +205,25 @@ public class TileEntitySolidGenerator extends TileEntityBase implements ITEStack
 			} else {
 				if (supplySlot.isEmpty()) {
 					this.isActive = false;
-				} else if(this.energyStorage.getEnergyStored() < this.energyStorage.getMaxEnergyStored())  {
+				} else if (this.energyStorage.getEnergyStored() < this.energyStorage.getMaxEnergyStored())  {
 					this.itemProcessingTimer = this.itemProcessingMaximum = consumeFuel();
 					this.isActive  = true;
 				}
 			}
 
-			if(this.energyStorage.getEnergyStored() > 0)
-			{
+			if (this.energyStorage.getEnergyStored() > 0) {
 				ArrayList<IEnergyStorage> receivers = new ArrayList<>();
-				for(EnumFacing facing : EnumFacing.VALUES)
-				{
+				for (EnumFacing facing : EnumFacing.VALUES) {
 					IEnergyStorage storage = this.getPowerReceiver(facing);
-					if(storage != null && storage.canReceive())
+					if (storage != null && storage.canReceive())
 						receivers.add(storage);
 				}
 
-				if(receivers.size() != 0) {
+				if (receivers.size() != 0) {
 					int energyRate = Math.min(ENERGY_TRANSFER_RATE / receivers.size(), this.energyStorage.getEnergyStored());
 					int energyLeft = Math.min(ENERGY_TRANSFER_RATE, this.energyStorage.getEnergyStored());
 					for (IEnergyStorage storage : receivers) {
-						if(energyLeft <= 0)
+						if (energyLeft <= 0)
 							break;
 						energyLeft -= energyStorage.extractEnergy(storage.receiveEnergy(energyRate, false), false);
 					}
@@ -234,13 +231,13 @@ public class TileEntitySolidGenerator extends TileEntityBase implements ITEStack
 			}
 		}
 
-		if(this.probeDataProvider != null) {
+		if (this.probeDataProvider != null) {
 			ProbeDataProviderGenerator probeData = (ProbeDataProviderGenerator)probeDataProvider;
 			probeData.updateProbeEnergyData(this.energyStorage.getEnergyStored(), this.energyStorage.getMaxEnergyStored());
 			probeData.updateProbeFuelData(this.itemProcessingTimer, this.itemProcessingMaximum, this.isActive);
 		}
 
-		if(wasActive != isActive) {
+		if (wasActive != isActive) {
 			wasActive = isActive;
 			this.world.notifyBlockUpdate(this.pos, this.world.getBlockState(this.pos), this.world.getBlockState(this.pos), 3);
 			this.world.markBlockRangeForRenderUpdate(this.pos, this.pos);
@@ -250,10 +247,9 @@ public class TileEntitySolidGenerator extends TileEntityBase implements ITEStack
 		}
 	}
 
-	private int checkPowerSide(int energyTransferRate, EnumFacing face)
-	{
+	private int checkPowerSide(int energyTransferRate, EnumFacing face) {
 		IEnergyStorage energy = getPowerReceiver(face);
-		if(energy.getEnergyStored() < energy.getMaxEnergyStored()) {
+		if (energy.getEnergyStored() < energy.getMaxEnergyStored()) {
 			int maximumTransfer = Math.min(energyTransferRate, energy.getMaxEnergyStored()-energy.getEnergyStored());
 			return energy.receiveEnergy(this.energyStorage.extractEnergy(maximumTransfer, false), false);
 		}
@@ -303,14 +299,13 @@ public class TileEntitySolidGenerator extends TileEntityBase implements ITEStack
 		return this.hasCustomName() ? this.customName : "darkmachinations.tileentity.solid_generator";
 	}
 
-	public void setCustomName(String name)
-	{
+	public void setCustomName(String name) {
 		this.customName = name;
 	}
 
 	@Override
 	public boolean hasCustomName() {
-		return !this.customName.isEmpty();
+		return (this.customName != null && !this.customName.isEmpty());
 	}
 
 	@Override
@@ -335,11 +330,12 @@ public class TileEntitySolidGenerator extends TileEntityBase implements ITEStack
 
 	@Override
 	public void readItemData(NBTTagCompound compound) {
-		if(compound.hasKey("energy_stored")) {
+		if (compound.hasKey("energy_stored")) {
 			int energyStored = compound.getInteger("energy_stored");
 
-			if(energyStored > ENERGY_CAPACITY)
+			if (energyStored > ENERGY_CAPACITY) {
 				energyStored = ENERGY_CAPACITY;
+			}
 
 			this.energyStorage.setEnergyStored(energyStored);
 		}
@@ -350,12 +346,13 @@ public class TileEntitySolidGenerator extends TileEntityBase implements ITEStack
 	public IInventory getContainerInventory() {
 		ValidatedInventoryView result = new ValidatedInventoryView(itemStackHandler);
 
-		if(!this.world.isRemote)
+		if (!this.world.isRemote) {
 			return result
-					.withField(FIELD_ENERGY_COUNT, ()->this.energyStorage.getEnergyStored())
-					.withField(FIELD_ENERGY_CAPACITY, ()->this.energyStorage.getMaxEnergyStored())
-					.withField(FIELD_ITEM_PROCESSING_TIME, ()->this.itemProcessingTimer)
-					.withField(FIELD_ITEM_PROCESSING_MAX, ()->this.itemProcessingMaximum);
+					.withField(FIELD_ENERGY_COUNT, () -> this.energyStorage.getEnergyStored())
+					.withField(FIELD_ENERGY_CAPACITY, () -> this.energyStorage.getMaxEnergyStored())
+					.withField(FIELD_ITEM_PROCESSING_TIME, () -> this.itemProcessingTimer)
+					.withField(FIELD_ITEM_PROCESSING_MAX, () -> this.itemProcessingMaximum);
+		}
 
 		return result;
 	}

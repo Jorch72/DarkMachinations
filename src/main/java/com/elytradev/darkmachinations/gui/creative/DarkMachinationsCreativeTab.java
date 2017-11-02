@@ -27,8 +27,8 @@
 
 package com.elytradev.darkmachinations.gui.creative;
 
-import com.elytradev.darkmachinations.registry.BlockRegistry;
-import com.elytradev.darkmachinations.registry.FluidRegistry;
+import com.elytradev.darkmachinations.init.DMBlocks;
+import com.elytradev.darkmachinations.init.DMFluids;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -42,21 +42,23 @@ import java.time.Month;
 
 public class DarkMachinationsCreativeTab extends CreativeTabs {
 
-	public DarkMachinationsCreativeTab(String name)
-	{
-		super(name + ((LocalDateTime.now().getMonth() == Month.APRIL && LocalDateTime.now().getDayOfMonth() == 1) ? "_af" : ""));
+	public DarkMachinationsCreativeTab(String name) {
+		super(name + ((LocalDateTime.now().getMonth() == Month.APRIL
+				&& LocalDateTime.now().getDayOfMonth() == 1) ? "_af" : ""));
 	}
 
 	@Override
 	public ItemStack getTabIconItem() {
-		return new ItemStack(BlockRegistry.machine_compressor);
+		return new ItemStack(DMBlocks.machine_generator);
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void displayAllRelevantItems(NonNullList<ItemStack> p_78018_1_) {
-		super.displayAllRelevantItems(p_78018_1_);
-		p_78018_1_.add(FluidUtil.getFilledBucket(new FluidStack(FluidRegistry.fluid_heavy_crude_oil, 1000)));
-		p_78018_1_.add(FluidUtil.getFilledBucket(new FluidStack(FluidRegistry.fluid_fuel, 1000)));
+	public void displayAllRelevantItems(NonNullList<ItemStack> stacks) {
+		super.displayAllRelevantItems(stacks);
+
+		stacks.add(FluidUtil.getFilledBucket(new FluidStack(DMFluids.fluid_heavy_crude_oil, 1000)));
+		stacks.add(FluidUtil.getFilledBucket(new FluidStack(DMFluids.fluid_fuel, 1000)));
+		stacks.add(FluidUtil.getFilledBucket(new FluidStack(DMFluids.fluid_hydrogen_gas, 1000)));
 	}
 }

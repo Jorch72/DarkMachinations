@@ -34,6 +34,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 
 import java.util.Map;
 import java.util.function.Supplier;
@@ -42,9 +43,11 @@ public class FakeInventoryView  implements IInventory {
 
 	private int[] fields = new int[0];
 	private final Map<Integer, Supplier<Integer>> fieldDelegates = Maps.newHashMap();
+	private String name;
 
-	public FakeInventoryView() {
+	public FakeInventoryView(String name) {
 		super();
+		this.name = name;
 	}
 
 	@Override
@@ -112,8 +115,12 @@ public class FakeInventoryView  implements IInventory {
 	@Override
 	public int getField(int id) {
 		Supplier<Integer> delegate = fieldDelegates.get(id);
-		if (delegate != null) return delegate.get();
-		if (fields.length > id) return fields[id];
+
+		if (delegate != null)
+			return delegate.get();
+		else if (fields.length > id)
+			return fields[id];
+
 		return 0;
 	}
 
@@ -121,7 +128,9 @@ public class FakeInventoryView  implements IInventory {
 	public void setField(int id, int value) {
 		if (fields.length <= id) {
 			int[] newFields = new int[id + 1];
-			if (fields.length > 0) System.arraycopy(fields, 0, newFields, 0, fields.length);
+			if (fields.length > 0) {
+				System.arraycopy(fields, 0, newFields, 0, fields.length);
+			}
 			fields = newFields;
 		}
 		fields[id] = value;
@@ -142,7 +151,7 @@ public class FakeInventoryView  implements IInventory {
 
 	@Override
 	public String getName() {
-		return null;
+		return name;
 	}
 
 	@Override
@@ -152,7 +161,7 @@ public class FakeInventoryView  implements IInventory {
 
 	@Override
 	public ITextComponent getDisplayName() {
-		return null;
+		return new TextComponentTranslation(this.getName());
 	}
 
 	public FakeInventoryView withField(int index, Supplier<Integer> delegate) {

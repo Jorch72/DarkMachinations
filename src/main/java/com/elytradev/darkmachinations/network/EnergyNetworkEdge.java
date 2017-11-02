@@ -29,4 +29,5 @@ package com.elytradev.darkmachinations.network;
 
 
 public class EnergyNetworkEdge {
+	// TODO: Fill this in.
 }

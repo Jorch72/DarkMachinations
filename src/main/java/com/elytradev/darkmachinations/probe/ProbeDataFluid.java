@@ -73,14 +73,14 @@ public class ProbeDataFluid implements IProbeData {
 
 	@Override
 	public double getBarCurrent() {
-		if(fluidTank != null)
+		if (fluidTank != null)
 			return fluidTank.getFluidAmount();
 		return 0;
 	}
 
 	@Override
 	public double getBarMaximum() {
-		if(fluidTank != null)
+		if (fluidTank != null)
 			return fluidTank.getCapacity();
 		return 0;
 	}

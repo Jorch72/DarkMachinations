@@ -28,9 +28,8 @@
 package com.elytradev.darkmachinations.tileentity;
 
 import com.elytradev.concrete.inventory.*;
-import com.elytradev.darkmachinations.generic.ITEStackHandler;
 import com.elytradev.darkmachinations.gui.container.ContainerCrusher;
-import com.elytradev.darkmachinations.registry.recipes.CrusherRecipes;
+import com.elytradev.darkmachinations.init.recipes.CrusherRecipes;
 import com.elytradev.darkmachinations.DarkMachinations;
 import com.elytradev.darkmachinations.energy.EnergyReciever;
 import com.elytradev.darkmachinations.energy.EnergyUser;
@@ -84,7 +83,7 @@ public class TileEntityCrusher extends TileEntityBase implements ITEStackHandler
 	public TileEntityCrusher() {
 		itemStackHandler = new ConcreteItemStorage(SLOT_COUNT)
 				.withValidators((stack) -> CrusherRecipes.INSTANCE.getRecipeResult(stack).getCount() != 0, Validators.NOTHING)
-				.withName("tile.darkmachinations.machine_crusher.name");
+				.withName(this.getName());
 		energyStorage = new EnergyReciever(ENERGY_CAPACITY, ENERGY_TRANSFER_RATE);
 		energyStorage.listen(this::markDirty);
 		inCrusher = ItemStack.EMPTY;
@@ -99,37 +98,29 @@ public class TileEntityCrusher extends TileEntityBase implements ITEStackHandler
 
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		if(capability == null)
+		if (capability == null)
 			return false;
 
-		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
 			return true;
-		}
-		if(capability == CapabilityEnergy.ENERGY)
-		{
+		if (capability == CapabilityEnergy.ENERGY)
 			return (world.getBlockState(pos).getValue(BlockHorizontal.FACING) != facing) && facing != EnumFacing.UP;
-		}
-		if(capability == DarkMachinations.PROBE_CAPABILITY) {
+		if (capability == DarkMachinations.PROBE_CAPABILITY)
 			return true;
-		}
 		return super.hasCapability(capability, facing);
 	}
 
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		if(capability == null)
+		if (capability == null)
 			return null;
 
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
-		{
 			return (T) itemStackHandler;
-		}
-		if(capability == CapabilityEnergy.ENERGY && (world.getBlockState(pos).getValue(BlockHorizontal.FACING) != facing) && facing != EnumFacing.UP)
-		{
+		if (capability == CapabilityEnergy.ENERGY && (world.getBlockState(pos).getValue(BlockHorizontal.FACING) != facing) && facing != EnumFacing.UP)
 			return (T) energyStorage;
-		}
-		if(capability == DarkMachinations.PROBE_CAPABILITY) {
-			if(probeDataProvider == null) {
+		if (capability == DarkMachinations.PROBE_CAPABILITY) {
+			if (probeDataProvider == null) {
 				probeDataProvider = new ProbeDataProviderMachine();
 				((ProbeDataProviderMachine)probeDataProvider).setStackHandler(this.itemStackHandler);
 			}
@@ -172,17 +163,16 @@ public class TileEntityCrusher extends TileEntityBase implements ITEStackHandler
 
 	@Override
 	public String getName() {
-		return this.hasCustomName() ? this.customName : "tileentity.crusher";
+		return this.hasCustomName() ? this.customName : "darkmachinations.tileentity.crusher";
 	}
 
-	public void setCustomName(String name)
-	{
+	public void setCustomName(String name) {
 		this.customName = name;
 	}
 
 	@Override
 	public boolean hasCustomName() {
-		return !this.customName.isEmpty();
+		return (this.customName != null && !this.customName.isEmpty());
 	}
 
 	@Override
@@ -190,7 +180,7 @@ public class TileEntityCrusher extends TileEntityBase implements ITEStackHandler
 
 		ItemStack supplySlot = itemStackHandler.getStackInSlot(StandardMachineSlots.INPUT);
 
-		if(!this.world.isRemote) {
+		if (!this.world.isRemote) {
 			if (this.isActive) {
 				if (this.itemProcessingTimer == 0) {
 					this.grindItem();
@@ -216,13 +206,13 @@ public class TileEntityCrusher extends TileEntityBase implements ITEStackHandler
 			}
 		}
 
-		if(this.probeDataProvider != null) {
+		if (this.probeDataProvider != null) {
 			ProbeDataProviderMachine probeData = (ProbeDataProviderMachine)probeDataProvider;
 			probeData.updateProbeEnergyData(this.energyStorage.getEnergyStored(), this.energyStorage.getMaxEnergyStored());
 			probeData.updateProbeProgressData(this.itemProcessingTimer, this.itemProcessingMaximum, this.isActive);
 		}
 
-		if(wasActive != isActive) {
+		if (wasActive != isActive) {
 			wasActive = isActive;
 			this.world.notifyBlockUpdate(this.pos, this.world.getBlockState(this.pos), this.world.getBlockState(this.pos), 3);
 			this.world.markBlockRangeForRenderUpdate(this.pos, this.pos);
@@ -236,17 +226,19 @@ public class TileEntityCrusher extends TileEntityBase implements ITEStackHandler
 
 	public void grindItem()
 	{
+		// TODO: Ingredients System
 		ItemStack product = CrusherRecipes.INSTANCE.getRecipeResult(inCrusher);
 		ItemStack productSlot = this.itemStackHandler.getStackInSlot(StandardMachineSlots.OUTPUT);
 
-		if (productSlot.isEmpty())
+		if (productSlot.isEmpty()) {
 			this.itemStackHandler.setStackInSlot(StandardMachineSlots.OUTPUT, product.copy());
-		else if (productSlot.getItem() == product.getItem() && productSlot.getItemDamage() == product.getItemDamage() && product.getCount() + productSlot.getCount() <= 64) {
+		} else if (productSlot.getItem() == product.getItem()
+				&& productSlot.getItemDamage() == product.getItemDamage()
+				&& product.getCount() + productSlot.getCount() <= 64) {
 			ItemStack adjustedQtyProduct = product.copy();
 			adjustedQtyProduct.setCount(product.getCount() + productSlot.getCount());
 			this.itemStackHandler.setStackInSlot(StandardMachineSlots.OUTPUT, adjustedQtyProduct);
-		}
-		else
+		} else
 			return;
 
 		this.inCrusher = ItemStack.EMPTY;
@@ -254,20 +246,23 @@ public class TileEntityCrusher extends TileEntityBase implements ITEStackHandler
 	}
 
 
-	public int getField(int id)
-	{
-		switch(id)
-		{
-			case FIELD_ENERGY_COUNT:
+	public int getField(int id) {
+		switch(id) {
+			case FIELD_ENERGY_COUNT: {
 				return this.energyStorage.getEnergyStored();
-			case FIELD_ENERGY_CAPACITY:
+			}
+			case FIELD_ENERGY_CAPACITY: {
 				return this.energyStorage.getMaxEnergyStored();
-			case FIELD_ITEM_PROCESSING_TIME:
+			}
+			case FIELD_ITEM_PROCESSING_TIME: {
 				return this.itemProcessingTimer;
-			case FIELD_ITEM_PROCESSING_MAX:
+			}
+			case FIELD_ITEM_PROCESSING_MAX: {
 				return this.itemProcessingMaximum;
-			default:
+			}
+			default: {
 				return 0;
+			}
 		}
 	}
 
@@ -276,23 +271,27 @@ public class TileEntityCrusher extends TileEntityBase implements ITEStackHandler
 		return SLOT_COUNT;
 	}
 
-	public void setField(int id, int value)
-	{
-		switch(id)
-		{
-			case FIELD_ENERGY_COUNT:
+	public void setField(int id, int value) {
+		switch(id) {
+			case FIELD_ENERGY_COUNT: {
 				this.energyStorage.setEnergyStored(value);
 				break;
-			case FIELD_ENERGY_CAPACITY:
+			}
+			case FIELD_ENERGY_CAPACITY: {
 				this.energyStorage.setEnergyCapacity(value);
-			case FIELD_ITEM_PROCESSING_TIME:
+				break;
+			}
+			case FIELD_ITEM_PROCESSING_TIME: {
 				this.itemProcessingTimer = value;
 				break;
-			case FIELD_ITEM_PROCESSING_MAX:
+			}
+			case FIELD_ITEM_PROCESSING_MAX: {
 				this.itemProcessingMaximum = value;
 				break;
-			default:
+			}
+			default: {
 				break;
+			}
 		}
 	}
 
@@ -330,10 +329,10 @@ public class TileEntityCrusher extends TileEntityBase implements ITEStackHandler
 
 	@Override
 	public void readItemData(NBTTagCompound compound) {
-		if(compound.hasKey("energy_stored")) {
+		if (compound.hasKey("energy_stored")) {
 			int energyStored = compound.getInteger("energy_stored");
 
-			if(energyStored > ENERGY_CAPACITY)
+			if (energyStored > ENERGY_CAPACITY)
 				energyStored = ENERGY_CAPACITY;
 
 			this.energyStorage.setEnergyStored(energyStored);
@@ -344,12 +343,13 @@ public class TileEntityCrusher extends TileEntityBase implements ITEStackHandler
 	public IInventory getContainerInventory() {
 		ValidatedInventoryView result = new ValidatedInventoryView(itemStackHandler);
 
-		if(!this.world.isRemote)
+		if (!this.world.isRemote) {
 			return result
-					.withField(FIELD_ENERGY_COUNT, ()->this.energyStorage.getEnergyStored())
-					.withField(FIELD_ENERGY_CAPACITY, ()->this.energyStorage.getMaxEnergyStored())
-					.withField(FIELD_ITEM_PROCESSING_TIME, ()->this.itemProcessingTimer)
-					.withField(FIELD_ITEM_PROCESSING_MAX, ()->this.itemProcessingMaximum);
+					.withField(FIELD_ENERGY_COUNT, () -> this.energyStorage.getEnergyStored())
+					.withField(FIELD_ENERGY_CAPACITY, () -> this.energyStorage.getMaxEnergyStored())
+					.withField(FIELD_ITEM_PROCESSING_TIME, () -> this.itemProcessingTimer)
+					.withField(FIELD_ITEM_PROCESSING_MAX, () -> this.itemProcessingMaximum);
+		}
 
 		return result;
 	}

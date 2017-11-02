@@ -2,13 +2,14 @@ item.darkmachinations.machine_corner.name=Machine Corner
 itemGroup.darkmachinations=Dark Machinations
 itemGroup.darkmachinations_af=Dank Machinations
 
-
 tile.darkmachinations.machine_crusher.name=Crusher
 tile.darkmachinations.machine_compressor.name=Compressor
 tile.darkmachinations.machine_redstone_core.name=Redstone Machine Core
 tile.darkmachinations.machine_solid_generator.name=Solid-Fuel Generator
 tile.darkmachinations.machine_pump.name=Pump
 tile.darkmachinations.machine_electric_furnace.name=Electric Furnace
+tile.darkmachinations.power_cell.name=Power Cell
+tile.darkmachinations.power_cell_creative.name=§4C§6r§ee§2a§9t§1i§5v§4e§r Power Cell
 
 tile.darkmachinations.cable_copper_insulated.name=Insulated Copper Cable
 tile.darkmachinations.cable_tin_insulated.name=Insulated Tin Cable
@@ -17,9 +18,6 @@ tile.darkmachinations.cable_gold.name=Insulated Gold Cable
 tile.darkmachinations.cable_copper_uninsulated.name=Uninsulated Copper Cable
 tile.darkmachinations.cable_tin_uninsulated.name=Uninsulated Tin Cable
 tile.darkmachinations.cable_gold_uninsulated.name=Uninsulated Gold Cable
-
-tile.darkmachinations.machine_bloomery.name=Bloomery Controller
-tile.darkmachinations.bloomery_brick.name=Bloomery Brick
 
 tile.darkmachinations.cable_regular_endpoint.name=Cable Node
 

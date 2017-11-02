@@ -28,9 +28,8 @@
 package com.elytradev.darkmachinations.block;
 
 import com.elytradev.darkmachinations.DarkMachinations;
-import com.elytradev.darkmachinations.generic.IDarmaBlock;
 import com.elytradev.darkmachinations.item.ItemBlockPowerCell;
-import com.elytradev.darkmachinations.registry.GuiRegistry;
+import com.elytradev.darkmachinations.init.GuiHandler;
 import com.elytradev.darkmachinations.tileentity.TileEntityBase;
 import com.elytradev.darkmachinations.tileentity.TileEntityPowerCell;
 import com.elytradev.darkmachinations.tileentity.TileEntitySolidGenerator;
@@ -44,7 +43,6 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -62,7 +60,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Random;
 
 public class BlockPowerCell extends BlockBase implements IDarmaBlock {
 
@@ -99,7 +96,7 @@ public class BlockPowerCell extends BlockBase implements IDarmaBlock {
 		boolean creative = ((meta & 0b1000) == 0b1000);
 
 		EnumFacing enumfacing = EnumFacing.getFront(meta & 0b0111);
-		if(enumfacing.getAxis() == EnumFacing.Axis.Y) {
+		if (enumfacing.getAxis() == EnumFacing.Axis.Y) {
 			enumfacing = EnumFacing.NORTH;
 		}
 
@@ -145,40 +142,62 @@ public class BlockPowerCell extends BlockBase implements IDarmaBlock {
 
 	@Override
 	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		drops.add(new ItemStack(this, 1, state.getValue(CREATIVE) ? 0b1000 : 0b0000));
+		ItemStack stack = new ItemStack(this, 1, state.getValue(CREATIVE) ? 0b1000 : 0b0000);
+		if (world.getTileEntity(pos) instanceof TileEntityBase) {
+			NBTTagCompound compound = new NBTTagCompound();
+			((TileEntityBase)world.getTileEntity(pos)).writeItemData(compound);
+			stack.setTagCompound(compound);
+		}
+		drops.add(stack);
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
+		if ((stack.getItemDamage() & 0b1000) != 0)
+			return;
+
 		NBTTagCompound compound = stack.getTagCompound();
 		if (compound != null) {
 			if (GuiScreen.isShiftKeyDown()) {
 				if (compound.hasKey("energy_stored"))
 					tooltip.add(TextFormatting.RED.toString() + TextFormatting.ITALIC.toString() + "Energy: " + TextFormatting.RESET.toString() + compound.getInteger("energy_stored") + "/" + TileEntitySolidGenerator.ENERGY_CAPACITY + " FU");
 			} else {
-				tooltip.add(TextFormatting.ITALIC.toString() + "Press SHIFT for more information...");
+				tooltip.add(TextFormatting.ITALIC.toString() + "Press SHIFT for more...");
 			}
 		}
 	}
 
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-		if(stack.hasTagCompound()) {
+		if (stack.hasTagCompound()) {
 			NBTTagCompound itemData = stack.getTagCompound();
-			if(worldIn.getTileEntity(pos) instanceof TileEntityBase) {
+			if (worldIn.getTileEntity(pos) instanceof  TileEntityBase) {
 				((TileEntityBase)worldIn.getTileEntity(pos)).readItemData(itemData);
 			}
 		}
 	}
 
 	@Override
+	public boolean removedByPlayer(@Nonnull IBlockState state, World world, @Nonnull BlockPos pos, @Nonnull EntityPlayer player, boolean willHarvest) {
+		//If it will harvest, delay deletion of the block until after getDrops
+		return willHarvest || super.removedByPlayer(state, world, pos, player, false);
+	}
+
+	@Override
+	public void harvestBlock(@Nonnull World world, EntityPlayer player, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nullable TileEntity te, ItemStack tool)
+	{
+		super.harvestBlock(world, player, pos, state, te, tool);
+		world.setBlockToAir(pos);
+	}
+
+	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
-		if(!world.isRemote) {
+		if (!world.isRemote) {
 			TileEntity tileentity = world.getTileEntity(pos);
-			if(tileentity != null) {
-				player.openGui(DarkMachinations.instance, GuiRegistry.GUI_POWER_CELL, world, pos.getX(), pos.getY(), pos.getZ());
+			if (tileentity != null) {
+				player.openGui(DarkMachinations.instance, GuiHandler.GUI_POWER_CELL, world, pos.getX(), pos.getY(), pos.getZ());
 			}
 		}
 		return true;

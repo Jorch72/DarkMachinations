@@ -54,8 +54,7 @@ public class ProbeDataProviderMachine implements IProbeDataProvider {
 		this.maxEnergy = maxEnergy;
 	}
 
-	public void updateProbeProgressData(double currProgress, double maxProgress, boolean active)
-	{
+	public void updateProbeProgressData(double currProgress, double maxProgress, boolean active) {
 		this.currProgress = currProgress;
 		this.maxProgress = maxProgress;
 		this.active = active;

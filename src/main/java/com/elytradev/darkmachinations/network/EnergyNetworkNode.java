@@ -48,6 +48,7 @@ public class EnergyNetworkNode {
 			return NodeType.values()[nodeType];
 		}
 	}
+
 	public BlockPos position;
 	public NodeType nodeType;
 	public EnergyNetwork network;
@@ -60,7 +61,7 @@ public class EnergyNetworkNode {
 
 	@Override
 	public boolean equals(Object obj) {
-		if(obj instanceof EnergyNetworkNode)
+		if (obj instanceof EnergyNetworkNode)
 			return this.equals((EnergyNetworkNode)obj);
 		return false;
 	}

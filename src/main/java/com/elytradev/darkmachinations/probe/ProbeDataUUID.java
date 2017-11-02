@@ -62,9 +62,8 @@ public class ProbeDataUUID implements IProbeData{
 	@Nonnull
 	@Override
 	public ITextComponent getLabel() {
-		if(identifier == null) {
+		if (identifier == null)
 			return new TextComponentString("No network found.");
-		}
 		return new TextComponentString(identifier.toString());
 	}
 

@@ -47,9 +47,9 @@ public class EnergyReciever extends EnergyUser {
 	public int receiveEnergy(int maxReceive, boolean simulate) {
 		int actualTransfer = Math.min(maxReceive, this.maxReceive);
 		int energyToTransfer = Math.min(actualTransfer, this.getMaxEnergyStored()-this.getEnergyStored());
-		if(!simulate)
+		if (!simulate)
 			this.setEnergyStored(this.getEnergyStored()+energyToTransfer);
-		if(energyToTransfer != 0 && !simulate) this.markDirty();
+		if (energyToTransfer != 0 && !simulate) this.markDirty();
 		return energyToTransfer;
 	}
 }

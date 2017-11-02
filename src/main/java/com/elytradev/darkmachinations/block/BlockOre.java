@@ -36,8 +36,7 @@ public class BlockOre extends BlockBase implements IOreDict {
 
 	protected String oreName;
 
-	public BlockOre(String name, String oreName, float hardness, float resistance, int harvestLevel)
-	{
+	public BlockOre(String name, String oreName, float hardness, float resistance, int harvestLevel) {
 		super(Material.ROCK, name);
 		this.oreName = oreName;
 		setHardness(hardness);

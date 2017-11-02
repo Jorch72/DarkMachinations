@@ -28,8 +28,7 @@
 package com.elytradev.darkmachinations.block;
 
 import com.elytradev.darkmachinations.DarkMachinations;
-import com.elytradev.darkmachinations.generic.IDarmaBlock;
-import com.elytradev.darkmachinations.generic.ITEStackHandler;
+import com.elytradev.darkmachinations.tileentity.ITEStackHandler;
 import com.elytradev.darkmachinations.tileentity.TileEntityBase;
 import com.elytradev.darkmachinations.tileentity.TileEntitySolidGenerator;
 import net.minecraft.block.Block;
@@ -67,20 +66,17 @@ import java.util.Random;
 public abstract class BlockMachineBase<TE extends TileEntityBase> extends Block implements IDarmaBlock {
 	protected String name;
 	protected int guiID;
-	public enum EnumMachineState implements IStringSerializable
-	{
+	public enum EnumMachineState implements IStringSerializable {
 		OFF("off"),
 		ON("on");
 
 		private final String name;
 
-		EnumMachineState(String name)
-		{
+		EnumMachineState(String name) {
 			this.name = name;
 		}
 
-		public String toString()
-		{
+		public String toString() {
 			return this.name;
 		}
 
@@ -91,7 +87,8 @@ public abstract class BlockMachineBase<TE extends TileEntityBase> extends Block 
 		}
 	}
 
-	private static final PropertyEnum<BlockCrusher.EnumMachineState> STATE = PropertyEnum.create("state", BlockMachineBase.EnumMachineState.class);
+	private static final PropertyEnum<BlockCrusher.EnumMachineState> STATE = PropertyEnum.create("state",
+			BlockMachineBase.EnumMachineState.class);
 
 	protected BlockMachineBase(Material materialIn, String name, int guiID) {
 		super(materialIn);
@@ -104,31 +101,29 @@ public abstract class BlockMachineBase<TE extends TileEntityBase> extends Block 
 		setHarvestLevel("pickaxe", 1);
 		setHardness(5.0f);
 		setResistance(10.0f);
-		setDefaultState(this.blockState.getBaseState().withProperty(BlockHorizontal.FACING, EnumFacing.NORTH).withProperty(STATE, EnumMachineState.OFF));
+		setDefaultState(this.blockState.getBaseState().withProperty(BlockHorizontal.FACING,
+				EnumFacing.NORTH).withProperty(STATE, EnumMachineState.OFF));
 
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
-	{
-		if(!world.isRemote) {
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+		if (!world.isRemote) {
 			TileEntity tileentity = world.getTileEntity(pos);
-			if(tileentity != null) {
+			if (tileentity != null) {
 				player.openGui(DarkMachinations.instance, guiID, world, pos.getX(), pos.getY(), pos.getZ());
 			}
 		}
 		return true;
 	}
 
-	public void registerItemModel(ItemBlock itemBlock)
-	{
+	public void registerItemModel(ItemBlock itemBlock) {
 		DarkMachinations.proxy.registerItemRenderer(itemBlock, 0, name);
 	}
 
 	@Nonnull
 	@Override
-	public BlockMachineBase setCreativeTab(@Nonnull CreativeTabs tab)
-	{
+	public BlockMachineBase setCreativeTab(@Nonnull CreativeTabs tab) {
 		super.setCreativeTab(tab);
 		return this;
 	}
@@ -148,8 +143,7 @@ public abstract class BlockMachineBase<TE extends TileEntityBase> extends Block 
 
 	@Nonnull
 	@Override
-	public IBlockState getStateForPlacement(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull EnumFacing facing, float hitX, float hitY, float hitZ, int meta, @Nonnull EntityLivingBase placer, EnumHand hand)
-	{
+	public IBlockState getStateForPlacement(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull EnumFacing facing, float hitX, float hitY, float hitZ, int meta, @Nonnull EntityLivingBase placer, EnumHand hand) {
 		return this.getDefaultState().withProperty(BlockHorizontal.FACING, placer.getHorizontalFacing().getOpposite());
 	}
 
@@ -159,33 +153,33 @@ public abstract class BlockMachineBase<TE extends TileEntityBase> extends Block 
 		BlockMachineBase.EnumMachineState machineState = EnumMachineState.OFF;
 		TileEntity tileentity = worldIn.getTileEntity(pos);
 
-		if(tileentity != null)
-		{
+		if (tileentity != null) {
 			TE crusher = (TE)tileentity;
-			if(crusher.getActive())
+			if (crusher.getActive()) {
 				machineState = EnumMachineState.ON;
+			}
 		}
-			return state.withProperty(STATE, machineState);
+
+		return state.withProperty(STATE, machineState);
 	}
 
 	@Override
 	public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
 		state = world.getBlockState(pos).getActualState(world, pos);
 		int lightLevel = 0;
-		if(state.getBlock() instanceof BlockMachineBase) {
-			if (state.getValue(STATE) == BlockMachineBase.EnumMachineState.ON)
+		if (state.getBlock() instanceof BlockMachineBase) {
+			if (state.getValue(STATE) == BlockMachineBase.EnumMachineState.ON) {
 				lightLevel = 7;
+			}
 			return lightLevel;
-		}
-		else
+		} else
 			return super.getLightValue(state, world, pos);
 
 	}
 
 	@Nonnull
 	@Override
-	public BlockStateContainer createBlockState()
-	{
+	public BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, BlockHorizontal.FACING, STATE);
 	}
 
@@ -200,12 +194,11 @@ public abstract class BlockMachineBase<TE extends TileEntityBase> extends Block 
 	public void breakBlock(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state) {
 		TE tileEntity = (TE)worldIn.getTileEntity(pos);
 
-		if (tileEntity != null && tileEntity instanceof ITEStackHandler)
-		{
+		if (tileEntity != null && tileEntity instanceof ITEStackHandler) {
 			ITEStackHandler handler = (ITEStackHandler)tileEntity;
-			for(int i =0;i < handler.getItemStackHandler().getSlots();i++)
-			{
-				InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), handler.getItemStackHandler().getStackInSlot(i));
+			for (int i =0;i < handler.getItemStackHandler().getSlots();i++) {
+				InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(),
+						handler.getItemStackHandler().getStackInSlot(i));
 			}
 		}
 
@@ -216,7 +209,7 @@ public abstract class BlockMachineBase<TE extends TileEntityBase> extends Block 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		EnumFacing enumfacing = EnumFacing.getFront(meta);
-		if(enumfacing.getAxis() == EnumFacing.Axis.Y) {
+		if (enumfacing.getAxis() == EnumFacing.Axis.Y) {
 			enumfacing = EnumFacing.NORTH;
 		}
 
@@ -247,14 +240,30 @@ public abstract class BlockMachineBase<TE extends TileEntityBase> extends Block 
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
 		NBTTagCompound compound = stack.getTagCompound();
-		if(compound != null) {
+		if (compound != null) {
 			if (GuiScreen.isShiftKeyDown()) {
-				if (compound.hasKey("energy_stored"))
-					tooltip.add(TextFormatting.RED.toString() + TextFormatting.ITALIC.toString() + "Energy: " + TextFormatting.RESET.toString() + compound.getInteger("energy_stored") + "/" + TileEntitySolidGenerator.ENERGY_CAPACITY + " FU");
-				if(compound.hasKey("fluid_stored")) {
+				if (compound.hasKey("energy_stored")) {
+					tooltip.add(TextFormatting.RED.toString() + TextFormatting.ITALIC.toString() + "Energy: "
+							+ TextFormatting.RESET.toString() + compound.getInteger("energy_stored") + "/"
+							+ TileEntitySolidGenerator.ENERGY_CAPACITY + " FU");
+				}
+				if (compound.hasKey("fluid_stored")) {
 					NBTTagCompound fluid = compound.getCompoundTag("fluid_stored");
-					if(fluid.hasKey("FluidName"))
-						tooltip.add(TextFormatting.BLUE.toString() + TextFormatting.ITALIC.toString() + "Fluid: " + TextFormatting.RESET.toString() + I18n.format("fluid." + fluid.getString("FluidName")) + ", " + fluid.getInteger("Amount") + "mb");
+					if (fluid.hasKey("FluidName")) {
+						tooltip.add(TextFormatting.BLUE.toString() + TextFormatting.ITALIC.toString() + "Fluid: "
+								+ TextFormatting.RESET.toString()
+								+ I18n.format("fluid." + fluid.getString("FluidName")) + ", "
+								+ fluid.getInteger("Amount") + "mb");
+					}
+				}
+				if (compound.hasKey("gas_stored")) {
+					NBTTagCompound gas = compound.getCompoundTag("gas_stored");
+					if (gas.hasKey("GasName")) {
+						tooltip.add(TextFormatting.GREEN.toString() + TextFormatting.ITALIC.toString() + "Gas: "
+								+ TextFormatting.RESET.toString()
+								+ I18n.format("fluid." + gas.getString("GasName"))
+								+ ", " + gas.getInteger("Amount") + "mb");
+					}
 				}
 			} else {
 				tooltip.add(TextFormatting.ITALIC.toString() + "Press SHIFT for more information...");
@@ -264,9 +273,9 @@ public abstract class BlockMachineBase<TE extends TileEntityBase> extends Block 
 
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-		if(stack.hasTagCompound()) {
+		if (stack.hasTagCompound()) {
 			NBTTagCompound itemData = stack.getTagCompound();
-			if(worldIn.getTileEntity(pos) instanceof  TileEntityBase) {
+			if (worldIn.getTileEntity(pos) instanceof  TileEntityBase) {
 				((TileEntityBase)worldIn.getTileEntity(pos)).readItemData(itemData);
 			}
 		}
@@ -274,11 +283,10 @@ public abstract class BlockMachineBase<TE extends TileEntityBase> extends Block 
 
 	@Nonnull
 	@Override
-	public List<ItemStack> getDrops(@Nonnull IBlockAccess world, @Nonnull BlockPos pos, @Nonnull IBlockState state, int fortune)
-	{
+	public List<ItemStack> getDrops(@Nonnull IBlockAccess world, @Nonnull BlockPos pos, @Nonnull IBlockState state, int fortune) {
 		ItemStack stack = new ItemStack(Item.getItemFromBlock(this), 1);
 		ArrayList<ItemStack> ret = new ArrayList<>();
-		if(world.getTileEntity(pos) instanceof TileEntityBase) {
+		if (world.getTileEntity(pos) instanceof TileEntityBase) {
 			NBTTagCompound compound = new NBTTagCompound();
 			((TileEntityBase)world.getTileEntity(pos)).writeItemData(compound);
 			stack.setTagCompound(compound);
@@ -287,6 +295,7 @@ public abstract class BlockMachineBase<TE extends TileEntityBase> extends Block 
 
 		return ret;
 	}
+
 	@Override
 	public boolean removedByPlayer(@Nonnull IBlockState state, World world, @Nonnull BlockPos pos, @Nonnull EntityPlayer player, boolean willHarvest) {
 		//If it will harvest, delay deletion of the block until after getDrops
@@ -294,8 +303,7 @@ public abstract class BlockMachineBase<TE extends TileEntityBase> extends Block 
 	}
 
 	@Override
-	public void harvestBlock(@Nonnull World world, EntityPlayer player, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nullable TileEntity te, ItemStack tool)
-	{
+	public void harvestBlock(@Nonnull World world, EntityPlayer player, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nullable TileEntity te, ItemStack tool) {
 		super.harvestBlock(world, player, pos, state, te, tool);
 		world.setBlockToAir(pos);
 	}

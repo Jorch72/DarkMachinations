@@ -42,8 +42,7 @@ public class ProbeDataEnergy implements IProbeData {
 
 	double minEnergy, currEnergy, maxEnergy;
 
-	public ProbeDataEnergy(double curr, double max)
-	{
+	public ProbeDataEnergy(double curr, double max) {
 		minEnergy = 0;
 		currEnergy = curr;
 		maxEnergy = max;

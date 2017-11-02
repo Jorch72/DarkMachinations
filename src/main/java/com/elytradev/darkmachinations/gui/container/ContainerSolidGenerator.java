@@ -36,8 +36,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class ContainerSolidGenerator extends ContainerBase<TileEntitySolidGenerator> {
 
-	public ContainerSolidGenerator(TileEntitySolidGenerator generator, IInventory playerInventory, IInventory generatorInventory)
-	{
+	public ContainerSolidGenerator(TileEntitySolidGenerator generator, IInventory playerInventory, IInventory generatorInventory) {
 		super(generator, playerInventory, generatorInventory);
 
 		WPlainPanel panel = new WPlainPanel();
@@ -47,15 +46,19 @@ public class ContainerSolidGenerator extends ContainerBase<TileEntitySolidGenera
 		panel.add(WItemSlot.ofPlayerStorage(playerInventory), 0, 84);
 		panel.add(WItemSlot.of(playerInventory, 0, 9, 1), 0, 144);
 		panel.add(new WBar(
-				new ResourceLocation("darkmachinations","textures/gui/machine/energy_bar_bg.png"),
-				new ResourceLocation("darkmachinations","textures/gui/machine/energy_bar_fg.png"),
+				new ResourceLocation("darkmachinations",
+						"textures/gui/machine/energy_bar_bg.png"),
+				new ResourceLocation("darkmachinations",
+						"textures/gui/machine/energy_bar_fg.png"),
 				generatorInventory,
 				TileEntitySolidGenerator.FIELD_ENERGY_COUNT,
 				TileEntitySolidGenerator.FIELD_ENERGY_CAPACITY,
 				WBar.Direction.UP).withTooltip("%d/%d FU"), 0, 10, 18, 68);
 		panel.add(new WBar(
-				new ResourceLocation("darkmachinations", "textures/gui/machine/burning_bg.png"),
-				new ResourceLocation("darkmachinations", "textures/gui/machine/burning_fg.png"),
+				new ResourceLocation("darkmachinations",
+						"textures/gui/machine/burning_bg.png"),
+				new ResourceLocation("darkmachinations",
+						"textures/gui/machine/burning_fg.png"),
 				generatorInventory,
 				TileEntitySolidGenerator.FIELD_ITEM_PROCESSING_TIME,
 				TileEntitySolidGenerator.FIELD_ITEM_PROCESSING_MAX,

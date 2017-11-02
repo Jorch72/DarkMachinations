@@ -27,8 +27,7 @@
 
 package com.elytradev.darkmachinations.block;
 
-import com.elytradev.darkmachinations.registry.GuiRegistry;
-import com.elytradev.darkmachinations.tileentity.TileEntityCompressor;
+import com.elytradev.darkmachinations.init.GuiHandler;
 import com.elytradev.darkmachinations.tileentity.TileEntityElectricFurnace;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -38,7 +37,7 @@ import javax.annotation.Nullable;
 
 public class BlockElectricFurnace extends BlockMachineBase<TileEntityElectricFurnace> {
 	public BlockElectricFurnace() {
-		super(Material.IRON, "machine_electric_furnace", GuiRegistry.GUI_MACHINE_ELECTRIC_FURNACE);
+		super(Material.IRON, "machine_electric_furnace", GuiHandler.GUI_MACHINE_ELECTRIC_FURNACE);
 	}
 
 

@@ -94,7 +94,7 @@ public class ProbeDataItemStackHandler implements IProbeData {
 	@Override
 	public ImmutableList<ItemStack> getInventory() {
 		ImmutableList.Builder<ItemStack> itemStacks = ImmutableList.builder();
-		for(int i =0; i < stackHandler.getSlots();i++) {
+		for (int i =0; i < stackHandler.getSlots();i++) {
 			itemStacks.add(stackHandler.getStackInSlot(i));
 		}
 		return itemStacks.build();
